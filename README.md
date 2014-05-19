@@ -1,4 +1,4 @@
-Tennessee Eastman Simulator with Gilbert-Elliot Channel Network Model
+TEsim: Tennessee Eastman Simulator with Gilbert-Elliot Channel Network Model
 =====
 
 Tennessee Eastman simulation with Gilbert-Elliot channel emulating PLC scan failure due to latency uncertainty introduced by a cyber-security device such as an industrial firewall.
@@ -31,6 +31,15 @@ The *results_gilbert* folder is specified by run_mc_test.m and can be modified t
 * mkdatabase.m: imports metrics from each IDV and stores the metrics in one Microsoft Excel (XLS) file.   
 * results_onetable.xls:  The XLS file produced by mkdatabase.m
 * results.accdb: Access database containing all of the metrics.  Access is not required but can be useful for analyzing the results with pivot charts.  MATLAB, Excel, and many other programming languages can be equally useful for analyzing the data.
+
+# Using TEsim
+
+Using TEsim is very simple, but a few steps are required to setup your simulation environment.  
+
+1. MEX build the temexd.c.  As long as your MEX build environment is properly setup, this is performed by executing mex temexd.c.
+2. Add the appropriate directories to your MATLAB path.  At a minimum, the root of TEsim must be included in you path.
+
+From there, the simlunk model can be executed directly or run from the run_mc_test.m script.
 
 # Contact Information
 
