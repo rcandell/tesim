@@ -41,6 +41,12 @@ Using TEsim is very simple, but a few steps are required to setup your simulatio
 
 From there, the simlunk model can be executed directly or run from the run_mc_test.m script.
 
+# Results Folders
+* *results_gilbert* contains simulation results and post-processing metrics for a partial sweep of P and R
+* *results_gilbert_fullsweep* contains simulation results and post-processing metrics for a full sweep of P and R
+
+## Note: Each official run of the TE model can produce large amounts of raw data that is far too large for GIT to handle.  A full P,R sweep produces close to 3 GB of data.  That data is available upon request, but users are encouraged to produce the data themselves by executing simulation in MATLAB.
+
 # Contact Information
 
 Rick Candell
