@@ -46,32 +46,32 @@ function generate_metrics(results_dir, base_results_file, results_file_mask)
         % Gilbert channel probabilities
         P = RESULTS.P;
         R = RESULTS.R;
-%         IDVnum = bi2de(RESULTS.IDVspec,'right-msb');
         IDVnum = RESULTS.IDVspec*pow2(0:19)';
              
         % check if the plant shutdown
-        thisShutdown = false;
+        thisShutdown = 0;
         thisLxmeas = size(RESULTS.xmeas,1);
         if size(BASE.xmeas,1) ~= thisLxmeas
-            thisShutdown = true;
+            thisShutdown = 1;
         end
         
         % calculate the deviation from base case
-        if ~thisShutdown
-            thisDevs = BASE.xmeas - RESULTS.xmeas;
-        else
-            thisDevs = BASE.xmeas(1:thisLxmeas,:) - RESULTS.xmeas;
-        end
+        thisDevs = BASE.xmeas(1:thisLxmeas,:) - RESULTS.xmeas;
+%         if thisShutdown>0
+%             thisDevs = BASE.xmeas - RESULTS.xmeas;
+%         else
+%             thisDevs = BASE.xmeas(1:thisLxmeas,:) - RESULTS.xmeas;
+%         end
         
         % measure the statistical deviations from base case measured
         % variables
+        thisAvgDevs = mean(thisDevs, 1);
         thisMaxDevs = max(thisDevs, [], 1);
         thisVarDevs = var(thisDevs);
         
         % quality metric
         
         % output vector for statistical quantities
-        %  TODO: Consider only the first three hours for the transient rsp
         corr_metrics = zeros(1,Nxmeas);
         for jj = 1:Nxmeas
             % correlation between base case and the measured variable
@@ -85,15 +85,15 @@ function generate_metrics(results_dir, base_results_file, results_file_mask)
         
         % metrics for quality compared to baseline
         thisQualityPctGspCorr = corr(BASE.Quality.signals.values(1:thisLxmeas,2),RESULTS.Quality.signals.values(:,2));     
-        thisQualityPctGspMaxDev = max(BASE.Quality.signals.values(1:thisLxmeas,2) - RESULTS.Quality.signals.values(:,2));
-        thisQualityPctGspVar = var(BASE.Quality.signals.values(1:thisLxmeas,2) - RESULTS.Quality.signals.values(:,2));
+        thisQualityPctGspMaxDev = max(RESULTS.Quality.signals.values(:,2) - BASE.Quality.signals.values(1:thisLxmeas,2));
+        thisQualityPctGspVar = var(RESULTS.Quality.signals.values(:,2) - BASE.Quality.signals.values(1:thisLxmeas,2));
         
         % write the stats to the output file
         if kk == 1
             writeHdr(output_file);
-            dlmwrite(output_file, [P R IDVnum thisMaxDevs thisVarDevs corr_metrics thisOpCostCorr thisOpCostMaxDev thisQualityPctGspCorr thisQualityPctGspMaxDev thisQualityPctGspVar],'delimiter',',','precision','%0.3f','-append');
+            dlmwrite(output_file, [P R IDVnum thisShutdown thisAvgDevs thisMaxDevs thisVarDevs corr_metrics thisOpCostCorr thisOpCostMaxDev thisQualityPctGspCorr thisQualityPctGspMaxDev thisQualityPctGspVar],'delimiter',',','precision','%0.3f','-append');
         else
-            dlmwrite(output_file, [P R IDVnum thisMaxDevs thisVarDevs corr_metrics thisOpCostCorr thisOpCostMaxDev thisQualityPctGspCorr thisQualityPctGspMaxDev thisQualityPctGspVar],'delimiter',',','precision','%0.3f','-append');
+            dlmwrite(output_file, [P R IDVnum thisShutdown thisAvgDevs thisMaxDevs thisVarDevs corr_metrics thisOpCostCorr thisOpCostMaxDev thisQualityPctGspCorr thisQualityPctGspMaxDev thisQualityPctGspVar],'delimiter',',','precision','%0.3f','-append');
         end
         
         kk = kk + 1;
@@ -104,12 +104,14 @@ end % function
 
 function writeHdr(output_file)
     domain_names = {'P','R','IDVnum'};
+    shutdown_name = {'Shutdown'};    
+    avg_names =  strcat({'AVGDEV from '}, getXMeasNames(1:41));
     max_names =  strcat({'MAXDEV from '}, getXMeasNames(1:41));
     var_names =  strcat({'VAR from '}, getXMeasNames(1:41));
     corr_names = strcat({'CORR of '}, getXMeasNames(1:41));
     opcost_names = {'Corr_to_OpCost', 'MaxDev_from_OpCost'};
-    quality_name = {'Corr_to_PctGsp', 'MaxDev_from_PctG', 'Var_from_PctG'};
-    hdr = strjoin([domain_names max_names var_names corr_names opcost_names quality_name],',');
+    quality_name = {'Corr_to_PctG', 'MaxDev_from_PctG', 'Var_from_PctG'};
+    hdr = strjoin([domain_names shutdown_name avg_names max_names var_names corr_names opcost_names quality_name],',');
     fid = fopen(output_file,'w');
     fprintf(fid,[hdr '\n']);
     fclose(fid);

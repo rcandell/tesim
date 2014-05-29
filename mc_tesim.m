@@ -1,6 +1,10 @@
 function mc_tesim(output_dir, IDVmat, Pvec, Rvec)
-%
-% Delay loss analysis of the TE simulator
+% FUNCITON MC_TESIM(output_dir, IDVmat, Pvec, Rvec)
+% This funciton runs a parametric sweep of the TE simulator.  The function
+% sweeps across vectors of disturbances and channel probabilities, P and R.
+% Results of the simulation are stored in "idv_NN" directories in the
+% folder specified by the caller.
+% 
 %  R. Candell
 %  5/2/2014
 
@@ -73,6 +77,8 @@ for ii = 1:Ndist
                 RESULTS.Ts_base = Ts_base;
                 RESULTS.Ts_scan = Ts_scan;
                 RESULTS.Ts_save = Ts_save;
+                RESULTS.link_status.sensors = link_status_sensors;
+                RESULTS.link_status.actuators = link_status_actuators;
                 RESULTS.xmeas = xmeas;
                 RESULTS.xmv = xmv;
                 RESULTS.idv = idv;

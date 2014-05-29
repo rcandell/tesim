@@ -1,6 +1,8 @@
 function mkdatabase()
 % mkdatabase()
 %   This funciton aggregates the metrics data from all idv_N directories.
+%   Data is stored to a an Excel spreasheet which can be imported into the
+%   Microsoft Access database, results.accdb.
 %
 % Rick Candell, 2014
 
