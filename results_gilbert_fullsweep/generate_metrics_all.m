@@ -1,3 +1,8 @@
+% GENERATE_METRICSALL
+%   This funciton serves as the top level driver to generate_metrics(...).
+%   Use this script as a template.
+%
+% Rick Candell, 2014
 
 clear variables;
 
