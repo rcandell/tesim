@@ -104,7 +104,7 @@ orv_idx_actuators = [-1];  % disable override
 % orv_idx_actuators = [6];  % purge valve
 orv_values_actuators = [15]; 
 
-% note that setting the purge valve to 15% allows the process to continue
+% Note that setting the purge valve to 15% allows the process to continue
 % operating smoothly and at quality while the reactor temperature builds.
 % A simple MITM attack would run the reactor to an overpressure condition
 % within 15 hours and ultimately cause a safety issue.
