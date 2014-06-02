@@ -85,7 +85,7 @@ r_xmeas = R+zeros(xmeas_vec_length,1);
 % p_xmeas = gtob(1) + (gtob(2)-gtob(1)).*rand(xmeas_vec_length,1);
 % r_xmeas = btog(1) + (btog(2)-btog(1)).*rand(xmeas_vec_length,1);
 
-% initialize the IDV condition (distirburbances)
+% initialize the IDV condition (disturbances)
 if isempty(evalin('base','IDVspec'))
     IDVspec = zeros(1, 20);
 %    IDVmat = zeros(1, 20);
@@ -93,5 +93,24 @@ if isempty(evalin('base','IDVspec'))
 end
 IDVspec;
 
+% initialize the sensor override (for Override and MITM attacks)
+orv_idx_sensors = [-1];  % disable override
+% orv_idx_sensors = [7];  % reactor pressure
+orv_values_sensors = [1000];
+
+% initialize the actuator override (for Override and MITM attacks)
+orv_idx_actuators = [-1];  % disable override
+% orv_idx_actuators = [1];  % D feed flow
+% orv_idx_actuators = [6];  % purge valve
+orv_values_actuators = [15]; 
+
+% note that setting the purge valve to 15% allows the process to continue
+% operating smoothly and at quality while the reactor temperature builds.
+% A simple MITM attack would run the reactor to an overpressure condition
+% within 15 hours and ultimately cause a safety issue.
+% Also, note that when the purge valve is stuck at one number, the
+% production cost is flat versus oscillatory for the baseline case.  This
+% is due to the fact that the purged materials is a major factor in cost
+% calculation.
 
 
