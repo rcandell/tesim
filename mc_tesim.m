@@ -4,6 +4,12 @@ function mc_tesim(output_dir, IDVmat, Pvec, Rvec)
 % sweeps across vectors of disturbances and channel probabilities, P and R.
 % Results of the simulation are stored in "idv_NN" directories in the
 % folder specified by the caller.
+%
+% Args
+%   Pvec must be specified in ascending order starting from zero inclusive
+%   Rvec must be specified in descending order stating from one inclusive
+%   IDVmat is a matrix of row-wise disturbance vectors specified in
+%   accordance with the Downs and Vogel format [ idv(1) idv(2) .... ]
 % 
 %  R. Candell
 %  5/2/2014
@@ -42,8 +48,8 @@ if ~exist(output_dir,'dir')
     mkdir(output_dir);
 end
 
-% the current date string
-thedatestr = datestr(now,'dd-mmm-yyyy_HHMMSS');
+% Number of iterations per scenario
+NIterations = 5;
 
 % loop through the distrurbances (IDV)
 for ii = 1:Ndist
@@ -56,62 +62,90 @@ for ii = 1:Ndist
     
     IDVspec = IDVmat(ii,:);  %ORIG: [ 0 0 0 0 0 0 0 1 zeros(1,12)]
     for jj = 1:length(Pvec)
-
+        
+        base_case_saved = false;
         P = Pvec(jj);       
 
         for kk = 1:length(Rvec)
             
             R = Rvec(kk);
-            
-            if (P==0  && R==1) || (P~=0)
-                % initialize the results structure     
-                RESULTS = results_struct();
-
-                % run the simulation
-                sim('MultiLoop_mode1.slx');
-
-                % save the results to file
-                RESULTS.P = P;
-                RESULTS.R = R;
-                RESULTS.IDVspec = IDVspec;
-                RESULTS.Ts_base = Ts_base;
-                RESULTS.Ts_scan = Ts_scan;
-                RESULTS.Ts_save = Ts_save;
-                RESULTS.link_status.sensors = link_status_sensors;
-                RESULTS.link_status.actuators = link_status_actuators;
-                RESULTS.xmeas = xmeas;
-                RESULTS.xmv = xmv;
-                RESULTS.idv = idv;
-                RESULTS.OpCost = OpCost;
-                RESULTS.Production = Production;
-                RESULTS.Quality = Quality;
                 
+            RESULTS = results_struct(); %repmat(results_struct(),1,NIterations);
+            for ll = 1:NIterations
+
+                % if check to only run the baseline case P=0 once
+                if (P==0 && kk==1 && ll==1) || (P~=0)
+
+                    disp(['Running scenario P=' num2str(P) ' R=' num2str(R) ' It=' num2str(ll)])
+
+                    % initialize the results structure     
+                    RESULTS_t = results_struct();
+
+                    % run the simulation
+                    sim('MultiLoop_mode1.slx');
+
+                    % save the results to file
+                    RESULTS_t.P = P;
+                    RESULTS_t.R = R;
+                    RESULTS_t.IDVspec = IDVspec;
+                    RESULTS_t.Iteration = ll;
+                    RESULTS_t.Ts_base = Ts_base;
+                    RESULTS_t.Ts_scan = Ts_scan;
+                    RESULTS_t.Ts_save = Ts_save;
+                    RESULTS_t.link_status.sensors = link_status_sensors;
+                    RESULTS_t.link_status.actuators = link_status_actuators;
+                    RESULTS_t.xmeas = xmeas;
+                    RESULTS_t.xmv = xmv;
+                    RESULTS_t.idv = idv;
+                    RESULTS_t.OpCost = OpCost;
+                    RESULTS_t.Production = Production;
+                    RESULTS_t.Quality = Quality;
+
+                    RESULTS(ll) = RESULTS_t;
+                else
+                    disp(['      Skipping scenario P=' num2str(P) ' R=' num2str(R) ' It=' num2str(ll)])
+                end % IF
+            end % Iterations
+
+            if P==0 && (~base_case_saved)  % save baseline case to separate file
+
+                disp(['   Saving base scenario P=' num2str(P) ' R=' num2str(R)])
+                save([output_dir_path '\BASELINE.mat'], 'RESULTS');
+                base_case_saved = true;
+
+                disp(['   Saving test scenario P=' num2str(P) ' R=' num2str(R)])
                 RESULTS_FILENAME ...
                     = [output_dir_path '\results_IDV(' ...
                     num2str(ii) ')_P(' num2str(P) ')_R(' num2str(R) ').mat'];             
-                save(RESULTS_FILENAME, 'RESULTS');
+                    save(RESULTS_FILENAME, 'RESULTS');                      
 
-                if jj==1 && kk==1  % first iteration for disturbance type
-                    save([output_dir_path '\BASELINE.mat'], 'RESULTS');
-                end 
-            end
-        end
-    end
-end
+            elseif P>0
+
+                disp(['   Saving test scenario P=' num2str(P) ' R=' num2str(R)])
+                RESULTS_FILENAME ...
+                    = [output_dir_path '\results_IDV(' ...
+                    num2str(ii) ')_P(' num2str(P) ')_R(' num2str(R) ').mat'];             
+                    save(RESULTS_FILENAME, 'RESULTS');  
+
+            end %IF                  
+        end % Rvec
+    end % Pvec
+end % Ndist
 
 function RESULTS = results_struct()
     RESULTS = struct( ...
         'P', [], ...
         'R', [], ...
         'IDVspec', [], ...
+        'Iteration', [], ...
         'Ts_base', [], ...
         'Ts_scan', [], ...
         'Ts_save', [], ...
+        'link_status', [], ...
         'xmeas', [], ...
         'xmv', [], ...
         'idv', [], ...
         'OpCost', [], ...
         'Production', [], ...
         'Quality', [] );
-    
     

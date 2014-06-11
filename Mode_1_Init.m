@@ -37,11 +37,9 @@ load Mode1xInitial
 % is using a fixed step size (Euler) method.  Variable step-size methods
 % don't work very well (high noise level).  TS_base is also the sampling
 % period of most discrete PI controllers used in the simulation.
-%Ts_base=0.0005; changed to be one second
 % Ts_base=0.0005/2;  % in hours (original setting)
-% Ts_base=(10/1000)/3600;  % 10 milliseconds seconds converted hours
 Ts_base=1/3600;  % seconds seconds converted hours
-Ts_scan=Ts_base*10;   
+Ts_scan=Ts_base;   
 
 % TS_save is the sampling period for saving results.  The following
 % variables are saved at the end of a run:
@@ -112,5 +110,12 @@ orv_values_actuators = [15];
 % production cost is flat versus oscillatory for the baseline case.  This
 % is due to the fact that the purged materials is a major factor in cost
 % calculation.
+
+% calculate the seed for the random number generator
+%   for the actuators channel
+rng('shuffle','twister');
+RNGSEED1 = round(rand(1,12)*1000);
+%   for the sensors channel
+RNGSEED2 = round(rand(1,41)*1000);
 
 
