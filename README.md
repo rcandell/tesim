@@ -13,7 +13,7 @@ This software package is an implementation of a decentralized controller designe
 
 The model consists of the following components:
 
-* LICENSE: License for the software
+* LICENSE: MIT
 * README.md: This document.
 * ricker96.pdf: The paper describing the decentralized controller design.
 * MultiLoop_model1.slx:  The Simulink model. Simulink 2012A or later is required to run the simulation.  
@@ -42,6 +42,7 @@ Using TEsim is very simple, but a few steps are required to setup your simulatio
 From there, the simlunk model can be executed directly or run from the run_mc_test.m script.
 
 # Results Folders
+* *results_gilbert_iterative* contains simulation results and metrics for a full sweep and multiple iterations for each P,R scenario.  This is the latest set of data points.
 * *results_gilbert* contains simulation results and post-processing metrics for a partial sweep of P and R
 * *results_gilbert_fullsweep* contains simulation results and post-processing metrics for a full sweep of P and R
 
