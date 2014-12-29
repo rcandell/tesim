@@ -1,0 +1,19 @@
+
+*.tmp
+# Word temporary
+~$*.doc*
+# Excel temporary
+~$*.xls*
+# Excel Backup File
+*.xlk
+
+
+# gilbert testing files
+results*.accdb
+results_*
+*.zip
+temp*.xlsx
+simulation*.log
+slprj
+
+
