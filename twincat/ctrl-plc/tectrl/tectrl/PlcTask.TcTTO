@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.26">
+  <Task Name="PlcTask" Id="{dd00137b-7d2c-4976-bdcd-43d95870b5f1}">
+    <!--CycleTime in micro seconds.-->
+    <CycleTime>10000</CycleTime>
+    <Priority>20</Priority>
+    <PouCall>
+      <Name>ldrMain</Name>
+    </PouCall>
+    <TaskFBGuid>{7cf1aadd-d28b-4cfa-b94c-009573ca97ce}</TaskFBGuid>
+    <Fb_init>{e621bb20-f216-421e-9f82-5bf0d9dcf64e}</Fb_init>
+    <Fb_exit>{6e47b40c-89bf-44f5-96ab-a61199a71153}</Fb_exit>
+    <CycleUpdate>{2687397e-be78-46fc-a1e1-8b4ea96e42d0}</CycleUpdate>
+    <PostCycleUpdate>{74a48070-b919-44cd-967f-969066330397}</PostCycleUpdate>
+  </Task>
+</TcPlcObject>
