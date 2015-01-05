@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.26">
+  <GVL Name="GVL" Id="{d4478a19-6f1e-4f78-a7ca-69c39ee17134}">
+    <Declaration><![CDATA[VAR_GLOBAL
+	
+	// used for main start/stop/estop
+	gRUNNING: BOOL;
+	gSTART: BOOL;
+	
+	// E-STOP
+	gESTOP: BOOL := TRUE;
+	
+	// loop control constants
+	gTs_base : REAL := 0.001;
+	gTs : REAL := 0.1;
+	
+END_VAR
+]]></Declaration>
+    <ObjectProperties />
+  </GVL>
+</TcPlcObject>
