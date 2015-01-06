@@ -10,8 +10,8 @@ VAR_OUTPUT
 END_VAR
 
 VAR
-	separator_temp_dpi: fb_discrete_pi		:= (kc:=-4, ti:=15/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=xmv_0[11]);	
-	reactor_temp_dpi: fb_discrete_pi		:= (kc:=-8, ti:=7.5/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=xmv_0[10]);
+	separator_temp_dpi: fb_discrete_pi		:= (kc:=-4, ti:=15/60, Ts:=g_Ts_base, hi :=100, lo:=0, x0:=xmv_0[11]);	
+	reactor_temp_dpi: fb_discrete_pi		:= (kc:=-8, ti:=7.5/60, Ts:=g_Ts_base, hi :=100, lo:=0, x0:=xmv_0[10]);
 	
 END_VAR
 ]]></Declaration>

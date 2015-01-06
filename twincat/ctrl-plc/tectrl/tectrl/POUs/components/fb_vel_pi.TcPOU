@@ -4,23 +4,23 @@
     <Declaration><![CDATA[FUNCTION_BLOCK fb_vel_pi
 
 VAR_INPUT
-	setpoint_in: LREAL := 0.0;
-	xmeas_in: LREAL := 0.0;
+	setpoint_in: LREAL;
+	xmeas_in: LREAL;
 	
 	// parameters
-	kc: REAL := 0.0;
-	ti: REAL := 0.0;
-	ts: REAL := 0.0;
+	kc: REAL;
+	ti: REAL;
+	ts: REAL;
 	
 END_VAR
 
 VAR_OUTPUT
-	delta_out: REAL := 0.0;
+	delta_out: REAL;
 END_VAR
 
 VAR
-	e: REAL := 0.0;
-	e_last : REAL := 0.0;
+	e: REAL;
+	e_last : REAL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -33,6 +33,7 @@ delta_out := (e + (ts/ti)*e - e_last) * kc;
 
 // save e for the next call
 e_last := e;
+
 ]]></ST>
     </Implementation>
     <ObjectProperties />

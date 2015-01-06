@@ -30,9 +30,9 @@ END_VAR
     <Implementation>
       <ST><![CDATA[
 pctgspP2 := P2[0]*EXPT(pctgsp,2) + P2[1]*pctgsp + P2[2];
-pctgspP3 := P2[0]*EXPT(pctgsp,2) + P2[1]*pctgsp + P2[2];
+pctgspP3 := P3[0]*EXPT(pctgsp,2) + P3[1]*pctgsp + P3[2];
 g_rx[2] :=  pctgspP2 - (32*eadj)/g_Fp;
-g_rx[3] :=  pctgspP2 + (46*eadj)/g_Fp;
+g_rx[3] :=  pctgspP3 + (46*eadj)/g_Fp;
 
 
 

@@ -35,13 +35,16 @@
     <Compile Include="POUs\components\fb_ratio_trimming.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\components\fb_slewrate_limiter.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\components\fb_vel_pi.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\components\fb_xmeas_acquire.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\components\fb_zoh_real.TcPOU">
+    <Compile Include="POUs\components\fb_unitdelay_real.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\ldrMain.TcPOU">
@@ -59,7 +62,7 @@
     <Compile Include="POUs\subsystems\fb_prod_comp_ctrl.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\subsystems\fb_ratio_ctrl.TcPOU">
+    <Compile Include="POUs\subsystems\fb_feed_ratio_ctrl.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\subsystems\fb_temp_ctrl.TcPOU">
