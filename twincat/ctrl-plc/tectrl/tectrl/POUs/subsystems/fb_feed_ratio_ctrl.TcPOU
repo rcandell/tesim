@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.26">
-  <POU Name="fb_ratio_ctrl" Id="{4e39a809-28eb-4848-81f9-430c28f4d764}">
-    <Declaration><![CDATA[FUNCTION_BLOCK fb_ratio_ctrl
+  <POU Name="fb_feed_ratio_ctrl" Id="{4e39a809-28eb-4848-81f9-430c28f4d764}">
+    <Declaration><![CDATA[FUNCTION_BLOCK fb_feed_ratio_ctrl
 
 VAR_INPUT
 END_VAR
@@ -10,13 +10,13 @@ VAR_OUTPUT
 END_VAR
 
 VAR
-	a_feed_rate_dpi: fb_flow_rate 			:= (kc:=0.01, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=xmv_0[3]);
-	d_feed_rate_dpi: fb_flow_rate 			:= (kc:=1.6E-6, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=xmv_0[1]);
-	e_feed_rate_dpi: fb_flow_rate 			:= (kc:=1.8E-6, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=xmv_0[2]);
-	c_feed_rate_dpi: fb_flow_rate 			:= (kc:=0.003, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=xmv_0[4]);
-	purge_rate_dpi: fb_flow_rate 			:= (kc:=0.01, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=xmv_0[6]);
-	separator_flow_rate_dpi: fb_flow_rate	:= (kc:=4E-4, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=xmv_0[7]);
-	stripper_flow_rate_dpi: fb_flow_rate	:= (kc:=4E-4, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=xmv_0[8]);	
+	a_feed_rate_dpi: fb_flow_rate 			:= (kc:=0.01, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, 	x0:=xmv_0[3]);
+	d_feed_rate_dpi: fb_flow_rate 			:= (kc:=1.6E-6, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, 	x0:=xmv_0[1]);
+	e_feed_rate_dpi: fb_flow_rate 			:= (kc:=1.8E-6, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, 	x0:=xmv_0[2]);
+	c_feed_rate_dpi: fb_flow_rate 			:= (kc:=0.003, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, 	x0:=xmv_0[4]);
+	purge_rate_dpi: fb_flow_rate 			:= (kc:=0.01, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, 	x0:=xmv_0[6]);
+	separator_flow_rate_dpi: fb_flow_rate	:= (kc:=4E-4, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, 	x0:=xmv_0[7]);
+	stripper_flow_rate_dpi: fb_flow_rate	:= (kc:=4E-4, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, 	x0:=xmv_0[8]);	
 END_VAR
 
 ]]></Declaration>
@@ -71,7 +71,7 @@ END_VAR
                           </o>
                           <v n="LValue">false</v>
                           <v n="Boolean">false</v>
-                          <v n="Id">22L</v>
+                          <v n="Id">214L</v>
                         </o>
                         <o n="OutputItems" t="OutputItemList">
                           <l2 n="OutputItems">
@@ -140,7 +140,7 @@ END_VAR
                         <v n="CallType" t="Operator">FunctionBlock</v>
                         <v n="EN">false</v>
                         <v n="ENO">false</v>
-                        <v n="Id">23L</v>
+                        <v n="Id">215L</v>
                       </o>
                       <v n="Id">29L</v>
                     </o>
@@ -316,7 +316,7 @@ END_VAR
                           </o>
                           <v n="LValue">false</v>
                           <v n="Boolean">false</v>
-                          <v n="Id">31L</v>
+                          <v n="Id">226L</v>
                         </o>
                         <o n="OutputItems" t="OutputItemList">
                           <l2 n="OutputItems">
@@ -385,7 +385,7 @@ END_VAR
                         <v n="CallType" t="Operator">FunctionBlock</v>
                         <v n="EN">false</v>
                         <v n="ENO">false</v>
-                        <v n="Id">32L</v>
+                        <v n="Id">227L</v>
                       </o>
                       <v n="Id">38L</v>
                     </o>
@@ -440,7 +440,7 @@ END_VAR
                           </o>
                           <v n="LValue">false</v>
                           <v n="Boolean">false</v>
-                          <v n="Id">40L</v>
+                          <v n="Id">238L</v>
                         </o>
                         <o n="OutputItems" t="OutputItemList">
                           <l2 n="OutputItems">
@@ -509,7 +509,7 @@ END_VAR
                         <v n="CallType" t="Operator">FunctionBlock</v>
                         <v n="EN">false</v>
                         <v n="ENO">false</v>
-                        <v n="Id">41L</v>
+                        <v n="Id">239L</v>
                       </o>
                       <v n="Id">47L</v>
                     </o>
@@ -564,7 +564,7 @@ END_VAR
                           </o>
                           <v n="LValue">false</v>
                           <v n="Boolean">false</v>
-                          <v n="Id">49L</v>
+                          <v n="Id">250L</v>
                         </o>
                         <o n="OutputItems" t="OutputItemList">
                           <l2 n="OutputItems">
@@ -633,7 +633,7 @@ END_VAR
                         <v n="CallType" t="Operator">FunctionBlock</v>
                         <v n="EN">false</v>
                         <v n="ENO">false</v>
-                        <v n="Id">50L</v>
+                        <v n="Id">251L</v>
                       </o>
                       <v n="Id">56L</v>
                     </o>
@@ -688,7 +688,7 @@ END_VAR
                           </o>
                           <v n="LValue">false</v>
                           <v n="Boolean">false</v>
-                          <v n="Id">58L</v>
+                          <v n="Id">262L</v>
                         </o>
                         <o n="OutputItems" t="OutputItemList">
                           <l2 n="OutputItems">
@@ -697,7 +697,7 @@ END_VAR
                         </o>
                         <o n="Flags" t="Flags">
                           <v n="Flags">0</v>
-                          <v n="Fixed">false</v>
+                          <v n="Fixed">true</v>
                         </o>
                         <n n="InputFlags" />
                         <l2 n="InputItems" cet="BoxTreeOperand">
@@ -757,7 +757,7 @@ END_VAR
                         <v n="CallType" t="Operator">FunctionBlock</v>
                         <v n="EN">false</v>
                         <v n="ENO">false</v>
-                        <v n="Id">59L</v>
+                        <v n="Id">263L</v>
                       </o>
                       <v n="Id">65L</v>
                     </o>
@@ -812,7 +812,7 @@ END_VAR
                           </o>
                           <v n="LValue">false</v>
                           <v n="Boolean">false</v>
-                          <v n="Id">67L</v>
+                          <v n="Id">274L</v>
                         </o>
                         <o n="OutputItems" t="OutputItemList">
                           <l2 n="OutputItems">
@@ -881,7 +881,7 @@ END_VAR
                         <v n="CallType" t="Operator">FunctionBlock</v>
                         <v n="EN">false</v>
                         <v n="ENO">false</v>
-                        <v n="Id">68L</v>
+                        <v n="Id">275L</v>
                       </o>
                       <v n="Id">74L</v>
                     </o>
@@ -936,7 +936,7 @@ END_VAR
                           </o>
                           <v n="LValue">false</v>
                           <v n="Boolean">false</v>
-                          <v n="Id">76L</v>
+                          <v n="Id">286L</v>
                         </o>
                         <o n="OutputItems" t="OutputItemList">
                           <l2 n="OutputItems">
@@ -945,7 +945,7 @@ END_VAR
                         </o>
                         <o n="Flags" t="Flags">
                           <v n="Flags">0</v>
-                          <v n="Fixed">false</v>
+                          <v n="Fixed">true</v>
                         </o>
                         <n n="InputFlags" />
                         <l2 n="InputItems" cet="BoxTreeOperand">
@@ -1005,7 +1005,7 @@ END_VAR
                         <v n="CallType" t="Operator">FunctionBlock</v>
                         <v n="EN">false</v>
                         <v n="ENO">false</v>
-                        <v n="Id">77L</v>
+                        <v n="Id">287L</v>
                       </o>
                       <v n="Id">83L</v>
                     </o>

@@ -10,11 +10,11 @@ VAR_OUTPUT
 END_VAR
 
 VAR
-	stripper_level_dpi: fb_discrete_pi			:= (kc:=2E-4, ti:=200/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=r_0[7]);
-	separator_level_dpi: fb_discrete_pi			:= (kc:=-1E-3, ti:=200/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=r_0[6]);
-	reactor_level_dpi: fb_discrete_pi			:= (kc:=0.8, ti:=60/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=SP17_0);
-	reactor_pressure_dpi: fb_discrete_pi		:= (kc:=-1E-4, ti:=20/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=r_0[5]);
-	reactor_temp_dpi: fb_discrete_pi			:= (kc:=-8, ti:=7.5/60, Ts:=g_Ts_base, hi :=100, lo:=0, yout:=xmv_0[10]);		
+	stripper_level_dpi: fb_discrete_pi			:= (kc:=2E-4, ti:=200/60, Ts:=g_Ts_base, hi :=100, lo:=0, x0:=r_0[7]);
+	separator_level_dpi: fb_discrete_pi			:= (kc:=-1E-3, ti:=200/60, Ts:=g_Ts_base, hi :=100, lo:=0, x0:=r_0[6]);
+	reactor_level_dpi: fb_discrete_pi			:= (kc:=0.8, ti:=60/60, Ts:=g_Ts_base, hi :=100, lo:=0, x0:=SP17_0);
+	reactor_pressure_dpi: fb_discrete_pi		:= (kc:=-1E-4, ti:=20/60, Ts:=g_Ts_base, hi :=100, lo:=0, x0:=r_0[5]);
+	reactor_temp_dpi: fb_discrete_pi			:= (kc:=-8, ti:=7.5/60, Ts:=g_Ts_base, hi :=100, lo:=0, x0:=xmv_0[10]);		
 END_VAR
 
 ]]></Declaration>

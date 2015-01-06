@@ -23,7 +23,6 @@ END_VAR
 VAR
 	
 	pct_g_dpi: fb_discrete_pi := (kc := 0.4, ti := 100.0, ts := g_Ts_base, hi := 100, lo:=0.0);
-	zoh_real_0: fb_zoh_real := (xlast := x0 );
 	change_rate_limit: FB_CTRL_LIMITER := (stInternalParams := (fMinOutput := -0.286875, fMaxOutput := 0.286875));
 	rate: REAL := 0;
 	
@@ -42,6 +41,8 @@ VAR
 	
 	
 	prod_feedforward: fb_prod_feedforward;
+	prod_level_slewrate_limiter: fb_slewrate_limiter := (pos_slewrate_limit := 0.3*22.95/24, neg_slewrate_limit := -0.3*22.95/24);
+	
 END_VAR
 
 VAR CONSTANT
@@ -73,49 +74,14 @@ END_VAR]]></Declaration>
                   <v n="Title">""</v>
                   <v n="Label">""</v>
                   <v n="OutCommented">false</v>
-                  <l2 n="NetworkItems" cet="BoxTreeAssign">
-                    <o>
-                      <o n="OutputItems" t="OutputItemList">
-                        <l2 n="OutputItems" cet="Operand">
-                          <o>
-                            <v n="Operand">"pctgsp"</v>
-                            <v n="Type">"REAL"</v>
-                            <v n="Comment">""</v>
-                            <v n="SymbolComment">""</v>
-                            <v n="Address">""</v>
-                            <o n="Flags" t="Flags">
-                              <v n="Flags">0</v>
-                              <v n="Fixed">false</v>
-                            </o>
-                            <v n="LValue">true</v>
-                            <v n="Boolean">false</v>
-                            <v n="Id">583L</v>
-                          </o>
-                          <o>
-                            <v n="Operand">"g_PctGsp"</v>
-                            <v n="Type">"REAL"</v>
-                            <v n="Comment">""</v>
-                            <v n="SymbolComment">" Percent G Composition"</v>
-                            <v n="Address">""</v>
-                            <o n="Flags" t="Flags">
-                              <v n="Flags">0</v>
-                              <v n="Fixed">false</v>
-                            </o>
-                            <v n="LValue">true</v>
-                            <v n="Boolean">false</v>
-                            <v n="Id">147L</v>
-                          </o>
-                        </l2>
-                      </o>
-                      <o n="Flags" t="Flags">
-                        <v n="Flags">0</v>
-                        <v n="Fixed">false</v>
-                      </o>
-                      <o n="RValue" t="BoxTreeBox">
-                        <v n="BoxType">"FB_CTRL_I"</v>
+                  <l2 n="NetworkItems">
+                    <o t="BoxTreeDemux">
+                      <v n="VarId">4</v>
+                      <o n="Input" t="BoxTreeBox">
+                        <v n="BoxType">"fb_slewrate_limiter"</v>
                         <o n="Instance" t="Operand">
-                          <v n="Operand">"integrate_change_rate"</v>
-                          <v n="Type">"TC2_CONTROLLERTOOLBOX.FB_CTRL_I"</v>
+                          <v n="Operand">"prod_level_slewrate_limiter"</v>
+                          <v n="Type">"fb_slewrate_limiter"</v>
                           <v n="Comment">""</v>
                           <v n="SymbolComment">""</v>
                           <v n="Address">""</v>
@@ -125,7 +91,7 @@ END_VAR]]></Declaration>
                           </o>
                           <v n="LValue">false</v>
                           <v n="Boolean">false</v>
-                          <v n="Id">466L</v>
+                          <v n="Id">726L</v>
                         </o>
                         <o n="OutputItems" t="OutputItemList">
                           <l2 n="OutputItems">
@@ -134,169 +100,16 @@ END_VAR]]></Declaration>
                         </o>
                         <o n="Flags" t="Flags">
                           <v n="Flags">0</v>
-                          <v n="Fixed">true</v>
+                          <v n="Fixed">false</v>
                         </o>
                         <n n="InputFlags" />
-                        <l2 n="InputItems">
-                          <o t="BoxTreeBox">
-                            <v n="BoxType">"FB_CTRL_LIMITER"</v>
-                            <o n="Instance" t="Operand">
-                              <v n="Operand">"change_rate_limit"</v>
-                              <v n="Type">"TC2_CONTROLLERTOOLBOX.FB_CTRL_LIMITER"</v>
-                              <v n="Comment">""</v>
-                              <v n="SymbolComment">""</v>
-                              <v n="Address">""</v>
-                              <o n="Flags" t="Flags">
-                                <v n="Flags">0</v>
-                                <v n="Fixed">false</v>
-                              </o>
-                              <v n="LValue">false</v>
-                              <v n="Boolean">false</v>
-                              <v n="Id">457L</v>
-                            </o>
-                            <o n="OutputItems" t="OutputItemList">
-                              <l2 n="OutputItems">
-                                <n />
-                              </l2>
-                            </o>
-                            <o n="Flags" t="Flags">
-                              <v n="Flags">0</v>
-                              <v n="Fixed">true</v>
-                            </o>
-                            <n n="InputFlags" />
-                            <l2 n="InputItems">
-                              <o t="BoxTreeBox">
-                                <v n="BoxType">"FB_CTRL_D"</v>
-                                <o n="Instance" t="Operand">
-                                  <v n="Operand">"calc_change_rate"</v>
-                                  <v n="Type">"TC2_CONTROLLERTOOLBOX.FB_CTRL_D"</v>
-                                  <v n="Comment">""</v>
-                                  <v n="SymbolComment">""</v>
-                                  <v n="Address">""</v>
-                                  <o n="Flags" t="Flags">
-                                    <v n="Flags">0</v>
-                                    <v n="Fixed">false</v>
-                                  </o>
-                                  <v n="LValue">false</v>
-                                  <v n="Boolean">false</v>
-                                  <v n="Id">441L</v>
-                                </o>
-                                <o n="OutputItems" t="OutputItemList">
-                                  <l2 n="OutputItems">
-                                    <n />
-                                  </l2>
-                                </o>
-                                <o n="Flags" t="Flags">
-                                  <v n="Flags">0</v>
-                                  <v n="Fixed">true</v>
-                                </o>
-                                <n n="InputFlags" />
-                                <l2 n="InputItems" cet="BoxTreeOperand">
-                                  <o>
-                                    <o n="Operand" t="Operand">
-                                      <v n="Operand">"g_set_production"</v>
-                                      <v n="Type">"REAL"</v>
-                                      <v n="Comment">""</v>
-                                      <v n="SymbolComment">" the initial setpoints"</v>
-                                      <v n="Address">""</v>
-                                      <o n="Flags" t="Flags">
-                                        <v n="Flags">0</v>
-                                        <v n="Fixed">false</v>
-                                      </o>
-                                      <v n="LValue">false</v>
-                                      <v n="Boolean">false</v>
-                                      <v n="Id">144L</v>
-                                    </o>
-                                    <v n="Id">143L</v>
-                                  </o>
-                                  <o>
-                                    <o n="Operand" t="Operand">
-                                      <v n="Operand">"stparams_calc_change_rate"</v>
-                                      <v n="Type">"TC2_CONTROLLERTOOLBOX.ST_CTRL_D_PARAMS"</v>
-                                      <v n="Comment">""</v>
-                                      <v n="SymbolComment">""</v>
-                                      <v n="Address">""</v>
-                                      <o n="Flags" t="Flags">
-                                        <v n="Flags">0</v>
-                                        <v n="Fixed">false</v>
-                                      </o>
-                                      <v n="LValue">false</v>
-                                      <v n="Boolean">false</v>
-                                      <v n="Id">453L</v>
-                                    </o>
-                                    <v n="Id">452L</v>
-                                  </o>
-                                </l2>
-                                <o n="InputParam" t="ParamList">
-                                  <l2 n="Names" cet="String">
-                                    <v>fIn</v>
-                                    <v>stParams</v>
-                                  </l2>
-                                  <l2 n="Types" cet="String">
-                                    <v>LREAL</v>
-                                    <v>ST_CTRL_D_PARAMS[REF]</v>
-                                  </l2>
-                                </o>
-                                <o n="OutputParam" t="ParamList">
-                                  <l2 n="Names" cet="String">
-                                    <v>fOut</v>
-                                  </l2>
-                                  <l2 n="Types" cet="String">
-                                    <v>LREAL</v>
-                                  </l2>
-                                </o>
-                                <v n="CallType" t="Operator">FunctionBlock</v>
-                                <v n="EN">false</v>
-                                <v n="ENO">false</v>
-                                <v n="Id">442L</v>
-                              </o>
-                              <o t="BoxTreeOperand">
-                                <o n="Operand" t="Operand">
-                                  <v n="Operand">"stparams_change_rate_limit"</v>
-                                  <v n="Type">"TC2_CONTROLLERTOOLBOX.ST_CTRL_LIMITER_PARAMS"</v>
-                                  <v n="Comment">""</v>
-                                  <v n="SymbolComment">""</v>
-                                  <v n="Address">""</v>
-                                  <o n="Flags" t="Flags">
-                                    <v n="Flags">0</v>
-                                    <v n="Fixed">false</v>
-                                  </o>
-                                  <v n="LValue">false</v>
-                                  <v n="Boolean">false</v>
-                                  <v n="Id">464L</v>
-                                </o>
-                                <v n="Id">463L</v>
-                              </o>
-                            </l2>
-                            <o n="InputParam" t="ParamList">
-                              <l2 n="Names" cet="String">
-                                <v>fIn</v>
-                                <v>stParams</v>
-                              </l2>
-                              <l2 n="Types" cet="String">
-                                <v>LREAL</v>
-                                <v>ST_CTRL_LIMITER_PARAMS[REF]</v>
-                              </l2>
-                            </o>
-                            <o n="OutputParam" t="ParamList">
-                              <l2 n="Names" cet="String">
-                                <v>fOut</v>
-                              </l2>
-                              <l2 n="Types" cet="String">
-                                <v>LREAL</v>
-                              </l2>
-                            </o>
-                            <v n="CallType" t="Operator">FunctionBlock</v>
-                            <v n="EN">false</v>
-                            <v n="ENO">false</v>
-                            <v n="Id">458L</v>
-                          </o>
-                          <o t="BoxTreeOperand">
+                        <l2 n="InputItems" cet="BoxTreeOperand">
+                          <o>
                             <o n="Operand" t="Operand">
-                              <v n="Operand">"stparams_integrate_change_rate"</v>
-                              <v n="Type">"TC2_CONTROLLERTOOLBOX.ST_CTRL_I_PARAMS"</v>
+                              <v n="Operand">"g_set_production"</v>
+                              <v n="Type">"REAL"</v>
                               <v n="Comment">""</v>
-                              <v n="SymbolComment">""</v>
+                              <v n="SymbolComment">" the initial setpoints"</v>
                               <v n="Address">""</v>
                               <o n="Flags" t="Flags">
                                 <v n="Flags">0</v>
@@ -304,51 +117,35 @@ END_VAR]]></Declaration>
                               </o>
                               <v n="LValue">false</v>
                               <v n="Boolean">false</v>
-                              <v n="Id">481L</v>
+                              <v n="Id">729L</v>
                             </o>
-                            <v n="Id">480L</v>
+                            <v n="Id">728L</v>
                           </o>
                         </l2>
                         <o n="InputParam" t="ParamList">
                           <l2 n="Names" cet="String">
-                            <v>fIn</v>
-                            <v>stParams</v>
+                            <v>in</v>
                           </l2>
                           <l2 n="Types" cet="String">
-                            <v>LREAL</v>
-                            <v>ST_CTRL_I_PARAMS[REF]</v>
+                            <v>REAL</v>
                           </l2>
                         </o>
                         <o n="OutputParam" t="ParamList">
                           <l2 n="Names" cet="String">
-                            <v>fOut</v>
+                            <v>out</v>
                           </l2>
                           <l2 n="Types" cet="String">
-                            <v>LREAL</v>
+                            <v>REAL</v>
                           </l2>
                         </o>
                         <v n="CallType" t="Operator">FunctionBlock</v>
                         <v n="EN">false</v>
                         <v n="ENO">false</v>
-                        <v n="Id">467L</v>
+                        <v n="Id">727L</v>
                       </o>
-                      <v n="Id">148L</v>
+                      <v n="Id">747L</v>
                     </o>
-                  </l2>
-                  <v n="ILActive">false</v>
-                  <v n="FBDValid">false</v>
-                  <v n="ILValid">false</v>
-                  <l2 n="ILLines" />
-                  <l2 n="Connectors" />
-                  <v n="Id">79L</v>
-                </o>
-                <o>
-                  <v n="Comment">""</v>
-                  <v n="Title">""</v>
-                  <v n="Label">""</v>
-                  <v n="OutCommented">false</v>
-                  <l2 n="NetworkItems" cet="BoxTreeAssign">
-                    <o>
+                    <o t="BoxTreeAssign">
                       <o n="OutputItems" t="OutputItemList">
                         <l2 n="OutputItems" cet="Operand">
                           <o>
@@ -363,7 +160,7 @@ END_VAR]]></Declaration>
                             </o>
                             <v n="LValue">true</v>
                             <v n="Boolean">false</v>
-                            <v n="Id">603L</v>
+                            <v n="Id">736L</v>
                           </o>
                         </l2>
                       </o>
@@ -385,7 +182,7 @@ END_VAR]]></Declaration>
                           </o>
                           <v n="LValue">false</v>
                           <v n="Boolean">false</v>
-                          <v n="Id">610L</v>
+                          <v n="Id">743L</v>
                         </o>
                         <o n="OutputItems" t="OutputItemList">
                           <l2 n="OutputItems">
@@ -397,25 +194,13 @@ END_VAR]]></Declaration>
                           <v n="Fixed">true</v>
                         </o>
                         <n n="InputFlags" />
-                        <l2 n="InputItems" cet="BoxTreeOperand">
-                          <o>
-                            <o n="Operand" t="Operand">
-                              <v n="Operand">"pctgsp"</v>
-                              <v n="Type">"REAL"</v>
-                              <v n="Comment">""</v>
-                              <v n="SymbolComment">""</v>
-                              <v n="Address">""</v>
-                              <o n="Flags" t="Flags">
-                                <v n="Flags">0</v>
-                                <v n="Fixed">false</v>
-                              </o>
-                              <v n="LValue">false</v>
-                              <v n="Boolean">false</v>
-                              <v n="Id">590L</v>
-                            </o>
-                            <v n="Id">589L</v>
+                        <l2 n="InputItems">
+                          <o t="BoxTreeDemux">
+                            <v n="VarId">4</v>
+                            <n n="Input" />
+                            <v n="Id">748L</v>
                           </o>
-                          <o>
+                          <o t="BoxTreeOperand">
                             <o n="Operand" t="Operand">
                               <v n="Operand">"g_xmeas[40]"</v>
                               <v n="Type">"REAL"</v>
@@ -428,9 +213,9 @@ END_VAR]]></Declaration>
                               </o>
                               <v n="LValue">false</v>
                               <v n="Boolean">false</v>
-                              <v n="Id">592L</v>
+                              <v n="Id">746L</v>
                             </o>
-                            <v n="Id">591L</v>
+                            <v n="Id">745L</v>
                           </o>
                         </l2>
                         <o n="InputParam" t="ParamList">
@@ -454,9 +239,39 @@ END_VAR]]></Declaration>
                         <v n="CallType" t="Operator">FunctionBlock</v>
                         <v n="EN">false</v>
                         <v n="ENO">false</v>
-                        <v n="Id">611L</v>
+                        <v n="Id">744L</v>
                       </o>
-                      <v n="Id">604L</v>
+                      <v n="Id">737L</v>
+                    </o>
+                    <o t="BoxTreeAssign">
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" cet="Operand">
+                          <o>
+                            <v n="Operand">"g_PctGsp"</v>
+                            <v n="Type">"REAL"</v>
+                            <v n="Comment">""</v>
+                            <v n="SymbolComment">" Percent G Composition"</v>
+                            <v n="Address">""</v>
+                            <o n="Flags" t="Flags">
+                              <v n="Flags">0</v>
+                              <v n="Fixed">false</v>
+                            </o>
+                            <v n="LValue">true</v>
+                            <v n="Boolean">false</v>
+                            <v n="Id">750L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">false</v>
+                      </o>
+                      <o n="RValue" t="BoxTreeDemux">
+                        <v n="VarId">4</v>
+                        <n n="Input" />
+                        <v n="Id">749L</v>
+                      </o>
+                      <v n="Id">751L</v>
                     </o>
                   </l2>
                   <v n="ILActive">false</v>
@@ -464,7 +279,7 @@ END_VAR]]></Declaration>
                   <v n="ILValid">false</v>
                   <l2 n="ILLines" />
                   <l2 n="Connectors" />
-                  <v n="Id">586L</v>
+                  <v n="Id">725L</v>
                 </o>
                 <o>
                   <v n="Comment">""</v>
@@ -607,7 +422,7 @@ END_VAR]]></Declaration>
                   <v n="Id">656L</v>
                 </o>
               </l2>
-              <v n="BranchCounter">0</v>
+              <v n="BranchCounter">4</v>
               <v n="ValidIds">true</v>
             </o>
           </Data>
@@ -615,6 +430,7 @@ END_VAR]]></Declaration>
             <Type n="Boolean">System.Boolean</Type>
             <Type n="BoxTreeAssign">{9873c309-1f09-4ebf-9078-42d8057ef11b}</Type>
             <Type n="BoxTreeBox">{acfc6f68-8e3a-4af5-bf81-3dd512095a46}</Type>
+            <Type n="BoxTreeDemux">{b1d55618-017c-4bc5-990a-55c2f27d9d3a}</Type>
             <Type n="BoxTreeOperand">{9de7f100-1b87-424c-a62e-45b0cfc85ed2}</Type>
             <Type n="Flags">{668066f2-6069-46b3-8962-8db8d13d7db2}</Type>
             <Type n="Int32">System.Int32</Type>
