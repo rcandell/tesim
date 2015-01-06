@@ -20,34 +20,46 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\fb_ac_measurements.TcPOU">
+    <Compile Include="POUs\components\fb_ac_measurements.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\fb_flow_rate.TcPOU">
+    <Compile Include="POUs\components\fb_discrete_pi.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\components\fb_flow_rate.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\components\fb_prod_feedforward.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\components\fb_ratio_trimming.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\components\fb_vel_pi.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\components\fb_xmeas_acquire.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\components\fb_zoh_real.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\ldrMain.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\fb_prod_feedforward.TcPOU">
+    <Compile Include="POUs\subsystems\fb_ac_ratio_ctrl.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\fb_prod_rate.TcPOU">
+    <Compile Include="POUs\subsystems\fb_level_ctrl.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\fb_ratio_trimming.TcPOU">
+    <Compile Include="POUs\subsystems\fb_prod_rate_ctrl.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\fb_discrete_pi.TcPOU">
+    <Compile Include="POUs\subsystems\fb_prod_comp_ctrl.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\fb_vel_pi.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\fb_xmeas_acquire.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\fb_zoh_real.TcPOU">
+    <Compile Include="POUs\subsystems\fb_ratio_ctrl.TcPOU">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -55,6 +67,7 @@
     <Folder Include="DUTs" />
     <Folder Include="GVLs" />
     <Folder Include="POUs\components" />
+    <Folder Include="POUs\subsystems" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>
