@@ -4,16 +4,54 @@
     <Declaration><![CDATA[VAR_GLOBAL
 	
 	// used for main start/stop/estop
-	gRUNNING: BOOL;
-	gSTART: BOOL;
+	g_RUNNING: BOOL;
+	g_START: BOOL;
 	
 	// E-STOP
-	gESTOP: BOOL := TRUE;
+	g_ESTOP: BOOL := TRUE;
 	
 	// loop control constants
-	gTs_base : REAL := 0.001;
-	gTs : REAL := 0.1;
+	g_Ts_base : REAL := 0.001;
+	g_Ts : REAL := 0.1;
 	
+	// the initial setpoints
+	g_set_production: 		REAL := 22.89;
+	g_set_stip_level: 		REAL := 50;
+	g_set_sep_level:  		REAL := 50;
+	g_set_reactor_level: 		REAL := 65;
+	g_set_reactor_press: 		REAL := 2800;
+	g_set_mol_pct_g:	 		REAL := 53.8;
+	g_set_ya:					REAL := 100*32.2/(32.2+18.8);
+	g_set_yac:				REAL := 32.2+18.8;
+	g_set_reactor_temp:		REAL := 122.9;
+	g_set_rcycle_valve_pos: 	REAL := 0;
+	g_set_steam_valve_pos:	REAL := 0;
+	g_set_agitator_speed:		REAL :=	100;		
+	g_set_separator_temp:		REAL := SP17_0;
+	
+	// storage variables for sub-controllers
+	g_xmeas: ARRAY [1..41] OF REAL;
+	g_xmv: ARRAY [1..12] OF REAL := [50,50,65,2800,22.89,63.1373,51,122.9,0,0,100,53.8];
+	g_rx: ARRAY [1..7] OF REAL;	
+	
+	// production rate variables
+	g_Prodsp: REAL;
+	g_Fp: REAL;
+	
+	// Percent G Composition
+	g_PctGsp: REAL :=0;
+	g_Eadj: REAL :=0;
+	
+	
+	
+END_VAR
+
+VAR_GLOBAL CONSTANT
+	xmv_0 : ARRAY [1..12] OF REAL := [50,50,65,2800,22.89,63.1373,51,122.9,0,0,100,53.8];
+	r_0 : ARRAY [1..7] OF REAL := [0,0,0,0,0,0,0];  // need values!!!
+	SP17_0 : REAL := 0.0;  // need value !!!
+	Eadj_0 : REAL := 0.0;  // need value !!!
+	ProdspGain: REAL := 100/22.89;	
 END_VAR
 ]]></Declaration>
     <ObjectProperties />
