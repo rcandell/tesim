@@ -6,12 +6,13 @@ _CompileInfo/
 _Libraries/
 _Boot/
 TrialLicense*
+*.~u
 /*tsproj.bak
 *.app
 *.crc
 *.occ
-*tizip
-*.sln.\~u 
+*.tizip 
+
 
 # User-specific files
 *.suo
