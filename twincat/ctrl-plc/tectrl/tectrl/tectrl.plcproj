@@ -62,6 +62,9 @@
     <Compile Include="POUs\subsystems\fb_ratio_ctrl.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\subsystems\fb_temp_ctrl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />

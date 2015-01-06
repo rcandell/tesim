@@ -19,11 +19,20 @@ VAR
 	// production rate loop
 	prod_rate_loop: fb_prod_rate_ctrl := (kc:=3.2, ti:=120/60, ts:=g_Ts_base, x0:=0, hi:=30, lo:=0);	
 	
-	ac_ratio_ctrl: fb_ac_ratio_ctrl;
 	feed_ratio_ctrl: fb_ratio_ctrl;
 	
+	// process levels/invetory controller
 	level_ctrl: fb_level_ctrl;
+		
+	// product comnposition controller
 	prod_comp_ctrl: fb_prod_comp_ctrl;
+	
+	// A & C ratio controller
+	ac_ratio_ctrl: fb_ac_ratio_ctrl;
+	
+	// temperature controller
+	temp_ctrl: fb_temp_ctrl;
+	
 END_VAR
 
 VAR_INPUT
@@ -369,7 +378,7 @@ END_VAR
                         <v n="Operand">"level_ctrl"</v>
                         <v n="Type">"fb_level_ctrl"</v>
                         <v n="Comment">""</v>
-                        <v n="SymbolComment">""</v>
+                        <v n="SymbolComment">" process levels/invetory controller"</v>
                         <v n="Address">""</v>
                         <o n="Flags" t="Flags">
                           <v n="Flags">0</v>
@@ -377,7 +386,7 @@ END_VAR
                         </o>
                         <v n="LValue">false</v>
                         <v n="Boolean">false</v>
-                        <v n="Id">1268L</v>
+                        <v n="Id">1344L</v>
                       </o>
                       <o n="OutputItems" t="OutputItemList">
                         <l2 n="OutputItems" />
@@ -399,7 +408,7 @@ END_VAR
                       <v n="CallType" t="Operator">FunctionBlock</v>
                       <v n="EN">false</v>
                       <v n="ENO">false</v>
-                      <v n="Id">1269L</v>
+                      <v n="Id">1345L</v>
                     </o>
                   </l2>
                   <v n="ILActive">false</v>
@@ -421,7 +430,7 @@ END_VAR
                         <v n="Operand">"prod_comp_ctrl"</v>
                         <v n="Type">"fb_prod_comp_ctrl"</v>
                         <v n="Comment">""</v>
-                        <v n="SymbolComment">""</v>
+                        <v n="SymbolComment">" product comnposition controller"</v>
                         <v n="Address">""</v>
                         <o n="Flags" t="Flags">
                           <v n="Flags">0</v>
@@ -473,7 +482,7 @@ END_VAR
                         <v n="Operand">"ac_ratio_ctrl"</v>
                         <v n="Type">"fb_ac_ratio_ctrl"</v>
                         <v n="Comment">""</v>
-                        <v n="SymbolComment">""</v>
+                        <v n="SymbolComment">" A &amp; C ratio controller"</v>
                         <v n="Address">""</v>
                         <o n="Flags" t="Flags">
                           <v n="Flags">0</v>
@@ -518,7 +527,46 @@ END_VAR
                   <v n="Title">""</v>
                   <v n="Label">""</v>
                   <v n="OutCommented">false</v>
-                  <l2 n="NetworkItems" />
+                  <l2 n="NetworkItems" cet="BoxTreeBox">
+                    <o>
+                      <v n="BoxType">"fb_temp_ctrl"</v>
+                      <o n="Instance" t="Operand">
+                        <v n="Operand">"temp_ctrl"</v>
+                        <v n="Type">"fb_temp_ctrl"</v>
+                        <v n="Comment">""</v>
+                        <v n="SymbolComment">" temperature controller"</v>
+                        <v n="Address">""</v>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">false</v>
+                        </o>
+                        <v n="LValue">false</v>
+                        <v n="Boolean">false</v>
+                        <v n="Id">1342L</v>
+                      </o>
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" />
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">true</v>
+                      </o>
+                      <n n="InputFlags" />
+                      <l2 n="InputItems" />
+                      <o n="InputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <o n="OutputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <v n="CallType" t="Operator">FunctionBlock</v>
+                      <v n="EN">false</v>
+                      <v n="ENO">false</v>
+                      <v n="Id">1343L</v>
+                    </o>
+                  </l2>
                   <v n="ILActive">false</v>
                   <v n="FBDValid">false</v>
                   <v n="ILValid">false</v>
