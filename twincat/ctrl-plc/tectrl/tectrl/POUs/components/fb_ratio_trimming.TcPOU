@@ -9,8 +9,8 @@ VAR_INPUT
 END_VAR
 
 VAR_OUTPUT
-	r1: REAL := 0.0;
-	r4: REAL := 0.0;
+	r1: REAL;
+	r4: REAL;
 END_VAR
 
 VAR

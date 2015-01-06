@@ -41,6 +41,7 @@ VAR
 	pctgsp: REAL := 0.0;
 	
 	
+	prod_feedforward: fb_prod_feedforward;
 END_VAR
 
 VAR CONSTANT
@@ -464,6 +465,146 @@ END_VAR]]></Declaration>
                   <l2 n="ILLines" />
                   <l2 n="Connectors" />
                   <v n="Id">586L</v>
+                </o>
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems" cet="BoxTreeAssign">
+                    <o>
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" cet="Operand">
+                          <o>
+                            <v n="Operand">"g_rx[2]"</v>
+                            <v n="Type">"REAL"</v>
+                            <v n="Comment">""</v>
+                            <v n="SymbolComment">""</v>
+                            <v n="Address">""</v>
+                            <o n="Flags" t="Flags">
+                              <v n="Flags">0</v>
+                              <v n="Fixed">false</v>
+                            </o>
+                            <v n="LValue">true</v>
+                            <v n="Boolean">false</v>
+                            <v n="Id">672L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">false</v>
+                      </o>
+                      <o n="RValue" t="BoxTreeBox">
+                        <v n="BoxType">"fb_prod_feedforward"</v>
+                        <o n="Instance" t="Operand">
+                          <v n="Operand">"prod_feedforward"</v>
+                          <v n="Type">"fb_prod_feedforward"</v>
+                          <v n="Comment">""</v>
+                          <v n="SymbolComment">""</v>
+                          <v n="Address">""</v>
+                          <o n="Flags" t="Flags">
+                            <v n="Flags">0</v>
+                            <v n="Fixed">false</v>
+                          </o>
+                          <v n="LValue">false</v>
+                          <v n="Boolean">false</v>
+                          <v n="Id">669L</v>
+                        </o>
+                        <o n="OutputItems" t="OutputItemList">
+                          <l2 n="OutputItems" cet="Operand">
+                            <n />
+                            <o>
+                              <v n="Operand">"g_rx[3]"</v>
+                              <v n="Type">"REAL"</v>
+                              <v n="Comment">""</v>
+                              <v n="SymbolComment">""</v>
+                              <v n="Address">""</v>
+                              <o n="Flags" t="Flags">
+                                <v n="Flags">0</v>
+                                <v n="Fixed">false</v>
+                              </o>
+                              <v n="LValue">true</v>
+                              <v n="Boolean">false</v>
+                              <v n="Id">671L</v>
+                            </o>
+                          </l2>
+                        </o>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">true</v>
+                        </o>
+                        <n n="InputFlags" />
+                        <l2 n="InputItems" cet="BoxTreeOperand">
+                          <o>
+                            <o n="Operand" t="Operand">
+                              <v n="Operand">"g_Eadj"</v>
+                              <v n="Type">"REAL"</v>
+                              <v n="Comment">""</v>
+                              <v n="SymbolComment">""</v>
+                              <v n="Address">""</v>
+                              <o n="Flags" t="Flags">
+                                <v n="Flags">0</v>
+                                <v n="Fixed">false</v>
+                              </o>
+                              <v n="LValue">false</v>
+                              <v n="Boolean">false</v>
+                              <v n="Id">666L</v>
+                            </o>
+                            <v n="Id">665L</v>
+                          </o>
+                          <o>
+                            <o n="Operand" t="Operand">
+                              <v n="Operand">"g_PctGsp"</v>
+                              <v n="Type">"REAL"</v>
+                              <v n="Comment">""</v>
+                              <v n="SymbolComment">" Percent G Composition"</v>
+                              <v n="Address">""</v>
+                              <o n="Flags" t="Flags">
+                                <v n="Flags">0</v>
+                                <v n="Fixed">false</v>
+                              </o>
+                              <v n="LValue">false</v>
+                              <v n="Boolean">false</v>
+                              <v n="Id">668L</v>
+                            </o>
+                            <v n="Id">667L</v>
+                          </o>
+                        </l2>
+                        <o n="InputParam" t="ParamList">
+                          <l2 n="Names" cet="String">
+                            <v>eadj</v>
+                            <v>pctgsp</v>
+                          </l2>
+                          <l2 n="Types" cet="String">
+                            <v>REAL</v>
+                            <v>REAL</v>
+                          </l2>
+                        </o>
+                        <o n="OutputParam" t="ParamList">
+                          <l2 n="Names" cet="String">
+                            <v>r2</v>
+                            <v>r3</v>
+                          </l2>
+                          <l2 n="Types" cet="String">
+                            <v>REAL</v>
+                            <v>REAL</v>
+                          </l2>
+                        </o>
+                        <v n="CallType" t="Operator">FunctionBlock</v>
+                        <v n="EN">false</v>
+                        <v n="ENO">false</v>
+                        <v n="Id">670L</v>
+                      </o>
+                      <v n="Id">673L</v>
+                    </o>
+                  </l2>
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" />
+                  <l2 n="Connectors" />
+                  <v n="Id">656L</v>
                 </o>
               </l2>
               <v n="BranchCounter">0</v>

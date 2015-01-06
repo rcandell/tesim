@@ -3,6 +3,10 @@
 
 # Twincat specific files
 _CompileInfo
+_Libraries
+_Boot
+TrialLicense*
+
 
 # User-specific files
 *.suo
