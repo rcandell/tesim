@@ -17,6 +17,9 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\fb_top.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -44,6 +47,18 @@
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_Module</Namespace>
     </PlaceholderReference>
+  </ItemGroup>
+  <ItemGroup>
+    <LibraryReference Include="UML Statechart Types,4.0.0.0,3S - Smart Software Solutions GmbH">
+      <Namespace>UML_SC</Namespace>
+      <PublishSymbolsInContainer>True</PublishSymbolsInContainer>
+      <SystemLibrary>True</SystemLibrary>
+    </LibraryReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="teplant.tmc">
+      <SubType>Content</SubType>
+    </Content>
   </ItemGroup>
   <ProjectExtensions />
 </Project>
