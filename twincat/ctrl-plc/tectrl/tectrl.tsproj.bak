@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0">
-	<Project ProjectGUID="{38E5C6FE-0519-48AD-8D59-BF6F6707ED8B}" ModifiedGUID="{AE5EEC7F-1D7C-4ED2-998C-C42C0848CE58}">
+	<Project ProjectGUID="{38E5C6FE-0519-48AD-8D59-BF6F6707ED8B}" ModifiedGUID="{1AFAC604-6F40-4A36-AA08-BB83F5E81BAE}">
 		<System>
 			<Settings>
 				<Cpu RtLimit="50"/>
 			</Settings>
 			<Tasks>
-				<Task Id="2" Priority="20" CycleTime="100000" AmsPort="350" Affinity="#x00000001">
+				<Task Id="2" Priority="20" CycleTime="1000000" AmsPort="350" Affinity="#x00000001">
 					<Name>PlcTask</Name>
 				</Task>
 			</Tasks>

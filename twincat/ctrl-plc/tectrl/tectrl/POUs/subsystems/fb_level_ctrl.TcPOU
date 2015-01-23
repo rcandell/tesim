@@ -24,7 +24,7 @@ END_VAR
           <Data>
             <o xml:space="preserve" t="NWLImplementationObject">
               <v n="NetworkListComment">""</v>
-              <v n="DefaultViewMode">"Fbd"</v>
+              <v n="DefaultViewMode">"Ld"</v>
               <l2 n="NetworkList" cet="Network">
                 <o>
                   <v n="Comment">""</v>

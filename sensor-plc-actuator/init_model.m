@@ -4,6 +4,7 @@ global Ts_base
 global Ts_scan
 global Ts_save
 global IDVspec
+global model_type
 
 u0=[63.053, 53.98, 24.644, 61.302, 22.21, 40.064, 38.10, 46.534, 47.446, 41.106, 18.114, 50];
     
@@ -32,16 +33,17 @@ SP17_0=80.1;
 %        doesn't apply.
 
 %load initial conditions for model signals
-xInitial = initial_conditions_combined('te_plant_controller')
+disp(['name of model: ' bdroot])
+xInitial = initial_conditions(bdroot, model_type)
+%xInitial = initial_conditions_combined('te_plant_controller')
 
 % TS_base is the integration step size in hours.  The simulink model
 % is using a fixed step size (Euler) method.  Variable step-size methods
 % don't work very well (high noise level).  TS_base is also the sampling
 % period of most discrete PI controllers used in the simulation.
 % Ts_base=0.0005/2;  % in hours (original setting)
-%Ts_base=1/3600;  % seconds seconds converted hours
-Ts_base=1/1800;  % seconds seconds converted hours
-Ts_scan=Ts_base*10;   
+Ts_base=1/3600;  % 1 second in hours 
+Ts_scan=Ts_base*10;
 
 % TS_save is the sampling period for saving results.  The following
 % variables are saved at the end of a run:
@@ -54,16 +56,20 @@ Ts_scan=Ts_base*10;
 Ts_save=Ts_base;
 
 % enable my udp servers
+% note: port numbers must be chosen carefully to avoid contention and slow
+% down of the simulation
+echoudp('off')
+remote_port = 25001
+echoudp('on',remote_port)
+xmeas_local_port_tx = 9601:9699;
+xmeas_local_port_rx = 9701:9799;
+xmv_local_port_tx = 9801:9899;
+xmv_local_port_rx = 9901:9999;
+
 if license('checkout','instrument_control_toolbox')
-    echoudp('off')
-    % measurement ports  - for the controller listener
-    for port = 9901:9941
-        echoudp('on', port)
-    end
-    % manipulated variables ports - for the plant listener
-    for port = 9951:9962
-        echoudp('on', port)
-    end
+  disp('license available')
+else
+  disp('no license available')
 end
 
 % % If p is the probability of going from good to bad, and if r is the
