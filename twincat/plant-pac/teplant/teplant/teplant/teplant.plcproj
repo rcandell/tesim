@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <FileVersion>1.0.0.0</FileVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{01e1d166-08dc-47e7-936c-f4ffd890e556}</ProjectGuid>
+    <Name>teplant</Name>
+    <ProgramVersion>3.1.0.8</ProgramVersion>
+    <Application>{c281ee40-a85b-45f7-9998-937e32d65e1c}</Application>
+    <TypeSystem>{5a59cdfc-63ba-4b48-ba33-17c7f9858885}</TypeSystem>
+    <Implicit_Task_Info>{00b22751-f16f-4380-b117-31bd8e5d8950}</Implicit_Task_Info>
+    <Implicit_KindOfTask>{0ead2443-baf4-4259-aba3-6e78a519d6a0}</Implicit_KindOfTask>
+    <Implicit_Jitter_Distribution>{fb84c20f-85a7-48bd-adbd-a3ba98ac4fc1}</Implicit_Jitter_Distribution>
+    <LibraryReferences>{c59fe23c-0e59-483d-93bc-f9976a27dace}</LibraryReferences>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="PlcTask.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\fb_top.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\MAIN.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DUTs" />
+    <Folder Include="GVLs" />
+    <Folder Include="VISUs" />
+    <Folder Include="POUs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderReference Include="Tc2_Standard">
+      <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Standard</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_System">
+      <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_System</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_Interfaces">
+      <DefaultResolution>Tc3_Interfaces, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_Interfaces</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_Module">
+      <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_Module</Namespace>
+    </PlaceholderReference>
+  </ItemGroup>
+  <ItemGroup>
+    <LibraryReference Include="UML Statechart Types,4.0.0.0,3S - Smart Software Solutions GmbH">
+      <Namespace>UML_SC</Namespace>
+      <PublishSymbolsInContainer>True</PublishSymbolsInContainer>
+      <SystemLibrary>True</SystemLibrary>
+    </LibraryReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="teplant.tmc">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <ProjectExtensions />
+</Project>
