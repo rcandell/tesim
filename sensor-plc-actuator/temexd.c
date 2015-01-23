@@ -939,37 +939,40 @@ static int tefunc(const integer *nn, doublereal *time, doublereal *yy, doublerea
     pv_.xmeas[21] = teproc_.tws;
     *isd = 0;
   
-    if (pv_.xmeas[6] > (float)3e3) {
-	*isd = 1;
-	sprintf(msg,"High Reactor Pressure!!  Shutting down.");
-    }
-    if (teproc_.vlr / (float)35.3145 > (float)24.) {
-	*isd = 2;
-	sprintf(msg,"High Reactor Liquid Level!!  Shutting down.");
-    }
-    if (teproc_.vlr / (float)35.3145 < (float)2.) {
-	*isd = 3;
-	sprintf(msg,"Low Reactor Liquid Level!!  Shutting down.");
-    }
-    if (pv_.xmeas[8] > (float)175.) {
-	sprintf(msg,"High Reactor Temperature!!  Shutting down.");
-	*isd = 4;
-    }
-    if (teproc_.vls / (float)35.3145 > (float)12.) {
-	*isd = 5;
-	sprintf(msg,"High Separator Liquid Level!!  Shutting down.");
-    }
-    if (teproc_.vls / (float)35.3145 < (float)1.) {
-	*isd = 6;
-	sprintf(msg,"Low Separator Liquid Level!!  Shutting down.");
-    }
-    if (teproc_.vlc / (float)35.3145 > (float)8.) {
-	sprintf(msg,"High Stripper Liquid Level!!  Shutting down.");
-	*isd = 7;
-    }
-    if (teproc_.vlc / (float)35.3145 < (float)1.) {
-	*isd = 8;
-	sprintf(msg,"Low Stripper Liquid Level!!  Shutting down.");
+    /* shutdown conditions */
+    if (1) {
+        if (pv_.xmeas[6] > (float)3e3) {
+        *isd = 1;
+        sprintf(msg,"High Reactor Pressure!!  Shutting down.");
+        }
+        if (teproc_.vlr / (float)35.3145 > (float)24.) {
+        *isd = 2;
+        sprintf(msg,"High Reactor Liquid Level!!  Shutting down.");
+        }
+        if (teproc_.vlr / (float)35.3145 < (float)2.) {
+        *isd = 3;
+        sprintf(msg,"Low Reactor Liquid Level!!  Shutting down.");
+        }
+        if (pv_.xmeas[8] > (float)175.) {
+        sprintf(msg,"High Reactor Temperature!!  Shutting down.");
+        *isd = 4;
+        }
+        if (teproc_.vls / (float)35.3145 > (float)12.) {
+        *isd = 5;
+        sprintf(msg,"High Separator Liquid Level!!  Shutting down.");
+        }
+        if (teproc_.vls / (float)35.3145 < (float)1.) {
+        *isd = 6;
+        sprintf(msg,"Low Separator Liquid Level!!  Shutting down.");
+        }
+        if (teproc_.vlc / (float)35.3145 > (float)8.) {
+        sprintf(msg,"High Stripper Liquid Level!!  Shutting down.");
+        *isd = 7;
+        }
+        if (teproc_.vlc / (float)35.3145 < (float)1.) {
+        *isd = 8;
+        sprintf(msg,"Low Stripper Liquid Level!!  Shutting down.");
+        }
     }
      
     if (*time > (float)0. && *isd == 0) {

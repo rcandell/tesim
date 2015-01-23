@@ -47,6 +47,8 @@
 END_VAR
 
 VAR_GLOBAL CONSTANT
+	g_NumXmeas: 	INT := 41;
+	g_NumXmv:		INT	:= 12;
 	Fp_0: REAL :=100;
 	r_0 : ARRAY [1..7] OF REAL := 
 		[0.251/Fp_0, 3664/Fp_0, 4509/Fp_0, 9.35/Fp_0, 0.337/Fp_0, 25.16/Fp_0, 22.95/Fp_0];    

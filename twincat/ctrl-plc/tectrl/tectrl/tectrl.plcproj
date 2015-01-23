@@ -47,6 +47,12 @@
     <Compile Include="POUs\components\fb_unitdelay_real.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\debug\fb_generate_random_value.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="POUs\debug\fb_xmeas_simulated.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="POUs\ldrMain.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -68,11 +74,16 @@
     <Compile Include="POUs\subsystems\fb_temp_ctrl.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POUs\test\fb_test_xmeas_simulated.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
     <Folder Include="GVLs" />
     <Folder Include="POUs\components" />
+    <Folder Include="POUs\debug" />
+    <Folder Include="POUs\test" />
     <Folder Include="POUs\subsystems" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
