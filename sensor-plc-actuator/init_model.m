@@ -62,9 +62,9 @@ echoudp('off')
 remote_port = 25001
 echoudp('on',remote_port)
 xmeas_local_port_tx = 9601:9699;
-xmeas_local_port_rx = 9701:9799;
+xmeas_local_port_rx = xmeas_local_port_tx;%9701:9799;
 xmv_local_port_tx = 9801:9899;
-xmv_local_port_rx = 9901:9999;
+xmv_local_port_rx = xmv_local_port_tx;%9901:9999;
 
 if license('checkout','instrument_control_toolbox')
   disp('license available')
