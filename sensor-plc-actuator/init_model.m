@@ -42,8 +42,20 @@ xInitial = initial_conditions(bdroot, model_type)
 % don't work very well (high noise level).  TS_base is also the sampling
 % period of most discrete PI controllers used in the simulation.
 % Ts_base=0.0005/2;  % in hours (original setting)
-Ts_base=1/3600;  % 1 second in hours 
-Ts_scan=Ts_base*10;
+Ts_base         = 1/3600;  % 1 second in hours 
+Ts_scan         = 60*Ts_base;
+% TS_SCAN cannot go longer than 125 times Ts_base
+
+% SENSOR SAMPLE TIMES
+Ts_sensor       = repmat(Ts_scan,41,1);
+%Ts_sensor(10)   = 1*Ts_sensor(10);
+
+% ACTUATOR SAMPLE TIMES
+Ts_actuator       = repmat(Ts_scan,12,1);
+%Ts_actuator(3)   = 1*Ts_actuator(3);
+
+% PLC processing delay
+Dprocplc = 0; %Ts_base;
 
 % TS_save is the sampling period for saving results.  The following
 % variables are saved at the end of a run:
@@ -72,44 +84,28 @@ else
   disp('no license available')
 end
 
-% % If p is the probability of going from good to bad, and if r is the
-% % probability of going from bad to good, then this code will generate a
-% % packet loss pattern with burst losses. 
-% 
-% gtob=[0.8 ,1];
-% btog=[0,.5];
-% xmv_vec_length=12;
-% xmeas_vec_length=41;
-% xmv_init = [62.807, 53.287, 26.662, 60.483, 0, 24.229, 37.208, 46.431, 0, 35.865, 12.931, 100]';
-% 
-% xmeas_init = [0.25052, 3664, 4509.3, 9.3477, 26.902, 42.339, 2705, 75, 120.4, 0.33712, 80.109,... 
-%     50, 2633.7, 25.16, 50, 3102.2, 22.949, 65.731, 230.31, 341.43, 94.599, 77.297, 32.188,... 
-%     8.8933, 26.383,  6.882, 18.776, 1.6567, 32.958, 13.823, 23.978, 1.2565, 18.579, 2.2633,... 
-%     4.8436, 2.2986, 0.017866, 0.8357, 0.098577, 53.724, 43.828]';
-% 
-% % set R & P in the top-level script
-% % by default, set to always good state
-% if ~exist('P','var') 
-%     P=0;
-% end
-% if ~exist('R','var') 
-%     R=1;
-% end
-% p_xmv = P+zeros(xmv_vec_length,1);
-% r_xmv = R+zeros(xmv_vec_length,1);
-% p_xmeas = P+zeros(xmeas_vec_length,1);
-% r_xmeas = R+zeros(xmeas_vec_length,1);
-% % p_xmv = gtob(1) + (gtob(2)-gtob(1)).*rand(xmv_vec_length,1);
-% % r_xmv = btog(1) + (btog(2)-btog(1)).*rand(xmv_vec_length,1);
-% % p_xmeas = gtob(1) + (gtob(2)-gtob(1)).*rand(xmeas_vec_length,1);
-% % r_xmeas = btog(1) + (btog(2)-btog(1)).*rand(xmeas_vec_length,1);
-% 
 % initialize the IDV condition (disturbances)
-if isempty(evalin('base','IDVspec'))
-    IDVspec = zeros(1, 20);
-%    IDVmat = zeros(1, 20);
-%    IDVmat(4) = 1; % Reactor cooling water inlet temperature
-end
+IDVspec = zeros(1, 20);
+IDVspec(1) = 0; % a/c feed ratio, b composition constant
+IDVspec(2) = 0; 
+IDVspec(3) = 0;
+IDVspec(4) = 0; % Reactor cooling water inlet temperature, step change
+IDVspec(5) = 0;
+IDVspec(6) = 0;
+IDVspec(4) = 0;
+IDVspec(8) = 0;
+IDVspec(9) = 0;
+IDVspec(10) = 0;
+IDVspec(11) = 0; % reactor cooling inlet temp, random variation
+IDVspec(12) = 0; % condenser cooling inlet temp, random variation
+IDVspec(13) = 0; % reaction kinectics, slow drift
+IDVspec(14) = 0; % reactor cooling valve sticks
+IDVspec(15) = 0; % condenser cooling valve sticks
+IDVspec(16) = 0;
+IDVspec(17) = 0;
+IDVspec(18) = 0;
+IDVspec(19) = 0; 
+IDVspec(20) = 0; 
 IDVspec %#ok<NOPTS>
 
 % 
