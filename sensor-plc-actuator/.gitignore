@@ -23,6 +23,7 @@ slprj
 *.mex32
 *.mex64
 *.unknown_version
+*.autosave
 
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0">
-	<Project ProjectGUID="{38E5C6FE-0519-48AD-8D59-BF6F6707ED8B}" ModifiedGUID="{A30B5C66-1C1D-4009-8E41-0A35B986FB66}" Target64Bit="true">
+	<Project ProjectGUID="{38E5C6FE-0519-48AD-8D59-BF6F6707ED8B}" ModifiedGUID="{AEA4CCCF-046A-4908-A39E-9E70F3167766}" Target64Bit="true">
 		<System>
 			<Settings>
 				<Cpu RtLimit="50"/>
