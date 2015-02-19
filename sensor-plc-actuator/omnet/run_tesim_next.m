@@ -1,4 +1,9 @@
 function [tstart, tstop, xmeas_out, xmv_out] = run_tesim_next(tstart, tstep, mdlname)
+%
+% Author: Rick Candell
+% Organization: National Institute of Standards and Technology
+%               U.S. Department of Commerce
+% License: Public Domain
 
 if nargin < 3
     mdlname = 'te_plant_controller_for_omnet';  
@@ -22,14 +27,6 @@ Ts_base = 1/3600;
 Ts_scan = 1/3600;
 Ts_save = 1/3600;  
 model_data_init(Ts_base, Ts_scan, Ts_save)
-
-% controller and plant initial conditions
- 
-% assignin('base','Ts_base',Ts_base);
-% assignin('base','Ts_scan',Ts_scan);
-% assignin('base','Ts_save',Ts_save);
-% Eadj_0=0;           assignin('base','Eadj_0',0);
-% SP17_0=80.1;        assignin('base','SP17_0',SP17_0);
 
 % run the simulation for the first time step
 set_param(mdl, 'StartTime', num2str(0));
