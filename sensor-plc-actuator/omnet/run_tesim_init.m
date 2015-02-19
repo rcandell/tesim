@@ -1,4 +1,9 @@
 function [tstart, tstop, xmeas_out, xmv_out] = run_tesim_init(mdlname, tstart, tstop)
+%
+% Author: Rick Candell
+% Organization: National Institute of Standards and Technology
+%               U.S. Department of Commerce
+% License: Public Domain
 
 if nargin < 3
     tstop = 10/3600;
@@ -47,13 +52,19 @@ set_param(mdl, 'StopTime', num2str(tstop));
 simout = sim(mdl);
 
 % save states, inputs, and outputs to file
+%  xFinal
 xFinal = simout.get('xFinal'); 
 save('xFinal.mat','xFinal');
+%  xmeas
 xmeas_out = simout.get('xmeas_out'); 
-dlmwrite('xmeas_in_init.txt',xmeas_out,'\t');
+dlmwrite('xmeas_out.txt',xmeas_out,'\t');
+%  xmv (includes on the nine used by the plant)
 xmv_out = simout.get('xmv_out'); 
-dlmwrite('xmv_in_init.txt',xmv_out,'\t');
-dlmwrite('xmv_full.txt', simout.get('xmv_full'), '\t');
+dlmwrite('xmv_out.txt',xmv_out,'\t');
+%  xmv_full (includes all 12 manipulated)
+xmv_full = simout.get('xmv_full'); 
+dlmwrite('xmv_full.txt', xmv_full, '\t');
+%  rx_k
 dlmwrite('rx_k.txt', simout.get('rx_k'), '\t');
 
 end  
@@ -73,11 +84,12 @@ function xmv_in = model_data_init(Ts_base, Ts_scan, Ts_save)
     end
     
     % set the manipulated variables 
+%     xmv_in = dlmread('xmv_in_init.txt', '\t');  
     xmv_in = u0([1 2 3 4 6 7 8 10 11]);
     assignin('base','xmv_in',xmv_in);
 
     % set the measured variables 
-    xmeas_in = dlmread('xmeas_in.txt', '\t');  
+    xmeas_in = dlmread('xmeas_in_init.txt', '\t');  
     assignin('base','xmeas_in', xmeas_in);    
 
     Fp_0=100;           assignin('base','Fp_0',Fp_0);

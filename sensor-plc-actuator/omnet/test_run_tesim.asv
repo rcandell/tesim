@@ -1,30 +1,39 @@
+%
+% Author: Rick Candell
+% Organization: National Institute of Standards and Technology
+%               U.S. Department of Commerce
+% License: Public Domain
 
 %% clear out memory
 clear;
 
 %% run the initialization routine
-[tstart, tstop, xmeas_out, xmv_out] = run_tesim_init();
+[tstart, tstop, xmeas_ii, xmv_ii] = run_tesim_init();
+disp(['start: ' num2str(tstart) ' stop: ' num2str(tstop)]);
+lvals = [tstart tstop xmv_ii xmeas_ii];
+save('tesim_fullout.txt','lvals','-ascii','-tabs')
 
 %% incrementaly run the simulation
+N = 5;
 tstep = 1/3600;
-for ii = 1:1000
+for ii = 2:N
     
-    % set timing
+    % set new start time
     tstart = tstop;
-    tstop = tstart + tstep;
     
     % call the omnet++ mock routine
     omnetpp()
     
     % call the next iteration of tesim
+    [tstart, tstop, xmeas_ii, xmv_ii] = run_tesim_next(tstart, tstep);
     disp(['start: ' num2str(tstart) ' stop: ' num2str(tstop)]);
-    [tstart, tstop, xmeas_out, xmv_out] = run_tesim_next(tstart, tstep);
     
     % log the outputof the simulation
-    dlmwrite('tesim_fullout.txt',[tstart tstop xmv_out],'-append')
-    
-    if ~mod(ii,10)
-        disp('waiting for input ....')
-        pause(5)
-    end
+    lvals = [tstart tstop xmv_ii xmeas_ii];
+    save('tesim_fullout.txt','lvals','-ascii','-tabs','-append') 
+
 end
+
+%% post processing 
+X = dlmread('tesim_fullout.txt','\t');
+plot

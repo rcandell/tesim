@@ -39,7 +39,7 @@ if cmd <= 0
                                   12.209547880014606 99.999999999999915];
     xInitial.signals(1).dimensions = 50;
     xInitial.signals(1).label = 'CSTATE';
-    xInitial.signals(1).blockName = [model_name '/TE Plant/TE Code'];
+    xInitial.signals(1).blockName = [model_name '/TE Plant/TE Plant Model/TE Code'];
 end
 
 if cmd >= 0
