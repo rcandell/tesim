@@ -89,7 +89,7 @@ C  Simulation Loop
 C
       DO 1000 I = 1, NPTS
 C
-          CALL CONTRL
+C          CALL CONTRL
 C
           CALL OUTPUT
 C

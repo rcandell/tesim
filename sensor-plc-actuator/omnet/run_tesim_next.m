@@ -89,15 +89,17 @@ function model_data_init(Ts_base, Ts_scan, Ts_save)
     assignin('base','IDVspec',IDVspec);
     
     % controller loop initials
-    xmv_full = dlmread('xmv_full.txt','\t');
-    Eadj_0=0;       assignin('base','Eadj_0',0);
-    SP17_0=80.1;    assignin('base','SP17_0',SP17_0);    
+    xmv_full = dlmread('xmv_full.txt','\t'); % TODO: Move this to next loop and compare to 9 output version
+	                                         % TODO: Can this one be used instead of the 9 output version (xmv_out)?
+    Eadj_0=0;       assignin('base','Eadj_0',0);       % TODO: Is this being reinitd instead of state propagated?
+    SP17_0=80.1;    assignin('base','SP17_0',SP17_0);  % TODO: Is this being reinitd instead of state propagated?  
+	
     for i=1:12;
         iChar=int2str(i);
-        evalin('base',['xmv',iChar,'_0=xmeas_in(',iChar,');']);
+        evalin('base',['xmv',iChar,'_0=xmeas_in(',iChar,');']);  %TODO: FIX!!!! Should be xmv_in!!!
     end
     rx_k = dlmread('rx_k.txt','\t');
-    assignin('base','r1_0',rx_k(1));
+    assignin('base','r1_0',rx_k(1)); % TODO: Verify that these are correctly assigned in the model
     assignin('base','r2_0',rx_k(2));
     assignin('base','r3_0',rx_k(3));
     assignin('base','r4_0',rx_k(4));
