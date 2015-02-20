@@ -7,6 +7,11 @@
 %% clear out memory
 clear;
 
+%% Sample times
+% TODO: Setup sample times structure and propagate through the model from top
+%   or use a class to store and retrieve all of the information instead
+%   ???? Why in the world didn't I think of that before ????
+
 %% run the initialization routine
 %   the base case starts off in a steady state condition
 [tstart, tstop, xmeas_ii, xmv_ii] = run_tesim_init();
@@ -14,7 +19,7 @@ disp(['start: ' num2str(tstart) ' stop: ' num2str(tstop)]);
 lvals = [tstart tstop xmv_ii xmeas_ii];
 save('tesim_fullout.txt','lvals','-ascii','-tabs')
 
-%% incrementaly run the simulation
+%% incrementally run the simulation
 tstep = 1/3600;
 N = 10/tstep; % 10 hours
 for ii = 2:N
@@ -25,7 +30,7 @@ for ii = 2:N
     % call the omnet++ mock routine
     omnetpp()
     
-    % todo: insert the distributance vector
+    % TODO: insert the disturbance vector
     %  read disturbance vector from next row in idv file
     
     % call the next iteration of tesim

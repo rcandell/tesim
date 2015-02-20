@@ -6,7 +6,7 @@ function [tstart, tstop, xmeas_out, xmv_out] = run_tesim_init(mdlname, tstart, t
 % License: Public Domain
 
 if nargin < 3
-    tstop = 10/3600;
+    tstop = 10/3600;  % TODO: make this 1/3600
 end
 
 if nargin < 2
@@ -22,8 +22,8 @@ open(mdlname);
 mdl = bdroot;
 
 % controller and plant initial conditions
-Ts_base = 1/3600;
-Ts_scan = 1/3600;
+Ts_base = 1/3600; % TODO: update the model to use Ts_base in the plant module
+Ts_scan = 1/3600; % TODO: update the model to use Ts_scan in the controller module
 Ts_save = 1/3600;
 model_data_init(Ts_base, Ts_scan, Ts_save);
 
@@ -33,12 +33,12 @@ set_param(mdl, 'StopTime', num2str(0));
 set_param(mdl, 'SaveFinalState', 'on');
 set_param(mdl, 'FinalStateName', 'xFinal');
 set_param(mdl, 'SaveFormat', 'Structure');
-set_param(mdl, 'SaveCompleteFinalSimState', 'off');  % this is must 
+set_param(mdl, 'SaveCompleteFinalSimState', 'off');  % must be turned OFF
 set_param(mdl, 'LoadInitialState', 'on');
 set_param(mdl, 'InitialState', 'xInitial');
 
-% set the IC for plant to [] fo first run
-assignin('base','tesim_ic',[]);
+% set the IC for plant to [] for first run
+assignin('base','tesim_ic',[]);  
 
 % set new start time
 set_param(mdl, 'StartTime', num2str(tstart));
@@ -58,24 +58,27 @@ save('xFinal.mat','xFinal');
 %  xmeas
 xmeas_out = simout.get('xmeas_out'); 
 dlmwrite('xmeas_out.txt',xmeas_out,'\t');
-%  xmv (includes on the nine used by the plant)
-xmv_out = simout.get('xmv_out'); 
-dlmwrite('xmv_out.txt',xmv_out,'\t');
+%  xmv (includes only the nine used by the plant)
+xmv_out = simout.get('xmv_out');          % TODO: Verify that xmv_out is used correctly downstream
+dlmwrite('xmv_out.txt',xmv_out,'\t');     % TODO: Verify that xmv is written correctly to file
 %  xmv_full (includes all 12 manipulated)
-xmv_full = simout.get('xmv_full'); 
+xmv_full = simout.get('xmv_full');        % TODO: verify that downstream used correctly
+										  % TODO:  Why do I I have two xmv files?  Can't I use just one?
 dlmwrite('xmv_full.txt', xmv_full, '\t');
 %  rx_k
-dlmwrite('rx_k.txt', simout.get('rx_k'), '\t');
+dlmwrite('rx_k.txt', simout.get('rx_k'), '\t');  % TODO: Verify that rx_k is saved and reloaded correctly to the right spot
 
 end  
 
 function xmv_in = model_data_init(Ts_base, Ts_scan, Ts_save)
 
     % Base case initialization
+	% These are the input to the model (XMV)
+	% TODO: Verify that these inputs are correctly used
     u0=[63.053, 53.98, 24.644, 61.302, 22.21, 40.064, 38.10, 46.534, 47.446, 41.106, 18.114, 50];
-    assignin('base','u0',u0);
-    assignin('base','Eadj_0',0);
-    assignin('base','SP17_0',80.1);
+    assignin('base','u0',u0);        	% TODO: Verify that this is used correctly from the original code
+    assignin('base','Eadj_0',0);		% TODO: Verify that this is used correctly from the original code
+    assignin('base','SP17_0',80.1);		% TODO: Verify that this is used correctly from the original code
     
     % controller loop initials
     for i=1:12;
@@ -104,7 +107,7 @@ function xmv_in = model_data_init(Ts_base, Ts_scan, Ts_save)
     Eadj_0=0;           assignin('base','Eadj_0',0);
     SP17_0=80.1;        assignin('base','SP17_0',SP17_0);
 
-    % TS_base is the integration step size in hours.  The simulink model
+    % TS_base is the integration step size in hours.  The Simulink model
     % is using a fixed step size (Euler) method.  Variable step-size methods
     % don't work very well (high noise level).  TS_base is also the sampling
     % period of most discrete PI controllers used in the simulation.
@@ -165,6 +168,7 @@ if cmd <= 0
     xInitial.signals(1).blockName = [model_name '/TE Plant/TE Plant Model/TE Code'];
 end
 
+% TODO:  Verify again that these blocks load correctly with no warnings
 if cmd >= 0
     xInitial.signals(2).values = 62.806983901159221;
     xInitial.signals(2).dimensions = 1;
