@@ -24,12 +24,8 @@
 
 // 1  Vector of 52 initial states.  If empty, defaults are used.
 
-
-
+		  
 #pragma warning(disable : 4996)
-
-#define S_FUNCTION_NAME  temexd
-#define S_FUNCTION_LEVEL 2
 
 #include "stdio.h"
 #include "math.h"
@@ -39,25 +35,25 @@
 // Common Block Declarations */
 //  These structures were produced using f2c
 
-static struct {
+/* static */ struct {
     doublereal xmeas[41], xmv[12];
 } pv_;
 
 
-static struct {
+/* static */ struct {
     integer idv[21];
 } dvec_;
 
-static struct {
+/* static */ struct {
 	doublereal g;
 } randsd_;
 
-static struct {
+/* static */ struct {
 	doublereal avp[8], bvp[8], cvp[8], ah[8], bh[8], ch[8], ag[8], bg[8], 
 		cg[8], av[8], ad[8], bd[8], cd[8], xmw[8];
 } const_;
 
-static struct {
+/* static */ struct {
 	doublereal uclr[8], ucvr[8], utlr, utvr, xlr[8], xvr[8], etr, esr, 
 		tcr, tkr, dlr, vlr, vvr, vtr, ptr, ppr[8], crxr[8], rr[4], rh,
 		 fwr, twr, qur, hwr, uar, ucls[8], ucvs[8], utls, utvs, xls[8]
@@ -71,7 +67,7 @@ static struct {
 	integer ivst[12];
 } teproc_;
 
-static struct {
+/* static */ struct {
 	doublereal adist[12], bdist[12], cdist[12], ddist[12], tlast[12], 
 		tnext[12], hspan[12], hzero[12], sspan[12], szero[12], spspan[
 		12];
@@ -104,8 +100,8 @@ const integer c__10 = 10;
 const integer c__11 = 11;
 const doublereal c_b123 = 4294967296.;
 
-static char msg[256];  // For error messages
-static integer code_sd;
+/* static */ char msg[256];  // For error messages
+/* static */ integer code_sd;
 
 /*====================================================================*
  * Parameter handling methods. These methods are not supported by RTW *
@@ -114,7 +110,7 @@ static integer code_sd;
 #undef MDL_CHECK_PARAMETERS   /* Change to #undef to remove function */
 #if defined(MDL_CHECK_PARAMETERS) && defined(MATLAB_MEX_FILE)
 
-static void mdlCheckParameters(SimStruct *S)
+/* static */ void mdlCheckParameters(SimStruct *S)
   {
 	// Declarations
 	int_T Plen[2];         // Expected lengths
@@ -169,7 +165,7 @@ static void mdlCheckParameters(SimStruct *S)
  *       0 or positive number - This explicitly sets item to the specified
  *                              value.
  */
-//static void mdlInitializeSizes(SimStruct *S)
+///* static */ void mdlInitializeSizes(SimStruct *S)
 //{
 //    ssSetNumSFcnParams(S, 1);  /* Number of expected parameters */
 //    if (ssGetNumSFcnParams(S) == ssGetSFcnParamsCount(S)) {
@@ -233,7 +229,7 @@ static void mdlCheckParameters(SimStruct *S)
 
 #undef MDL_SET_WORK_WIDTHS   /* Change to #undef to remove function */
 #if defined(MDL_SET_WORK_WIDTHS) && defined(MATLAB_MEX_FILE)
-  static void mdlSetWorkWidths(SimStruct *S)
+  /* static */ void mdlSetWorkWidths(SimStruct *S)
   {
   }
 #endif /* MDL_SET_WORK_WIDTHS */
@@ -256,7 +252,7 @@ static void mdlCheckParameters(SimStruct *S)
    *    You can use the ssIsFirstInitCond(S) macro to determine if this is
    *    is the first time mdlInitializeConditions is being called.
    */
-static void mdlInitializeConditions(SimStruct *S)
+/* static */ void mdlInitializeConditions(SimStruct *S)
   {
 	  real_T *x0;      // pointer to states
       real_T *pr;
@@ -337,7 +333,7 @@ static void mdlInitializeConditions(SimStruct *S)
 
 #undef MDL_START  /* Change to #undef to remove function */
 #if defined(MDL_START)
-static void mdlStart(SimStruct *S)
+/* static */ void mdlStart(SimStruct *S)
   {
   }
 #endif /*  MDL_START */
@@ -349,7 +345,7 @@ static void mdlStart(SimStruct *S)
  *    S-function. You must register the same number of sample times as
  *    specified in ssSetNumSampleTimes.
  */
-//static void mdlInitializeSampleTimes(SimStruct *S)
+///* static */ void mdlInitializeSampleTimes(SimStruct *S)
 //{
 //    ssSetSampleTime(S, 0, CONTINUOUS_SAMPLE_TIME);
 //    ssSetOffsetTime(S, 0, 0.0);
@@ -363,7 +359,7 @@ static void mdlStart(SimStruct *S)
  *    block. Generally outputs are placed in the output vector(s),
  *    ssGetOutputPortSignal.
  */
-//static void mdlOutputs(SimStruct *S, int_T tid)
+///* static */ void mdlOutputs(SimStruct *S, int_T tid)
 //{
 //	real_T *y;
 //	int i;
@@ -397,7 +393,7 @@ static void mdlStart(SimStruct *S)
    *    for performing any tasks that should only take place once per
    *    integration step.
    */
-static void mdlUpdate(SimStruct *S, int_T tid)
+/* static */ void mdlUpdate(SimStruct *S, int_T tid)
   {
   }
 #endif /* MDL_UPDATE */
@@ -411,7 +407,7 @@ static void mdlUpdate(SimStruct *S, int_T tid)
    *    In this function, you compute the S-function block's derivatives.
    *    The derivatives are placed in the derivative vector, ssGetdX(S).
    */
-static void mdlDerivatives(SimStruct *S)
+/* static */ void mdlDerivatives(SimStruct *S)
   {
 	doublereal x[50];
 	doublereal *dx;
@@ -444,7 +440,7 @@ static void mdlDerivatives(SimStruct *S)
  *            }
  *        }
  */
-//static void mdlTerminate(SimStruct *S)
+///* static */ void mdlTerminate(SimStruct *S)
 //{
 //		if (code_sd != (integer) 0 ) {
 //			mexWarnMsgTxt(msg);
@@ -455,7 +451,7 @@ static void mdlDerivatives(SimStruct *S)
 // Also moves current IDV values into the common block.
 // Also moves current U values into common.
 
-//static doublereal getcurr(doublereal x[], SimStruct *S)
+///* static */ doublereal getcurr(doublereal x[], SimStruct *S)
 //{
 //	int i;
 //	doublereal rt;
@@ -479,7 +475,7 @@ static void mdlDerivatives(SimStruct *S)
 
 // SETIDV moves current IDV parameters into the common block.
 
-//static void setidv(SimStruct *S)
+///* static */ void setidv(SimStruct *S)
 //{
 //	InputRealPtrsType uPtrs;
 //	int i;
@@ -496,7 +492,7 @@ static void mdlDerivatives(SimStruct *S)
 
 // SUBROUTINE TEFUNC
 
-static int tefunc(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp)
+/* static */ int tefunc(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp)
 {
     /* System generated locals */
     integer i__1;
@@ -1114,7 +1110,7 @@ static int tefunc(const integer *nn, doublereal *time, doublereal *yy, doublerea
 
 // SUBROUTINE TEINIT
 
-static int teinit(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp)
+/* static */ int teinit(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp)
 {
     /* Local variables */
     integer i__;
@@ -1528,7 +1524,7 @@ static int teinit(const integer *nn, doublereal *time, doublereal *yy, doublerea
 
 /* ============================================================================= */
 
-/* Subroutine */static int tesub1_(doublereal *z__, doublereal *t, 
+/* Subroutine *//* static */ int tesub1_(doublereal *z__, doublereal *t, 
 		doublereal *h__, const integer *ity)
 {
     /* System generated locals */
@@ -1573,7 +1569,7 @@ static int teinit(const integer *nn, doublereal *time, doublereal *yy, doublerea
     return 0;
 } /* tesub1_ */
 
-/* Subroutine */static int tesub2_(doublereal *z__, doublereal *t, doublereal *h__, 
+/* Subroutine *//* static */ int tesub2_(doublereal *z__, doublereal *t, doublereal *h__, 
            const integer *ity)
 {
     integer j;
@@ -1602,7 +1598,7 @@ L300:
     return 0;
 } /* tesub2_ */
 
-/* Subroutine */static int tesub3_(doublereal *z__, doublereal *t, doublereal *dh, 
+/* Subroutine *//* static */ int tesub3_(doublereal *z__, doublereal *t, doublereal *dh, 
 		   const integer *ity)
 {
     /* System generated locals */
@@ -1646,7 +1642,7 @@ L300:
     return 0;
 } /* tesub3_ */
 
-/* Subroutine */static int tesub4_(doublereal *x, doublereal *t, doublereal *r__)
+/* Subroutine *//* static */ int tesub4_(doublereal *x, doublereal *t, doublereal *r__)
 {
     integer i__;
     doublereal v;
@@ -1665,7 +1661,7 @@ L300:
     return 0;
 } /* tesub4_ */
 
-static int tesub5_(doublereal *s, doublereal *sp, doublereal *adist, doublereal *bdist, 
+/* static */ int tesub5_(doublereal *s, doublereal *sp, doublereal *adist, doublereal *bdist, 
 			doublereal *cdist, doublereal *ddist, doublereal *tlast, 
 			doublereal *tnext, doublereal *hspan, doublereal *hzero, 
 			doublereal *sspan, doublereal *szero, doublereal *spspan, 
@@ -1696,7 +1692,7 @@ static int tesub5_(doublereal *s, doublereal *sp, doublereal *adist, doublereal 
     return 0;
 } /* tesub5_ */
 
-/* Subroutine */static int tesub6_(doublereal *std, doublereal *x)
+/* Subroutine *//* static */ int tesub6_(doublereal *std, doublereal *x)
 {
     integer i__;
 
@@ -1708,7 +1704,7 @@ static int tesub5_(doublereal *s, doublereal *sp, doublereal *adist, doublereal 
     return 0;
 } /* tesub6_ */
 
-static doublereal tesub7_(integer *i__)
+/* static */ doublereal tesub7_(integer *i__)
 {
     /* System generated locals */
     doublereal ret_val, d__1, c_b78;
@@ -1725,7 +1721,7 @@ static doublereal tesub7_(integer *i__)
     return ret_val;
 } /* tesub7_ */
 
-static doublereal tesub8_(const integer *i__, doublereal *t)
+/* static */ doublereal tesub8_(const integer *i__, doublereal *t)
 {
     /* System generated locals */
     doublereal ret_val;
