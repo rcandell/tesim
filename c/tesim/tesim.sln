@@ -1,7 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tesim", "tesim.vcxproj", "{BCD23133-71A7-4277-B98C-704312445459}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tesimexec", "tesim.vcxproj", "{80176B0A-A8BD-4866-B575-6812299E93BD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tenist", "..\tenist\tenist.vcxproj", "{969E4490-A38D-400B-B44C-E405D9190EBA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "f2c", "..\f2c\f2c.vcxproj", "{CE892EC8-B9CC-4C7C-B569-1B53850F7828}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +13,18 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BCD23133-71A7-4277-B98C-704312445459}.Debug|Win32.ActiveCfg = Debug|Win32
-		{BCD23133-71A7-4277-B98C-704312445459}.Debug|Win32.Build.0 = Debug|Win32
-		{BCD23133-71A7-4277-B98C-704312445459}.Release|Win32.ActiveCfg = Release|Win32
-		{BCD23133-71A7-4277-B98C-704312445459}.Release|Win32.Build.0 = Release|Win32
+		{80176B0A-A8BD-4866-B575-6812299E93BD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{80176B0A-A8BD-4866-B575-6812299E93BD}.Debug|Win32.Build.0 = Debug|Win32
+		{80176B0A-A8BD-4866-B575-6812299E93BD}.Release|Win32.ActiveCfg = Release|Win32
+		{80176B0A-A8BD-4866-B575-6812299E93BD}.Release|Win32.Build.0 = Release|Win32
+		{969E4490-A38D-400B-B44C-E405D9190EBA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{969E4490-A38D-400B-B44C-E405D9190EBA}.Debug|Win32.Build.0 = Debug|Win32
+		{969E4490-A38D-400B-B44C-E405D9190EBA}.Release|Win32.ActiveCfg = Release|Win32
+		{969E4490-A38D-400B-B44C-E405D9190EBA}.Release|Win32.Build.0 = Release|Win32
+		{CE892EC8-B9CC-4C7C-B569-1B53850F7828}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CE892EC8-B9CC-4C7C-B569-1B53850F7828}.Debug|Win32.Build.0 = Debug|Win32
+		{CE892EC8-B9CC-4C7C-B569-1B53850F7828}.Release|Win32.ActiveCfg = Release|Win32
+		{CE892EC8-B9CC-4C7C-B569-1B53850F7828}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

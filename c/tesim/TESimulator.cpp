@@ -1,5 +1,5 @@
 
-#include "tesim_nist.h"
+#include "TESimulator.h"
 
 TESimulator* TESimulator::instance = 0;
 
@@ -47,4 +47,5 @@ void TESimulator::valid_times(const double ts_plant, const double ts_ctlr) throw
 {
 	
 }
+
 

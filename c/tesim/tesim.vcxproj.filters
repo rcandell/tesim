@@ -18,31 +18,28 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClCompile Include="tesim.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TESimulator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="teplant.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="teprob.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="f2c.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TEPlant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\tesim_nist.h">
+    <ClInclude Include="TESimulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TEController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tesim.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\tesim_nist.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
