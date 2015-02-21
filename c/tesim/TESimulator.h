@@ -7,8 +7,8 @@
 
 */
 
-#ifndef __TESIM_H__
-#define __TESIM_H__
+#ifndef __TESIMULATOR_H__
+#define __TESIMULATOR_H__
 
 //#define NIST_DEBUG_ON (true)
 //#define NIST_DEBUG(x) do { \
