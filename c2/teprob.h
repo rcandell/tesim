@@ -229,14 +229,15 @@ typedef doublereal E_f; /* real function with -R not specified */
 #undef unix
 #undef vax
 #endif
-#endif
+
+
 
 // more defs by rc
 typedef double real_T;
-typedef struct
-{
-	doublereal x0;
-} SimStruct;
+//typedef struct
+//{
+//	doublereal x0;
+//} SimStruct;
 
 const int NX = 50;			// number of states
 const int NU = 12;			// number of xmv
@@ -244,14 +245,9 @@ const int NY = 41;			// number of xmeas
 const int NPAR = 1;			// number of parameters for encapsulating simulink block
 const int NIDV = 20;		// number of disturbance types
 
-#ifdef __cplusplus
-extern "C" 
-{
-#endif
-
 // Prototypes
-void setidv(SimStruct *S);
-doublereal getcurr(doublereal x[], SimStruct *S);
+//void setidv(SimStruct *S);
+//doublereal getcurr(doublereal x[], SimStruct *S);
 int tefunc(const integer *nn, doublereal *time, doublereal *yy, 
 		   doublereal *yp);
 int teinit(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp);
@@ -274,6 +270,6 @@ double pow_dd(doublereal *ap, const doublereal *bp);
 double d_mod(doublereal *x, doublereal *y);
 
 
-#ifdef __cplusplus
-}
+
+
 #endif

@@ -118,10 +118,6 @@ void TESimulator::increment_controller()
 	
 }
 
-// validates that tstep is integer multiple of ode time step
-void TESimulator::valid_times(const double ts_plant, const double ts_ctlr) throw (...)
-{
-	
-}
+
 
 

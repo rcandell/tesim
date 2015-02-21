@@ -58,9 +58,6 @@ class TESimulator
 		
 		// run the controller one scan interval
 		void increment_controller();
-		
-		// validates that tstep is integer multiple of ode time step
-		void valid_times(const double ts_plant, const double ts_ctlr) throw (...);
 
 		// variables
 		double 		m_ts_ode;			// time step for the ode solver
