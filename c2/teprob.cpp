@@ -27,6 +27,7 @@
 		  
 #pragma warning(disable : 4996)
 
+
 #include "stdio.h"
 #include "math.h"
 //#include "simstruc.h"
@@ -473,6 +474,27 @@ const doublereal c_b123 = 4294967296.;
 //}
 // end GETCURR
 
+void get_curr_xmeas(double* xmeas)
+{
+	for (int i=0; i<NY; i++) {
+		xmeas[i] = pv_.xmeas[i];
+	}
+}
+
+void set_curr_xmv(double* xmv)
+{
+	for (int i = 0; i<NU; i++) {
+		pv_.xmv[i] = xmv[i];
+	}
+}
+
+void set_curr_idv(int* idv)
+{
+	for (int i=0; i<NIDV; i++) {
+		dvec_.idv[i] = (integer) idv[NIDV];
+	}	
+}
+
 // SETIDV moves current IDV parameters into the common block.
 
 ///* static */ void setidv(SimStruct *S)
@@ -492,7 +514,7 @@ const doublereal c_b123 = 4294967296.;
 
 // SUBROUTINE TEFUNC
 
-/* static */ int tefunc(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp)
+int tefunc(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp)
 {
     /* System generated locals */
     integer i__1;
@@ -1110,7 +1132,7 @@ const doublereal c_b123 = 4294967296.;
 
 // SUBROUTINE TEINIT
 
-/* static */ int teinit(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp)
+int teinit(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp)
 {
     /* Local variables */
     integer i__;

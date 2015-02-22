@@ -27,37 +27,45 @@
 //	5. increment the simulator
 //  6. repeat from Step 3.
 
+#include <ostream>     // std::cout, std::ostream, std::ios
+
 class TESimulator
 {		
     public:
         static TESimulator* getInstance();
 		virtual ~TESimulator();
 
+		// constants
+		static const long int NX;			// number of states
+		static const long int NU;			// number of xmv
+		static const long int NY;			// number of xmeas
+		static const long int NIDV;			// number of disturbance types
+
 		// initialize the simulation
 		void initializePlant();
-		void initializeController(const double ts_ctlr);
+		void initializeController();
 		
-		// increment both plant and controller one time step
-		void increment();
+		// run the plant one time step
+		// returns the measured variables
+		double* increment_plant(double dt, double* xmv);
+
+		// run the controller one scan interval
+		// returns the manipulated variables
+		double* increment_controller(double* xmeas);
 		
 		// set and get for xmeas
-		const double* get_xmeas() const { return m_xmeas; };
-		void set_xmeas(const double* xmeas);
+		const double* get_xmeas() const;
 		
 		// set and get for xmv
-		const double* get_xmv() const { return m_xmv; };
-		void set_xmv(const double* xmv);		
+		//void set_xmv(const double* xmv);		
+
+		// overloaded output stream for TESimulator
+		friend std::ostream& operator<< (std::ostream&, const TESimulator&);
 		
     private:
         TESimulator() {}; 
         TESimulator(TESimulator const&);    // Singleton: Don't Implement
         void operator=(TESimulator const&); // Singleton: Don't implement
-		
-		// run the plant one time step
-		void increment_plant();
-		
-		// run the controller one scan interval
-		void increment_controller();
 
 		// variables
 		double 		m_ts_ode;			// time step for the ode solver
@@ -68,17 +76,19 @@ class TESimulator
 
 		static TESimulator*    instance; 
 
-		// constants
-		static const long int NX;			// number of states
-		static const long int NU;			// number of xmv
-		static const long int NY;			// number of xmeas
-		static const long int NIDV;			// number of disturbance types
-
-		// process variables
+		// process variables memory
 		double*		m_x;		// the states
 		double*		m_dxdt;		// the state derivatives
+		double		t;			// current time
+
+		// input/output memory
 		double*		m_xmeas;	// measured
 		double*		m_xmv;		// manipulated
+		int*		m_idv;		// dist. vector
+
+		static void euler(int nn, double t, double dt, double *yy, double *yp);
+
 };
 
 #endif
+

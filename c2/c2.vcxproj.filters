@@ -21,7 +21,7 @@
     <ClCompile Include="TESimulator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="teprob.c">
+    <ClCompile Include="teprob.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

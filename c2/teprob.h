@@ -248,8 +248,10 @@ const int NIDV = 20;		// number of disturbance types
 // Prototypes
 //void setidv(SimStruct *S);
 //doublereal getcurr(doublereal x[], SimStruct *S);
-int tefunc(const integer *nn, doublereal *time, doublereal *yy, 
-		   doublereal *yp);
+void get_curr_xmeas(double* xmeas);
+void set_curr_xmv(double* xmv);
+void set_curr_idv(int* idv);
+int tefunc(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp);
 int teinit(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp);
 int tesub1_(doublereal *z__, doublereal *t, doublereal *h__, 
 			const integer *ity);
