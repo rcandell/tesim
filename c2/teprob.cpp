@@ -5,7 +5,7 @@
 *               U.S. Department of Commerce
 * License: Public Domain
 
-* credits:
+* original credits:
 * 
 *  N. L. Ricker, 12/98.  ricker@u.washington.edu
 

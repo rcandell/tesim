@@ -18,10 +18,13 @@
     <ClCompile Include="tesim.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TESimulator.cpp">
+    <ClCompile Include="teprob.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="teprob.cpp">
+    <ClCompile Include="TEController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TEPlant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,7 +32,10 @@
     <ClInclude Include="teprob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TESimulator.h">
+    <ClInclude Include="TEController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TEPlant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

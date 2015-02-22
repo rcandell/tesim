@@ -1,9 +1,13 @@
-/* 
+/*
 
-* Author: Rick Candell
+* Author: Rick Candell (rick.candell@nist.gov)
 * Organization: National Institute of Standards and Technology
 *               U.S. Department of Commerce
 * License: Public Domain
+
+* original credits:
+*
+*  N. L. Ricker, 12/98.  ricker@u.washington.edu
 
 */
 

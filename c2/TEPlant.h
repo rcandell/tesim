@@ -5,12 +5,10 @@
 *               U.S. Department of Commerce
 * License: Public Domain
 
-* credit to N. L. Ricker, 12/98.  ricker@u.washington.edu
-
 */
 
-#ifndef __TESIMULATOR_H__
-#define __TESIMULATOR_H__
+#ifndef __TEPLANT_H__
+#define __TEPLANT_H__
 
 //#define NIST_DEBUG_ON (true)
 //#define NIST_DEBUG(x) do { \
@@ -23,17 +21,17 @@
 //  2. initialize()  This will initialize memory, load ic's, and increment plant and control one time step
 //        The simulator is now ready to provide values to the network simulator
 //  3. Fetch xmv and xmeas using get methods for each, and run network for one time step
-//  4. update tesimulator with xmeas and xmv using set methods for each
+//  4. update TEPlant with xmeas and xmv using set methods for each
 //	5. increment the simulator
 //  6. repeat from Step 3.
 
 #include <ostream>     // std::cout, std::ostream, std::ios
 
-class TESimulator
+class TEPlant
 {		
     public:
-        static TESimulator* getInstance();
-		virtual ~TESimulator();
+        static TEPlant* getInstance();
+		virtual ~TEPlant();
 
 		// constants
 		static const long int NX;			// number of states
@@ -42,16 +40,11 @@ class TESimulator
 		static const long int NIDV;			// number of disturbance types
 
 		// initialize the simulation
-		void initializePlant();
-		void initializeController();
+		void initialize();
 		
 		// run the plant one time step
 		// returns the measured variables
-		double* increment_plant(double dt, double* xmv);
-
-		// run the controller one scan interval
-		// returns the manipulated variables
-		double* increment_controller(double* xmeas);
+		double* increment(double t, double dt, double* xmv);
 		
 		// set and get for xmeas
 		const double* get_xmeas() const;
@@ -59,13 +52,13 @@ class TESimulator
 		// set and get for xmv
 		//void set_xmv(const double* xmv);		
 
-		// overloaded output stream for TESimulator
-		friend std::ostream& operator<< (std::ostream&, const TESimulator&);
+		// overloaded output stream for TEPlant
+		friend std::ostream& operator<< (std::ostream&, const TEPlant&);
 		
     private:
-        TESimulator() {}; 
-        TESimulator(TESimulator const&);    // Singleton: Don't Implement
-        void operator=(TESimulator const&); // Singleton: Don't implement
+        TEPlant() {}; 
+        TEPlant(TEPlant const&);    // Singleton: Don't Implement
+        TEPlant& operator=(const TEPlant&); // Singleton: Don't implement
 
 		// variables
 		double 		m_ts_ode;			// time step for the ode solver
@@ -74,7 +67,7 @@ class TESimulator
 		unsigned 	m_ode_per_tstep;
 		unsigned 	m_ode_per_tscan;
 
-		static TESimulator*    instance; 
+		static TEPlant*    instance; 
 
 		// process variables memory
 		double*		m_x;		// the states
