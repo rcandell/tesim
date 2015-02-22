@@ -1,35 +1,50 @@
-// tesim.cpp : Defines the entry point for the console application.
+/*
+
+* Author: Rick Candell (rick.candell@nist.gov)
+* Organization: National Institute of Standards and Technology
+*               U.S. Department of Commerce
+* License: Public Domain
+
+*/
+// tesim.cpp : Defines the main() entry point for the console application.
 //
 
-#include "TESimulator.h"
+#include "TEPlant.h"
+#include "TEController.h"
+#include <iostream>
 
 int main(int argc, char* argv[])
 {
-	TESimulator* tesim = TESimulator::getInstance();
+	TEPlant* teplant = TEPlant::getInstance();
+	TEController* tectlr = TEController::getInstance();
 
 	int nsteps = 10000;
-	double t, tstep;
+	double t, tstep, tscan;
 	double *xmeas, *xmv;
 	t = 0;
 	tstep = 1. / 3600.;
-	tesim->initializePlant();
-	tesim->initializeController();
+
+	// init the plant
+	teplant->initialize();
+	xmeas = (double*)(teplant->get_xmeas());
+
+	// init the controller
+	tscan = 1. / 3600.; 
+	tectlr->initialize();
 	for (int ii = 0; ii < nsteps; ii++)
 	{
-		// get the measured data
-		xmeas = (double*)(tesim->get_xmeas());
-
 		// network transmits xmeas data
 		// ...
 
 		// run the controller
-		xmv = tesim->increment_controller(xmeas);
+		xmv = tectlr->increment(t, tscan, xmeas);
 
 		// network transmits xmv data
 		// ...
 
 		// run the plant
-		tesim->increment_plant(t, xmv);
+		xmeas = teplant->increment(t, tstep, xmv);
+		std::cout << *teplant << std::endl;
 
 		// advance the time step
 		t += tstep;

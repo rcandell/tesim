@@ -76,15 +76,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TEController.cpp" />
     <ClCompile Include="teprob.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="tesim.cpp" />
-    <ClCompile Include="TESimulator.cpp" />
+    <ClCompile Include="TEPlant.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TEController.h" />
     <ClInclude Include="teprob.h" />
-    <ClInclude Include="TESimulator.h" />
+    <ClInclude Include="TEPlant.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="f\tecommon.inc" />

@@ -10,48 +10,45 @@
 #include <iostream>     // std::cout, std::ostream, std::ios
 
 #include "teprob.h"
-#include "TESimulator.h"
+#include "TEPlant.h"
 
-const long int TESimulator::NX = 50;			// number of states
-const long int TESimulator::NU = 12;			// number of xmv
-const long int TESimulator::NY = 41;			// number of xmeas
-const long int TESimulator::NIDV = 20;			// number of disturbance types
+const long int TEPlant::NX = 50;			// number of states
+const long int TEPlant::NU = 12;			// number of xmv
+const long int TEPlant::NY = 41;			// number of xmeas
+const long int TEPlant::NIDV = 20;			// number of disturbance types
 
-TESimulator* TESimulator::instance = 0;
+TEPlant* TEPlant::instance = 0;
 
-TESimulator* TESimulator::getInstance()
+TEPlant* TEPlant::getInstance()
 {
-	if (TESimulator::instance == 0)
+	if (TEPlant::instance == 0)
 	{
-		TESimulator::instance = new TESimulator;
+		TEPlant::instance = new TEPlant;
 	}
-    return TESimulator::instance;
+    return TEPlant::instance;
 }
 
-TESimulator::~TESimulator()
+TEPlant::~TEPlant()
 {
-	delete TESimulator::instance;
-	TESimulator::instance = 0;
+	delete TEPlant::instance;
+	TEPlant::instance = 0;
 }
 
 // initialize the simulation
-void TESimulator::initializePlant()
+void TEPlant::initialize()
 {
 	double t = 0.0;
-	m_x		= new double[TESimulator::NX];	// the states
-	m_dxdt	= new double[TESimulator::NX];	// the state derivatives
-	m_xmeas = new double[TESimulator::NY];	// measured
-	m_xmv	= new double[TESimulator::NU];	// manipulated
-	m_idv = new int[TESimulator::NIDV];	// idv's
+	m_x		= new double[TEPlant::NX];	// the states
+	m_dxdt	= new double[TEPlant::NX];	// the state derivatives
+	m_xmeas = new double[TEPlant::NY];	// measured
+	m_xmv	= new double[TEPlant::NU];	// manipulated
+	m_idv = new int[TEPlant::NIDV];	// idv's
 
 	// idv vector
-	for (int ii = 0; ii < TESimulator::NIDV; ii++)
+	for (int ii = 0; ii < TEPlant::NIDV; ii++)
 	{
 		m_idv[ii] = 0;
 	}
-
-	// TODO: initialize manipulated variables
-	// u0 = [63.053, 53.98, 24.644, 61.302, 22.21, 40.064, 38.10, 46.534, 47.446, 41.106, 18.114, 50];
 
 	// initialize states
 	m_x[0] = (float)10.40491389;
@@ -107,53 +104,50 @@ void TESimulator::initializePlant()
 
 	//int teinit(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp);
 	t = 0.0;
-	teinit(&TESimulator::NX, &t, m_x, m_dxdt);
-}
-
-void TESimulator::initializeController()
-{
+	teinit(&TEPlant::NX, &t, m_x, m_dxdt);
 }
 
 // run the plant one time step
-double* TESimulator::increment_plant(double dt, double* new_xmv)
+// reference: http://www.mathworks.com/help/simulink/sfg/how-s-functions-work.html
+//  the plant incrementation operates like simulink solver with euler method
+double* TEPlant::increment(double t, double dt, double* new_xmv)
 {
-	// int tefunc(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp);
+	// apply the new the inputs
 	set_curr_idv(m_idv);
 	set_curr_xmv(m_xmv); 
-	tefunc(&TESimulator::NX, &t, m_x, m_dxdt);
-	euler(TESimulator::NX, t, dt, m_x, m_dxdt);
+
+	// update the model outputs and compute derivatives
+	tefunc(&TEPlant::NX, &t, m_x, m_dxdt);
+
+	// integrate
+	euler(TEPlant::NX, t, dt, m_x, m_dxdt);
+
+	// fetch the next outputs
 	get_curr_xmeas(m_xmeas);
 	return m_xmeas;
-}
-
-// run the controller one scan interval
-double* TESimulator::increment_controller(double* new_xmeas)
-{
-	// todo: run the controller
-	// ...
-	// get xmv's
-	// ...
-	return m_xmv;
 }
 
 // get for xmeas
-const double* TESimulator::get_xmeas() const
+const double* TEPlant::get_xmeas() const
 {
 	get_curr_xmeas(m_xmeas);
 	return m_xmeas;
 }
 
 
-std::ostream& operator<< (std::ostream& lhs, const TESimulator& rhs)
-{
-	return lhs;
-}
-
-
-void TESimulator::euler(int nn, double t, double dt, double* yy, double* yp)
+void TEPlant::euler(int nn, double t, double dt, double* yy, double* yp)
 {
 	for (int ii = 0; ii < nn; ii++)
 	{
 		yy[ii] = yy[ii] + yp[ii] * dt;
 	}
+}
+
+std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
+{
+	for (int ii = 0; ii < TEPlant::NY; ii++)
+	{
+		lhs << rhs.m_xmeas[ii] << "\t";
+	}
+	return lhs;
 }
