@@ -48,6 +48,7 @@ class TEPlant
 		
 		// set and get for xmeas
 		const double* get_xmeas() const;
+		const double get_xmeas(unsigned idx) const { return m_xmeas[idx];	}
 		
 		// set and get for xmv
 		//void set_xmv(const double* xmv);		
@@ -72,7 +73,7 @@ class TEPlant
 		// process variables memory
 		double*		m_x;		// the states
 		double*		m_dxdt;		// the state derivatives
-		double		t;			// current time
+		double		m_t;			// current time
 
 		// input/output memory
 		double*		m_xmeas;	// measured

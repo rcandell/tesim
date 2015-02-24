@@ -8,6 +8,7 @@
 */
 
 #include <iostream>     // std::cout, std::ostream, std::ios
+#include <cstring>
 
 #include "teprob.h"
 #include "TEPlant.h"
@@ -38,17 +39,11 @@ TEPlant::~TEPlant()
 void TEPlant::initialize()
 {
 	double t = 0.0;
-	m_x		= new double[TEPlant::NX];	// the states
-	m_dxdt	= new double[TEPlant::NX];	// the state derivatives
-	m_xmeas = new double[TEPlant::NY];	// measured
-	m_xmv	= new double[TEPlant::NU];	// manipulated
-	m_idv = new int[TEPlant::NIDV];	// idv's
-
-	// idv vector
-	for (int ii = 0; ii < TEPlant::NIDV; ii++)
-	{
-		m_idv[ii] = 0;
-	}
+	m_x		= new double[TEPlant::NX]();	// the states
+	m_dxdt	= new double[TEPlant::NX]();	// the state derivatives
+	m_xmeas = new double[TEPlant::NY]();	// measured
+	m_xmv	= new double[TEPlant::NU]();	// manipulated
+	m_idv   = new int[TEPlant::NIDV]();	// idv's
 
 	// initialize states
 	m_x[0] = (float)10.40491389;
@@ -101,10 +96,17 @@ void TEPlant::initialize()
 	m_x[47] = (float)41.10581288;
 	m_x[48] = (float)18.11349055;
 	m_x[49] = (float)50.;
+	std::memset(m_dxdt, 0, TEPlant::NX*sizeof m_x);
+
+	// initialize the plant inputs for good measure
+	double u0[NU] = { 63.053, 53.98, 24.644, 61.302, 22.21,
+		40.064, 38.10, 46.534, 47.446, 41.106,
+		18.114, 100 };  // TODO: verify with simulink model
+	std::memcpy(m_xmv, u0, NU*sizeof(double));
 
 	//int teinit(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp);
-	t = 0.0;
-	teinit(&TEPlant::NX, &t, m_x, m_dxdt);
+	m_t = 0.0;
+	teinit(&TEPlant::NX, &m_t, m_x, m_dxdt);
 }
 
 // run the plant one time step
@@ -112,15 +114,18 @@ void TEPlant::initialize()
 //  the plant incrementation operates like simulink solver with euler method
 double* TEPlant::increment(double t, double dt, double* new_xmv)
 {
+	// update time
+	m_t = t;
+
 	// apply the new the inputs
 	set_curr_idv(m_idv);
-	set_curr_xmv(m_xmv); 
+	set_curr_xmv(m_xmv);
 
 	// update the model outputs and compute derivatives
 	tefunc(&TEPlant::NX, &t, m_x, m_dxdt);
 
 	// integrate
-	euler(TEPlant::NX, t, dt, m_x, m_dxdt);
+	TEPlant::euler(TEPlant::NX, t, dt, m_x, m_dxdt);
 
 	// fetch the next outputs
 	get_curr_xmeas(m_xmeas);
@@ -133,7 +138,6 @@ const double* TEPlant::get_xmeas() const
 	get_curr_xmeas(m_xmeas);
 	return m_xmeas;
 }
-
 
 void TEPlant::euler(int nn, double t, double dt, double* yy, double* yp)
 {
@@ -151,3 +155,4 @@ std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
 	}
 	return lhs;
 }
+
