@@ -45,6 +45,7 @@ int main(int argc, char* argv[])
 		// run the plant
 		xmeas = teplant->increment(t, tstep, xmv);
 		std::cout << *teplant << std::endl;
+		//std::cout << teplant->get_xmeas(12) << std::endl;
 
 		// advance the time step
 		t += tstep;

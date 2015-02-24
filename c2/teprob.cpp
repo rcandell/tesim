@@ -78,439 +78,31 @@
 
 /* Table of constant values */
 
-const integer c__50 = 50;
-const integer c__12 = 12;
-const integer c__21 = 21;
-const integer c__153 = 153;
-const integer c__586 = 586;
-const integer c__139 = 139;
-const integer c__6 = 6;
-const integer c__1 = 1;
-const integer c__0 = 0;
-const integer c__41 = 41;
-const integer c__2 = 2;
-const integer c__3 = 3;
-const integer c__4 = 4;
-const integer c__5 = 5;
-const integer c__7 = 7;
-const integer c__8 = 8;
-const doublereal c_b73 = 1.1544;
-const doublereal c_b74 = .3735;
-const integer c__9 = 9;
-const integer c__10 = 10;
-const integer c__11 = 11;
-const doublereal c_b123 = 4294967296.;
+static const integer c__50 = 50;
+static const integer c__12 = 12;
+static const integer c__21 = 21;
+static const integer c__153 = 153;
+static const integer c__586 = 586;
+static const integer c__139 = 139;
+static const integer c__6 = 6;
+static const integer c__1 = 1;
+static const integer c__0 = 0;
+static const integer c__41 = 41;
+static const integer c__2 = 2;
+static const integer c__3 = 3;
+static const integer c__4 = 4;
+static const integer c__5 = 5;
+static const integer c__7 = 7;
+static const integer c__8 = 8;
+static const doublereal c_b73 = 1.1544;
+static const doublereal c_b74 = .3735;
+static const integer c__9 = 9;
+static const integer c__10 = 10;
+static const integer c__11 = 11;
+static const doublereal c_b123 = 4294967296.;
 
-/* static */ char msg[256];  // For error messages
-/* static */ integer code_sd;
-
-/*====================================================================*
- * Parameter handling methods. These methods are not supported by RTW *
- *====================================================================*/
-
-#undef MDL_CHECK_PARAMETERS   /* Change to #undef to remove function */
-#if defined(MDL_CHECK_PARAMETERS) && defined(MATLAB_MEX_FILE)
-
-/* static */ void mdlCheckParameters(SimStruct *S)
-  {
-	// Declarations
-	int_T Plen[2];         // Expected lengths
-	int_T i, nEls;
-
-	// Start
-	Plen[0] = NX;
-	Plen[1] = 20;
-	for (i=0; i<NPAR; i++) {
-		if (mxIsEmpty(ssGetSFcnParam(S,i)))
-			continue;
-		if (mxIsSparse(ssGetSFcnParam(S,i)) ||
-			mxIsComplex(ssGetSFcnParam(S,i)) ||
-			!mxIsNumeric(ssGetSFcnParam(S,i))) {
-			sprintf(msg,"Error in parameter %i:  %s",i+1,
-				"Parameter must be a real, non-sparse vector.");
-			ssSetErrorStatus(S,msg);
-			return;
-		}
-		nEls = mxGetNumberOfElements(ssGetSFcnParam(S,i));
-		if (nEls != Plen[i]) {
-			sprintf(msg,"Error in parameter %i:  Length = %i"
-				".  Expecting length = %i", i+1, nEls, Plen[i]);
-			ssSetErrorStatus(S,msg);
-			return;
-		}
-	}
-  }
-#endif /* MDL_CHECK_PARAMETERS */
-
-
-/*=====================================*
- * Configuration and execution methods *
- *=====================================*/
-
-/* Function: mdlInitializeSizes ===============================================
- * Abstract:
- *    The sizes information is used by Simulink to determine the S-function
- *    block's characteristics (number of inputs, outputs, states, etc.).
- *
- *    The direct feedthrough flag can be either 1=yes or 0=no. It should be
- *    set to 1 if the input, "u", is used in the mdlOutput function. Setting
- *    this to 0 is akin to making a promise that "u" will not be used in the
- *    mdlOutput function. If you break the promise, then unpredictable results
- *    will occur.
- *
- *    The NumContStates, NumDiscStates, NumInputs, NumOutputs, NumRWork,
- *    NumIWork, NumPWork NumModes, and NumNonsampledZCs widths can be set to:
- *       DYNAMICALLY_SIZED    - In this case, they will be set to the actual
- *                              input width, unless you are have a
- *                              mdlSetWorkWidths to set the widths.
- *       0 or positive number - This explicitly sets item to the specified
- *                              value.
- */
-///* static */ void mdlInitializeSizes(SimStruct *S)
-//{
-//    ssSetNumSFcnParams(S, 1);  /* Number of expected parameters */
-//    if (ssGetNumSFcnParams(S) == ssGetSFcnParamsCount(S)) {
-//		mdlCheckParameters(S);
-//		if (ssGetErrorStatus(S) != NULL) return;
-//	}
-//	else {
-//			return;     /*Simulink will report a parameter mismatch error */
-//	}
-//
-//    ssSetNumContStates(    S, NX);   /* number of continuous states           */
-//    ssSetNumDiscStates(    S, 0);   /* number of discrete states             */
-//
-//
-//    /*
-//     * Configure the input ports. First set the number of input ports,
-//     * then set for each input port index starting at 0, the width
-//     * and whether or not the port has direct feedthrough (1=yes, 0=no).
-//     * The width of a port can be DYNAMICALLY_SIZED or greater than zero.
-//     * A port has direct feedthrough if the input is used in either
-//     * the mdlOutputs or mdlGetTimeOfNextVarHit functions.
-//     */
-//    if (!ssSetNumInputPorts(S, 1)) return;
-//    ssSetInputPortWidth(S, 0, NU+NIDV);
-//    ssSetInputPortDirectFeedThrough(S, 0, 1);
-//
-//    /*
-//     * Configure the output ports. First set the number of output ports,
-//     * then set for each output port index starting at 0, the width
-//     * of the output port which can be DYNAMICALLY_SIZE or greater than zero.
-//     */
-//    if (!ssSetNumOutputPorts(S, 1)) return;
-//    ssSetOutputPortWidth(S, 0, NY);
-//
-//    /*
-//     * Set the number of sample times. This must be a positive, nonzero
-//     * integer indicating the number of sample times or it can be
-//     * PORT_BASED_SAMPLE_TIMES.*/
-//    ssSetNumSampleTimes(   S, 1);   /* number of sample times                */
-//
-//    /*
-//     * Set size of the work vectors.
-//     */
-//    ssSetNumRWork(         S, 0);   /* number of real work vector elements   */
-//    ssSetNumIWork(         S, 0);   /* number of integer work vector elements*/
-//    ssSetNumPWork(         S, 0);   /* number of pointer work vector elements*/
-//    ssSetNumModes(         S, 0);   /* number of mode work vector elements   */
-//    ssSetNumNonsampledZCs( S, 0);   /* number of nonsampled zero crossings   */
-//
-//	// Set any S-function options which must be OR'd together.
-//    ssSetOptions(S, SS_OPTION_EXCEPTION_FREE_CODE);   /* general options (SS_OPTION_xx)        */
-//
-//	// Declare parameter 1 to be unchanging during a simulation.
-//	ssSetSFcnParamNotTunable(S, 0);
-//
-//} /* end mdlInitializeSizes */
-
-
-
-
-
-#undef MDL_SET_WORK_WIDTHS   /* Change to #undef to remove function */
-#if defined(MDL_SET_WORK_WIDTHS) && defined(MATLAB_MEX_FILE)
-  /* static */ void mdlSetWorkWidths(SimStruct *S)
-  {
-  }
-#endif /* MDL_SET_WORK_WIDTHS */
-
-
-
-#undef MDL_INITIALIZE_CONDITIONS   /* Change to #undef to remove function */
-#if defined(MDL_INITIALIZE_CONDITIONS)
-  /* Function: mdlInitializeConditions ========================================
-   * Abstract:
-   *    In this function, you should initialize the continuous and discrete
-   *    states for your S-function block.  The initial states are placed
-   *    in the state vector, ssGetContStates(S) or ssGetDiscStates(S).
-   *    You can also perform any other initialization activities that your
-   *    S-function may require. Note, this routine will be called at the
-   *    start of simulation and if it is present in an enabled subsystem
-   *    configured to reset states, it will be call when the enabled subsystem
-   *    restarts execution to reset the states.
-   *
-   *    You can use the ssIsFirstInitCond(S) macro to determine if this is
-   *    is the first time mdlInitializeConditions is being called.
-   */
-/* static */ void mdlInitializeConditions(SimStruct *S)
-  {
-	  real_T *x0;      // pointer to states
-      real_T *pr;
-	  int_T i, nx;
-	  real_T dxdt[50];
-	  real_T rt;
-
-	  x0 = ssGetContStates(S);
-	  nx = NX;
-	  rt = 0;
-	  if (ssIsFirstInitCond(S)) teinit(&nx, &rt, x0, dxdt);
-	  // If first parameter is non-empty, use it to initialize the state vector.
-	  // If empty, use default values.
-	  if (mxIsEmpty(ssGetSFcnParam(S,0))) {
-		x0[0] = (float)10.40491389;
-		x0[1] = (float)4.363996017;
-		x0[2] = (float)7.570059737;
-		x0[3] = (float).4230042431;
-		x0[4] = (float)24.15513437;
-		x0[5] = (float)2.942597645;
-		x0[6] = (float)154.3770655;
-		x0[7] = (float)159.186596;
-		x0[8] = (float)2.808522723;
-		x0[9] = (float)63.75581199;
-		x0[10] = (float)26.74026066;
-		x0[11] = (float)46.38532432;
-		x0[12] = (float).2464521543;
-		x0[13] = (float)15.20484404;
-		x0[14] = (float)1.852266172;
-		x0[15] = (float)52.44639459;
-		x0[16] = (float)41.20394008;
-		x0[17] = (float).569931776;
-		x0[18] = (float).4306056376;
-		x0[19] = .0079906200783;
-		x0[20] = (float).9056036089;
-		x0[21] = .016054258216;
-		x0[22] = (float).7509759687;
-		x0[23] = .088582855955;
-		x0[24] = (float)48.27726193;
-		x0[25] = (float)39.38459028;
-		x0[26] = (float).3755297257;
-		x0[27] = (float)107.7562698;
-		x0[28] = (float)29.77250546;
-		x0[29] = (float)88.32481135;
-		x0[30] = (float)23.03929507;
-		x0[31] = (float)62.85848794;
-		x0[32] = (float)5.546318688;
-		x0[33] = (float)11.92244772;
-		x0[34] = (float)5.555448243;
-		x0[35] = (float).9218489762;
-		x0[36] = (float)94.59927549;
-		x0[37] = (float)77.29698353;
-		x0[38] = (float)63.05263039;
-		x0[39] = (float)53.97970677;
-		x0[40] = (float)24.64355755;
-		x0[41] = (float)61.30192144;
-		x0[42] = (float)22.21;
-		x0[43] = (float)40.06374673;
-		x0[44] = (float)38.1003437;
-		x0[45] = (float)46.53415582;
-		x0[46] = (float)47.44573456;
-		x0[47] = (float)41.10581288;
-		x0[48] = (float)18.11349055;
-		x0[49] = (float)50.;
-	  } else {
-	    pr = mxGetPr(ssGetSFcnParam(S,0));		// pointer to first parameter
-	    for (i=0; i<nx; i++) {
-			x0[i] = pr[i];
-		}
-	  }
-	  setidv(S);
-	  dvec_.idv[20] = (integer) 0;
-	  code_sd = (integer) 0;
-  }
-#endif /* MDL_INITIALIZE_CONDITIONS */
-
-
-
-#undef MDL_START  /* Change to #undef to remove function */
-#if defined(MDL_START)
-/* static */ void mdlStart(SimStruct *S)
-  {
-  }
-#endif /*  MDL_START */
-
-
-/* Function: mdlInitializeSampleTimes =========================================
- * Abstract:
- *    This function is used to specify the sample time(s) for your
- *    S-function. You must register the same number of sample times as
- *    specified in ssSetNumSampleTimes.
- */
-///* static */ void mdlInitializeSampleTimes(SimStruct *S)
-//{
-//    ssSetSampleTime(S, 0, CONTINUOUS_SAMPLE_TIME);
-//    ssSetOffsetTime(S, 0, 0.0);
-//
-//}
-
-
-/* Function: mdlOutputs =======================================================
- * Abstract:
- *    In this function, you compute the outputs of your S-function
- *    block. Generally outputs are placed in the output vector(s),
- *    ssGetOutputPortSignal.
- */
-///* static */ void mdlOutputs(SimStruct *S, int_T tid)
-//{
-//	real_T *y;
-//	int i;
-//	doublereal rx[50];
-//	doublereal dx[50];
-//	doublereal rt;
-//
-//	// Get current time, states, and inputs
-//	rt = getcurr(rx, S);
-//	// Call TEFUNC to update everything
-//	tefunc(&NX, &rt, rx, dx);
-//	// Transfer the outputs to Simulink
-//	y = ssGetOutputPortRealSignal(S,0);
-//	for (i=0; i<NY; i++) {
-//		y[i] = pv_.xmeas[i];
-//	}
-//	// Shut down the simulation if ISD is non-zero.
-//	if (dvec_.idv[20] != (integer) 0 && rt > (doublereal) 0.1 ) {
-//		code_sd = dvec_.idv[20];
-//		ssSetStopRequested(S,1);
-//	}
-//} /* end mdlOutputs */
-
-
-#undef MDL_UPDATE  /* Change to #undef to remove function */
-#if defined(MDL_UPDATE)
-  /* Function: mdlUpdate ======================================================
-   * Abstract:
-   *    This function is called once for every major integration time step.
-   *    Discrete states are typically updated here, but this function is useful
-   *    for performing any tasks that should only take place once per
-   *    integration step.
-   */
-/* static */ void mdlUpdate(SimStruct *S, int_T tid)
-  {
-  }
-#endif /* MDL_UPDATE */
-
-
-
-#undef MDL_DERIVATIVES  /* Change to #undef to remove function */
-#if defined(MDL_DERIVATIVES)
-  /* Function: mdlDerivatives =================================================
-   * Abstract:
-   *    In this function, you compute the S-function block's derivatives.
-   *    The derivatives are placed in the derivative vector, ssGetdX(S).
-   */
-/* static */ void mdlDerivatives(SimStruct *S)
-  {
-	doublereal x[50];
-	doublereal *dx;
-	doublereal rt;
-
-	rt = getcurr(x, S);
-	// Call TEFUNC to update dx
-	dx = ssGetdX(S);
-	tefunc(&NX, &rt, x, dx);
-  }
-#endif /* MDL_DERIVATIVES */
-
-
-
-/* Function: mdlTerminate =====================================================
- * Abstract:
- *    In this function, you should perform any actions that are necessary
- *    at the termination of a simulation.  For example, if memory was allocated
- *    in mdlStart, this is the place to free it.
- *
- *    Suppose your S-function allocates a few few chunks of memory in mdlStart
- *    and saves them in PWork. The following code fragment would free this
- *    memory.
- *        {
- *            int i;
- *            for (i = 0; i<ssGetNumPWork(S); i++) {
- *                if (ssGetPWorkValue(S,i) != NULL) {
- *                    free(ssGetPWorkValue(S,i));
- *                }
- *            }
- *        }
- */
-///* static */ void mdlTerminate(SimStruct *S)
-//{
-//		if (code_sd != (integer) 0 ) {
-//			mexWarnMsgTxt(msg);
-//		}
-//}
-
-// GETCURR gets pointers to current states and inputs from Simulink.  
-// Also moves current IDV values into the common block.
-// Also moves current U values into common.
-
-///* static */ doublereal getcurr(doublereal x[], SimStruct *S)
-//{
-//	int i;
-//	doublereal rt;
-//	real_T *xPtr;
-//	InputRealPtrsType uPtrs;
-//
-//	rt = ssGetT(S);
-//	xPtr = ssGetContStates(S);
-//	uPtrs = ssGetInputPortRealSignalPtrs(S,0);
-//
-//	setidv(S);
-//	for (i=0; i<NU; i++) {
-//		pv_.xmv[i] = *uPtrs[i];
-//	}
-//	for (i=0; i<NX; i++) {
-//		x[i] = xPtr[i];
-//	}
-//	return rt;
-//}
-// end GETCURR
-
-void get_curr_xmeas(double* xmeas)
-{
-	for (int i=0; i<NY; i++) {
-		xmeas[i] = pv_.xmeas[i];
-	}
-}
-
-void set_curr_xmv(double* xmv)
-{
-	for (int i = 0; i<NU; i++) {
-		pv_.xmv[i] = xmv[i];
-	}
-}
-
-void set_curr_idv(int* idv)
-{
-	for (int i=0; i<NIDV; i++) {
-		dvec_.idv[i] = (integer) idv[NIDV];
-	}	
-}
-
-// SETIDV moves current IDV parameters into the common block.
-
-///* static */ void setidv(SimStruct *S)
-//{
-//	InputRealPtrsType uPtrs;
-//	int i;
-//
-//	uPtrs = ssGetInputPortRealSignalPtrs(S,0);
-//	for (i=0; i<NIDV; i++) {
-//		dvec_.idv[i] = (integer) *uPtrs[i+NU];
-//	}	
-//}
-// end SETIDV
-
-
-/* ============================================================================= */
+static char msg[256];  // For error messages
+static integer code_sd;
 
 // SUBROUTINE TEFUNC
 
@@ -1169,8 +761,8 @@ int teinit(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp)
 /* 		Output XMEAS(50) is true (delay free) mole % G in product */
 /* 		Output XMEAS(51) is true (delay free) mole % H in product */
     /* Parameter adjustments */
-    --yp;
-    --yy;
+    --yp; // WHY? Because original code was in fortran, 1-based code
+    --yy; // WHY? Because original code was in fortran, 1-based code
 
     /* Function Body */
     const_.xmw[0] = (float)2.;
@@ -1806,16 +1398,23 @@ double pow_dd(doublereal *ap, const doublereal *bp)
 return(pow(*ap, *bp) );
 }
 
+void get_curr_xmeas(double* xmeas)
+{
+	for (int i = 0; i<NY; i++) {
+		xmeas[i] = pv_.xmeas[i];
+	}
+}
 
+void set_curr_xmv(double* xmv)
+{
+	for (int i = 0; i<NU; i++) {
+		pv_.xmv[i] = xmv[i];
+	}
+}
 
-///*=============================*
-// * Required S-function trailer *
-// *=============================*/
-//
-//#ifdef  MATLAB_MEX_FILE    /* Is this file being compiled as a MEX-file? */
-//#include "simulink.c"      /* MEX-file interface mechanism */
-//#else
-//#include "cg_sfun.h"       /* Code generation registration function */
-//#endif
-
-
+void set_curr_idv(int* idv)
+{
+	for (int i = 0; i<NIDV; i++) {
+		dvec_.idv[i] = (integer)idv[NIDV];
+	}
+}
