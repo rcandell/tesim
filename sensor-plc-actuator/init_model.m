@@ -34,7 +34,7 @@ SP17_0=80.1;
 
 %load initial conditions for model signals
 disp(['name of model: ' bdroot])
-xInitial = initial_conditions(bdroot, model_type)
+xInitial = initial_conditions(bdroot, model_type);
 %xInitial = initial_conditions_combined('te_plant_controller')
 
 % TS_base is the integration step size in hours.  The simulink model
@@ -43,7 +43,7 @@ xInitial = initial_conditions(bdroot, model_type)
 % period of most discrete PI controllers used in the simulation.
 % Ts_base=0.0005/2;  % in hours (original setting)
 Ts_base         = 1/3600;  % 1 second in hours 
-Ts_scan         = 60*Ts_base;
+Ts_scan         = 30*Ts_base;
 % TS_SCAN cannot go longer than 125 times Ts_base
 
 % SENSOR SAMPLE TIMES

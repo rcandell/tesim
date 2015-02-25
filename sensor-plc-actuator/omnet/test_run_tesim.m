@@ -21,7 +21,9 @@ save('tesim_fullout.txt','lvals','-ascii','-tabs')
 
 %% incrementally run the simulation
 tstep = 1/3600;
-N = 10/tstep; % 10 hours
+N = 48/tstep; % 10 hours
+rp = nan(N,2);
+rp(1,:) = [tstop, xmeas_ii(7)];
 for ii = 2:N
     
     % set new start time
@@ -36,16 +38,21 @@ for ii = 2:N
     % call the next iteration of tesim
     [tstart, tstop, xmeas_ii, xmv_ii] = run_tesim_next(tstart, tstep);
     disp(['start: ' num2str(tstart) ' stop: ' num2str(tstop)]);
+    disp(['Reactor pressure: ' num2str(xmeas_ii(7))])
     
     % log the outputof the simulation
     lvals = [tstart tstop xmv_ii xmeas_ii];
     save('tesim_fullout.txt','lvals','-ascii','-tabs','-append') 
+    
+    rp(ii,:) = [tstop, xmeas_ii(7)];
+    plot(rp(:,1),rp(:,2))
+    drawnow
 
 end
 
 %% post processing 
 n_time = 2;
-n_xmv = 9;
+n_xmv = 12;
 reactor_press_i = 7 + n_time + n_xmv;
 X = dlmread('tesim_fullout.txt','\t');
 plot(X(:,reactor_press_i))
