@@ -76,6 +76,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PlantInterfaceADS.cpp" />
+    <ClCompile Include="PlantInterfaceAnalog.cpp" />
+    <ClCompile Include="PlantInterfaceTCP.cpp" />
     <ClCompile Include="TEController.cpp" />
     <ClCompile Include="teprob.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -84,6 +87,10 @@
     <ClCompile Include="TEPlant.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PlantInterfaceADS.h" />
+    <ClInclude Include="PlantInterface.h" />
+    <ClInclude Include="PlantInterfaceAnalog.h" />
+    <ClInclude Include="PlantInterfaceTCP.h" />
     <ClInclude Include="TEController.h" />
     <ClInclude Include="teprob.h" />
     <ClInclude Include="TEPlant.h" />
