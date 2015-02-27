@@ -80,6 +80,7 @@
     <ClCompile Include="PlantInterfaceAnalog.cpp" />
     <ClCompile Include="PlantInterfaceTCP.cpp" />
     <ClCompile Include="TEController.cpp" />
+    <ClCompile Include="TEControllerRicker.cpp" />
     <ClCompile Include="teprob.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -92,6 +93,7 @@
     <ClInclude Include="PlantInterfaceAnalog.h" />
     <ClInclude Include="PlantInterfaceTCP.h" />
     <ClInclude Include="TEController.h" />
+    <ClInclude Include="TEControllerRicker.h" />
     <ClInclude Include="teprob.h" />
     <ClInclude Include="TEPlant.h" />
   </ItemGroup>

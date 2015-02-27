@@ -36,6 +36,9 @@
     <ClCompile Include="PlantInterfaceADS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TEControllerRicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="teprob.h">
@@ -57,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlantInterfaceADS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TEControllerRicker.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

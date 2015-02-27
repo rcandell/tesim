@@ -7,36 +7,29 @@
 
 */
 
-#ifndef __TE_CONTROLLER_H__
-#define __TE_CONTROLLER_H__
+#ifndef __TE_CONTROLLER_RICKER_H__
+#define __TE_CONTROLLER_RICKER_H__
 
 #include "TEPlant.h"
+#include "TEController.h"
+#include "TEControllerRicker.h"
 
-class TEController
+class TEControllerRicker : public TEController
 {
 public:
-
 	static TEController* getInstance();
-	virtual ~TEController();
+	virtual ~TEControllerRicker();
 
-	void initialize();
+private:
+
+	TEControllerRicker();
+	TEControllerRicker(const TEControllerRicker&);
+	TEControllerRicker& operator=(const TEControllerRicker&);
 
 	// run the controller one scan interval
 	// returns new manipulated variables
 	double* increment(double t, double dt, double* xmeas);
 
-protected:
-
-	TEController() {};
-	TEController(const TEController&);
-	TEController& operator=(const TEController&);
-
-	static TEController*    instance;
-
-	// input/output variables
-	double *m_xmv;
-
 };
-
 
 #endif
