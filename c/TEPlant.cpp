@@ -117,8 +117,10 @@ double* TEPlant::increment(double t, double dt, double* new_xmv)
 	// update time
 	m_t = t;
 
+	// copy new xmv to the stored xmv
+	std::memcpy(m_xmv, new_xmv, TEPlant::NU*sizeof(double));
+
 	// apply the new the inputs
-	set_curr_idv(m_idv);
 	set_curr_xmv(m_xmv);
 
 	// update the model outputs and compute derivatives

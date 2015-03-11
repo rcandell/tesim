@@ -14,6 +14,7 @@
     <ProjectGuid>{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>c2</RootNamespace>
+    <ProjectName>tesim</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
