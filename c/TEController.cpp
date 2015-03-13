@@ -30,35 +30,34 @@ TEController::~TEController()
 
 void TEController::initialize(double tstep, double tscan)
 {
-
 	// Create the "Manipulated Vairable" array
 	m_xmv = new double[TEPlant::NU];
-	double u0[NU] = {   62.8070,    // Initial D Feed Rate
-                        53.2867,    // Initial E Feed Rate
-                        26.6622,    // Initial A Feed Rate
-                        60.4829,    // Initial C Feed Rate
-                        0.,	        // Recycle Valve Position
-                        24.2293,    // Initial Purge Rate
-                        37.2082,    // Initial Separator Flow Rate
-                        46.4305,    // Initial Stripper Flow Rate
-                        0.,	        // Steam Valve Position
-                        35.8653,    // Initial Reactor Temperature
-                        12.9306,    // Initial Separator Temperature
-                        100. };	    // Agitator Setting
+    double u0[NU] = {  62.8070,    // Initial D Feed Rate
+                       53.2867,    // Initial E Feed Rate
+                       26.6622,    // Initial A Feed Rate
+                       60.4829,    // Initial C Feed Rate
+                       0.,         // Recycle Valve Position
+                       24.2293,    // Initial Purge Rate
+                       37.2082,    // Initial Separator Flow Rate
+                       46.4305,    // Initial Stripper Flow Rate
+                       0.,         // Steam Valve Position
+                       35.8653,    // Initial Reactor Temperature
+                       12.9306,    // Initial Separator Temperature
+                       100. };     // Agitator Setting
 	// Fill in the manipulated variables with the associated values
 	for (int ii = 0; ii < TEPlant::NU; ii++) m_xmv[ii] = u0[ii];
 
 	// Set the initial Production Rate
-	Fp = 100;
+	Fp = 100.;
 	// Create the ratio array with its initial conditions
 	r = new double[7];
-	double r_0[7] = {   0.251,   // Initial Ratio Trim for r[0]
+	double r_0[7] = {   0.251,   // 
                         3664,    // 
                         4509,    // 
-                        9.35,    // Initial Ratio Trim for r[3]
-                        0.0019,  // Initial Reactor Pressure
-                        0.2537,  // Initial Separator Level
-                        0.2287}; // Initial Stripper Level
+                        9.35,    // 
+                        0.337,   // 
+                        25.16,   // 
+                        22.95 }; // 
 	for (int ii = 0; ii < 7; ii++) r[ii] = (r_0[ii] / Fp);
 
 	// Create the control loops
