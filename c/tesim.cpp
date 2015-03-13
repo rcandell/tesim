@@ -23,8 +23,8 @@ int main(int argc, char* argv[])
 	TEController* tectlr = TEController::getInstance();
 
 	// Create the log file
-	//std::ofstream logFile;
-	//logFile.open("xmeasured_outputs.log");
+	std::ofstream logFile;
+	logFile.open("xmeasured_outputs.log");
 
 	int nsteps = 72 * 3600;
 	double t, tstep, tscan;
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 		//std::cout << *teplant << std::endl;
 		dbl tMod = fmod(t, 0.01);
 		if ((last_tMod > tMod) || t == 0) {
-			//logFile << t << "\t" << *teplant << *tectlr << std::endl;
+			logFile << t << "\t" << *teplant << *tectlr << std::endl;
 		}
 		last_tMod = tMod;
 		//std::cout << teplant->get_xmeas(12) << std::endl;
@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
 		t += tstep;
 	}
 
-	//logFile.close();
+	logFile.close();
 
 	return 0;
 }
