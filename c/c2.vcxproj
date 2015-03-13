@@ -77,6 +77,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ControlLoops.cpp" />
+    <ClCompile Include="PI.cpp" />
     <ClCompile Include="PlantInterfaceADS.cpp" />
     <ClCompile Include="PlantInterfaceAnalog.cpp" />
     <ClCompile Include="PlantInterfaceTCP.cpp" />
@@ -89,6 +91,8 @@
     <ClCompile Include="TEPlant.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ControlLoops.h" />
+    <ClInclude Include="PI.h" />
     <ClInclude Include="PlantInterfaceADS.h" />
     <ClInclude Include="PlantInterface.h" />
     <ClInclude Include="PlantInterfaceAnalog.h" />

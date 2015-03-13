@@ -1,9 +1,10 @@
 /* 
 
-* Author: Rick Candell (rick.candell@nist.gov)
+* Author:       Rick Candell (rick.candell@nist.gov)
+*               Tim Zimmerman (timothy.zimmerman@nist.gov)
 * Organization: National Institute of Standards and Technology
 *               U.S. Department of Commerce
-* License: Public Domain
+* License:      Public Domain
 
 */
 
@@ -43,65 +44,75 @@ void TEPlant::initialize()
 	m_dxdt	= new double[TEPlant::NX]();	// the state derivatives
 	m_xmeas = new double[TEPlant::NY]();	// measured
 	m_xmv	= new double[TEPlant::NU]();	// manipulated
-	m_idv   = new int[TEPlant::NIDV]();	// idv's
+	m_idv   = new int[TEPlant::NIDV]();	    // idv's
 
 	// initialize states
-	m_x[0] = (float)10.40491389;
-	m_x[1] = (float)4.363996017;
-	m_x[2] = (float)7.570059737;
-	m_x[3] = (float).4230042431;
-	m_x[4] = (float)24.15513437;
-	m_x[5] = (float)2.942597645;
-	m_x[6] = (float)154.3770655;
-	m_x[7] = (float)159.186596;
-	m_x[8] = (float)2.808522723;
-	m_x[9] = (float)63.75581199;
-	m_x[10] = (float)26.74026066;
-	m_x[11] = (float)46.38532432;
-	m_x[12] = (float).2464521543;
-	m_x[13] = (float)15.20484404;
-	m_x[14] = (float)1.852266172;
-	m_x[15] = (float)52.44639459;
-	m_x[16] = (float)41.20394008;
-	m_x[17] = (float).569931776;
-	m_x[18] = (float).4306056376;
-	m_x[19] = .0079906200783;
-	m_x[20] = (float).9056036089;
-	m_x[21] = .016054258216;
-	m_x[22] = (float).7509759687;
-	m_x[23] = .088582855955;
-	m_x[24] = (float)48.27726193;
-	m_x[25] = (float)39.38459028;
-	m_x[26] = (float).3755297257;
-	m_x[27] = (float)107.7562698;
-	m_x[28] = (float)29.77250546;
-	m_x[29] = (float)88.32481135;
-	m_x[30] = (float)23.03929507;
-	m_x[31] = (float)62.85848794;
-	m_x[32] = (float)5.546318688;
-	m_x[33] = (float)11.92244772;
-	m_x[34] = (float)5.555448243;
-	m_x[35] = (float).9218489762;
-	m_x[36] = (float)94.59927549;
-	m_x[37] = (float)77.29698353;
-	m_x[38] = (float)63.05263039;
-	m_x[39] = (float)53.97970677;
-	m_x[40] = (float)24.64355755;
-	m_x[41] = (float)61.30192144;
-	m_x[42] = (float)22.21;
-	m_x[43] = (float)40.06374673;
-	m_x[44] = (float)38.1003437;
-	m_x[45] = (float)46.53415582;
-	m_x[46] = (float)47.44573456;
-	m_x[47] = (float)41.10581288;
-	m_x[48] = (float)18.11349055;
-	m_x[49] = (float)50.;
+	m_x[0] = (float)11.9522;
+	m_x[1] = (float)7.9503;
+	m_x[2] = (float)4.8685;
+	m_x[3] = (float)0.2730;
+	m_x[4] = (float)18.1710;
+	m_x[5] = (float)6.0757;
+	m_x[6] = (float)138.7725;
+	m_x[7] = (float)136.1281;
+	m_x[8] = (float)2.5241;
+	m_x[9] = (float)62.6271;
+	m_x[10] = (float)41.6563;
+	m_x[11] = (float)25.5223;
+	m_x[12] = (float)0.1517;
+	m_x[13] = (float)10.7462;
+	m_x[14] = (float)3.5934;
+	m_x[15] = (float)52.2791;
+	m_x[16] = (float)41.1175;
+	m_x[17] = (float)0.6488;
+	m_x[18] = (float)0.4248;
+	m_x[19] = (float)0.0079;
+	m_x[20] = (float)0.8934;
+	m_x[21] = (float)0.0096;
+	m_x[22] = (float)0.5151;
+	m_x[23] = (float)0.1668;
+	m_x[24] = (float)48.1831;
+	m_x[25] = (float)39.4205;
+	m_x[26] = (float)0.3802;
+	m_x[27] = (float)113.6842;
+	m_x[28] = (float)52.6117;
+	m_x[29] = (float)66.6613;
+	m_x[30] = (float)21.2122;
+	m_x[31] = (float)58.9420;
+	m_x[32] = (float)14.3367;
+	m_x[33] = (float)17.6491;
+	m_x[34] = (float)8.5122;
+	m_x[35] = (float)1.1380;
+	m_x[36] = (float)102.4800;
+	m_x[37] = (float)92.2625;
+	m_x[38] = (float)62.8066;
+	m_x[39] = (float)53.2860;
+	m_x[40] = (float)26.6613;
+	m_x[41] = (float)60.4848;
+	m_x[42] = (float)4.4e-323;
+	m_x[43] = (float)24.2347;
+	m_x[44] = (float)37.2091;
+	m_x[45] = (float)46.4309;
+	m_x[46] = (float)8.2000e-322;
+	m_x[47] = (float)35.9446;
+	m_x[48] = (float)12.2095;
+	m_x[49] = (float)100.;
 	std::memset(m_dxdt, 0, TEPlant::NX*sizeof m_x);
 
 	// initialize the plant inputs for good measure
-	double u0[NU] = { 63.053, 53.98, 24.644, 61.302, 22.21,
-		40.064, 38.10, 46.534, 47.446, 41.106,
-		18.114, 100 };  // TODO: verify with simulink model
+	double u0[NU] = {	62.8070,    // Initial D Feed Rate
+                        53.2867,    // Initial E Feed Rate
+                        26.6622,    // Initial A Feed Rate
+                        60.4829,    // Initial C Feed Rate
+                        0.,         // Recycle Valve Position
+                        24.2293,    // Initial Purge Rate
+                        37.2082,    // Initial Separator Flow Rate
+                        46.4305,    // Initial Stripper Flow Rate
+                        0.,         // Steam Valve Position
+                        35.8653,    // Initial Reactor Temperature
+                        12.9306,    // Initial Separator Temperature
+                        100. };     // Agitator Setting 
+
 	std::memcpy(m_xmv, u0, NU*sizeof(double));
 
 	//int teinit(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp);
