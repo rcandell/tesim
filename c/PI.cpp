@@ -1,8 +1,8 @@
 /*
-* Author:		Tim Zimmerman (timothy.zimmerman@nist.gov)
+* Author:       Tim Zimmerman (timothy.zimmerman@nist.gov)
 * Organization: National Institute of Standards and Technology
 *               U.S. Department of Commerce
-* License:		Public Domain
+* License:      Public Domain
 */
 
 #include "PI.h"
