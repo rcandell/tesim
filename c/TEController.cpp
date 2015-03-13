@@ -88,7 +88,10 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	dbl prodSP = 0, E_Adj, loop14 = 0, loop15 = 0;
 
 	// Update the % G in product
-	E_Adj = pctG_inProduct->increment(53.8, new_xmeas[39], t, dt);
+	dbl pctG_SP;
+	if (t < 24. || t > 100.) pctG_SP = 53.8;
+	else pctG_SP = 65.;
+	E_Adj = pctG_inProduct->increment(pctG_SP, new_xmeas[39], t, dt);
 
 	// Update the A and C Measurements
 	yAC = new_xmeas[22] + new_xmeas[24];
