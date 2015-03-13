@@ -100,18 +100,18 @@ void TEPlant::initialize()
 	std::memset(m_dxdt, 0, TEPlant::NX*sizeof m_x);
 
 	// initialize the plant inputs for good measure
-	double u0[NU] = {	62.8070,    // Initial D Feed Rate
-                        53.2867,    // Initial E Feed Rate
-                        26.6622,    // Initial A Feed Rate
-                        60.4829,    // Initial C Feed Rate
-                        0.,         // Recycle Valve Position
-                        24.2293,    // Initial Purge Rate
-                        37.2082,    // Initial Separator Flow Rate
-                        46.4305,    // Initial Stripper Flow Rate
-                        0.,         // Steam Valve Position
-                        35.8653,    // Initial Reactor Temperature
-                        12.9306,    // Initial Separator Temperature
-                        100. };     // Agitator Setting 
+    double u0[NU] = { 62.8070,    // Initial D Feed Rate
+                      53.2867,    // Initial E Feed Rate
+                      26.6622,    // Initial A Feed Rate
+                      60.4829,    // Initial C Feed Rate
+                      0.,         // Recycle Valve Position
+                      24.2293,    // Initial Purge Rate
+                      37.2082,    // Initial Separator Flow Rate
+                      46.4305,    // Initial Stripper Flow Rate
+                      0.,         // Steam Valve Position
+                      35.8653,    // Initial Reactor Temperature
+                      12.9306,    // Initial Separator Temperature
+                      100. };     // Agitator Setting
 
 	std::memcpy(m_xmv, u0, NU*sizeof(double));
 

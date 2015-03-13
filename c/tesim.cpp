@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 	logFile.open("xmeasured_outputs.log");
 	#endif
 
-	int nsteps = 72 * 3600;
+	int nsteps = 72 * 2000;
 	double t, tstep, tscan;
 	double *xmeas, *xmv;
 	t = 0;
