@@ -63,7 +63,7 @@ double PercentG_inProduct::rateLimiter(dbl sp, dbl t, dbl dt)
 		rate = (sp - lastOut) / (t - lastTime);
 		if (rate > pos_R) out = (t - lastTime) * pos_R + lastOut;
 		else if (rate < neg_R) out = (t - lastTime) * neg_R + lastOut;
-		else out = rate + lastOut;
+		else out = sp;
 	}
 	else out = sp;	// If the time is 0, we need to output the current input
 	// Store our state variables
@@ -98,9 +98,9 @@ double ProductionRate::rateLimiter(dbl sp, dbl t, dbl dt)
 		rate = (sp - lastOut) / (t - lastTime);
 		if (rate > pos_R) out = (t - lastTime) * pos_R + lastOut;
 		else if (rate < neg_R) out = (t - lastTime) * neg_R + lastOut;
-		else out = rate + lastOut;
+		else out = sp;
 	}
-	else out = sp;	// If the time is 0, we needb to output the current input
+	else out = sp;	// If the time is 0, we need to output the current input
 	// Store our state variables
 	lastTime = t;
 	lastOut = out;
