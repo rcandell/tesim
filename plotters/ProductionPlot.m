@@ -27,7 +27,7 @@ pctG_SP_col             = 62;
 % Check to see if the log file exists in the 'Release' directory
 % If not, prompt the user for the file location.
 if exist('../c/Release/xmeas_xmv_outputs.log', 'file') 
-    load xmeas_xmv_outputs.log;
+    load ../c/Release/xmeas_xmv_outputs.log;
     logData = xmeas_xmv_outputs;
 else 
     [filename, path] = uigetfile('*.log', 'Select the TESim output log file...');
