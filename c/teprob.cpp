@@ -1415,6 +1415,6 @@ void set_curr_xmv(double* xmv)
 void set_curr_idv(int* idv)
 {
 	for (int i = 0; i<NIDV; i++) {
-		dvec_.idv[i] = (integer)idv[NIDV];
+		dvec_.idv[i] = (integer)idv[i];
 	}
 }
