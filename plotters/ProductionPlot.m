@@ -7,14 +7,12 @@
 % Description:
 % Creates two plots: production rate vs. time and product quality vs. time
 % using an output log file from the TESim plant. The script will prompt the
-% user to select the log file upon execution. Both the production rate 
-% and 'mol % G in product' include the ±5% error bounds for the setpoint. 
-% These error bounds will follow any rate-limited changes that occur to the
-% setpoint, if it was changed during plant operation.
+% user to select the log file upon execution (if the file is not in the 
+% 'Release' directory). Both the production rate and 'mol % G in product' 
+% include the ±5% error bounds for the setpoint. These error bounds will 
+% follow any rate-limited changes that occur to the setpoint, if it was 
+% changed during plant operation.
 %
-
-[filename, path] = uigetfile('*.log', 'Select the TESim output log file...');
-logData =  importdata(fullfile(path,filename), '\t');
 
 % Column definitions (in case the log file changes)
 stripperUnderflow_col   = 18;
@@ -25,6 +23,16 @@ product_F_col           = 40;
 product_G_col           = 41;
 product_H_col           = 42;
 pctG_SP_col             = 62;
+
+% Check to see if the log file exists in the 'Release' directory
+% If not, prompt the user for the file location.
+if exist('../c/Release/xmeas_xmv_outputs.log', 'file') 
+    load xmeas_xmv_outputs.log;
+    logData = xmeas_xmv_outputs;
+else 
+    [filename, path] = uigetfile('*.log', 'Select the TESim output log file...');
+    logData =  importdata(fullfile(path,filename), '\t');
+end
 
 % Store the time values
 t = logData(:,1);

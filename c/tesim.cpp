@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 	// Create the log file
 	#ifndef _DEBUG
 	std::ofstream logFile;
-	logFile.open("xmeasured_outputs.log");
+	logFile.open("xmeas_xmv_outputs.log");
 	#endif
 
 	int nsteps = 72 * 2000;
