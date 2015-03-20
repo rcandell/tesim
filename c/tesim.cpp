@@ -25,6 +25,7 @@ int main(int argc, char* argv[])
 	// Create the log file
 	#ifndef _DEBUG
 	std::ofstream logFile;
+	logFile.precision(15);
 	logFile.open("xmeas_xmv_outputs.log");
 	#endif
 
@@ -33,41 +34,37 @@ int main(int argc, char* argv[])
 	double *xmeas, *xmv;
 	t = 0;
 	tstep = 0.0005;
-	//tstep = 1. / 3600.;
+	tscan = 0.0005;
+
+	// init the controller 
+	tectlr->initialize(tstep, tscan);
+	xmv = (double*)(tectlr->get_xmv());
 
 	// init the plant
 	teplant->initialize();
 	xmeas = (double*)(teplant->get_xmeas());
 
-	// init the controller
-	tscan = 1. / 3600.;
-	tectlr->initialize(tstep, tscan);
 	for (int ii = 0; ii < nsteps; ii++)
 	{
-		// network transmits xmeas data
-		// ...
+		// run the plant
+		xmeas = teplant->increment(t, tstep, xmv);
 
 		// run the controller
 		xmv = tectlr->increment(t, tscan, xmeas);
 
-		// network transmits xmv data
-		// ...
-
-		// run the plant
-		xmeas = teplant->increment(t, tstep, xmv);
 		//std::cout << *teplant << std::endl;
 		dbl tMod = fmod(t, 0.01);
-		if ((last_tMod > tMod) || t == 0) {
+		if ((tMod < 0.00005) || (0.01 - tMod) < 0.00005 || t == 0) {
 			#ifndef _DEBUG
 			logFile << t << "\t" << *teplant << *tectlr << std::endl;
 			#endif
 		}
-		last_tMod = tMod;
 		//std::cout << teplant->get_xmeas(12) << std::endl;
 
 		// advance the time step
 		t += tstep;
 	}
+
 	#ifndef _DEBUG
 	logFile.close();
 	#endif
