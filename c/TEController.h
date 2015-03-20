@@ -26,6 +26,7 @@ public:
 	virtual ~TEController();
 
 	void initialize(double tstep, double tscan);
+	const double* get_xmv() const;
 
 	// run the controller one scan interval
 	// returns new manipulated variables
