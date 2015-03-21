@@ -22,55 +22,40 @@ int main(int argc, char* argv[])
 	TEPlant* teplant = TEPlant::getInstance();
 	TEController* tectlr = TEController::getInstance();
 
-	// Create the log file
-	#ifndef _DEBUG
-	std::ofstream logFile;
-	logFile.open("xmeas_xmv_outputs.log");
-	#endif
+	// Create the log files
+	std::ofstream plant_log;
+	std::ofstream ctlr_log;
+	plant_log.open("teplant.dat");
+	ctlr_log.open("tectlr.dat");
 
-	int nsteps = 72 * 2000;
+	int nsteps = 100; // 72 * 2000;
 	double t, tstep, tscan;
 	double *xmeas, *xmv;
 	t = 0;
 	tstep = 0.0005;
-	//tstep = 1. / 3600.;
 
 	// init the plant
 	teplant->initialize();
 	xmeas = (double*)(teplant->get_xmeas());
+	plant_log << t << "\t" << *teplant << std::endl;
 
 	// init the controller
-	tscan = 1. / 3600.;
+	tscan = tstep;
 	tectlr->initialize(tstep, tscan);
+	xmv = (double*)(tectlr->get_xmv());
+	ctlr_log << t << "\t" << *tectlr << std::endl;
+	
 	for (int ii = 0; ii < nsteps; ii++)
 	{
-		// network transmits xmeas data
-		// ...
-
-		// run the controller
-		xmv = tectlr->increment(t, tscan, xmeas);
-
-		// network transmits xmv data
-		// ...
-
-		// run the plant
+		// increment the plant and controller
 		xmeas = teplant->increment(t, tstep, xmv);
-		//std::cout << *teplant << std::endl;
-		dbl tMod = fmod(t, 0.01);
-		if ((last_tMod > tMod) || t == 0) {
-			#ifndef _DEBUG
-			logFile << t << "\t" << *teplant << *tectlr << std::endl;
-			#endif
-		}
-		last_tMod = tMod;
-		//std::cout << teplant->get_xmeas(12) << std::endl;
-
-		// advance the time step
+		xmv = tectlr->increment(t, tscan, xmeas); 
 		t += tstep;
+
+		// log the variables
+		plant_log << t << "\t" << *teplant << std::endl;
+		ctlr_log << t << "\t" << *tectlr << std::endl;
 	}
-	#ifndef _DEBUG
-	logFile.close();
-	#endif
 
 	return 0;
 }
