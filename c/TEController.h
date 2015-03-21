@@ -31,6 +31,11 @@ public:
 	// returns new manipulated variables
 	double* increment(double t, double dt, double* xmeas);
 
+	// set and get for xmv
+	const double* get_xmv() const;
+	const double get_xmv(unsigned idx) const { return m_xmv[idx]; }
+
+	// overloaded output stream for the controller
 	friend std::ostream& operator<< (std::ostream&, const TEController&);
 
 private:
@@ -51,6 +56,7 @@ private:
                 last_tMod;
 
 	// input/output variables
+	double *m_xmeas;
 	double *m_xmv;
 	double *r;
 	double Fp;

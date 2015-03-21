@@ -25,7 +25,8 @@
 //	5. increment the simulator
 //  6. repeat from Step 3.
 
-#include <ostream>     // std::cout, std::ostream, std::ios
+#include <ostream>     
+#include <fstream>     
 
 class TEPlant
 {		

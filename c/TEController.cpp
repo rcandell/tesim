@@ -30,6 +30,10 @@ TEController::~TEController()
 
 void TEController::initialize(double tstep, double tscan)
 {
+	// measured variables
+	m_xmeas = new double[TEPlant::NY]();
+	get_curr_xmeas(m_xmeas);
+
 	// Create the "Manipulated Vairable" array
 	m_xmv = new double[TEPlant::NU];
 	double u0[NU] = {   62.8069839011592,    // Initial D Feed Rate
@@ -84,6 +88,10 @@ void TEController::initialize(double tstep, double tscan)
 // run the controller one scan interval
 double* TEController::increment(double t, double dt, double* new_xmeas)
 {
+	// store the measures vars locally  
+	//  TODO: these will eventually be used for the basis of calculation
+	std::memcpy(m_xmeas, new_xmeas, TEPlant::NY*sizeof(double));
+
 	//
 	dbl prodSP = 0, E_Adj, loop14 = 0, loop15 = 0;
 
@@ -152,18 +160,38 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	return m_xmv;
 }
 
+// get for xmeas
+const double* TEController::get_xmv() const
+{
+	get_curr_xmv(m_xmv);
+	return m_xmv;
+}
+
 std::ostream& operator<< (std::ostream& lhs, const TEController& rhs)
 {
+	// measured variables
+	for (int ii = 0; ii < TEPlant::NY; ii++)
+	{
+		lhs << rhs.m_xmeas[ii] << "\t";
+	}
+
+	// manipulated variables
 	for (int ii = 0; ii < TEPlant::NU; ii++)
 	{
 		lhs << rhs.m_xmv[ii] << "\t";
 	}
 
+	// r state variables
 	for (int ii = 0; ii < 7; ii++)
 	{
 		lhs << rhs.r[ii] << "\t";
 	}
 
+	// production rate and percentGSP
 	lhs << rhs.mP_G_SP << "\t" << rhs.productionRate->getProductionRate();
+
 	return lhs;
 }
+
+
+

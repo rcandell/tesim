@@ -165,10 +165,20 @@ void TEPlant::euler(int nn, double t, double dt, double* yy, double* yp)
 
 std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
 {
-	for (int ii = 0; ii < TEPlant::NY; ii++)
+	// manipulated variables
+	for (int ii = 0; ii < TEPlant::NU-1; ii++)
+	{
+		lhs << rhs.m_xmv[ii] << "\t";
+	}
+	lhs << rhs.m_xmv[TEPlant::NU - 1];
+
+	// measured variables
+	for (int ii = 0; ii < TEPlant::NY - 1; ii++)
 	{
 		lhs << rhs.m_xmeas[ii] << "\t";
 	}
+	lhs << rhs.m_xmeas[TEPlant::NY - 1];
+
 	return lhs;
 }
 
