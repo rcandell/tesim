@@ -1,0 +1,30 @@
+
+*.tmp
+# Word temporary
+~$*.doc*
+# Excel temporary
+~$*.xls*
+# Excel Backup File
+*.xlk
+
+
+# gilbert testing files
+results*.accdb
+results_*
+*.zip
+temp*.xlsx
+simulation*.log
+slprj
+
+# Other files
+*.zip
+
+# matlab intermediate files
+*.mex32
+*.mex64
+*.unknown_version
+*.autosave
+
+
+
+

@@ -1,0 +1,40 @@
+<html>
+
+<body>
+<h1>RealTime Pacer</h1>
+<p>Slow down a simulation to track real (i.e., wall clock) elapsed time.</p>
+
+<h2>Description</h2>
+<p>The RealTime Pacer block slows down ("paces") simulation time to track real elapsed time. The degree of slowdown 
+is controllable via the <i>Speedup</i> parameter. To use this block, copy it anywhere in your model (it does not need
+to be at the top level).</p>
+<p>Some points to keep in mind when using the RealTime Pacer block:</p>
+<ol>
+    <li> The block relies on slowing down a simulation to make it match real time. If your model involves a lot of 
+        computation so that 1 second of simulation time requires more than 1 second of real time, this block will not 
+    have any effect. </li>
+    <li> The block uses the MATLAB <tt>PAUSE</tt> function to slow down the simulation. The <tt>PAUSE</tt> command gives 
+        up the processor during the pause, so system performance does not degrade.</li>
+    <li> The matching between simulation time and elapsed real time is approximate, with expected differences on 
+        the order of 10 to 30 milliseconds. This limitation is due to difficulties of precise timing with a multitasking 
+    operating system. </li>
+    <li> The block does not support code generation. </li>
+</ol>
+The RealTime Pacer block works on all supported Simulink platforms.
+
+<h2>Parameters</h2>
+<h3>Speedup</h3>
+<i>Speedup</i> specifies the ratio between simulation time and real time. 
+<ul>
+    <li>Speedup can be any real value greater than zero. A value less than 1 forces the real elapsed time to be greater 
+    than the simulation time. For example, with a speedup of 0.5, 1 second of simulation time takes 2 seconds of real time.</li>   
+    <li>Speedup = <i>N</i> specifies that <i>N</i> seconds of simulation time correspond to one second of real time</li>
+    <li>Speedup = <i>inf</i> specifies that the simulation should run normally, at full speed</li>
+</ul>
+
+<h2>Inputs and Outputs</h2>
+None.
+<hr>
+</body>
+</html>
+

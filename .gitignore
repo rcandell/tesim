@@ -16,4 +16,8 @@ temp*.xlsx
 simulation*.log
 slprj
 
+# Other files
+*.zip
+
+
 
