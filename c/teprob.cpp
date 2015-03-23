@@ -1,11 +1,11 @@
 /* 
 
-* Author: Rick Candell (rick.candell@nist.gov)
+* Author:       Rick Candell (rick.candell@nist.gov)
 * Organization: National Institute of Standards and Technology
 *               U.S. Department of Commerce
-* License: Public Domain
+* License:      Public Domain
 
-* original credits:
+* Original credits:
 * 
 *  N. L. Ricker, 12/98.  ricker@u.washington.edu
 
@@ -1405,6 +1405,13 @@ void get_curr_xmeas(double* xmeas)
 	}
 }
 
+void get_curr_xmv(double* xmv)
+{
+	for (int i = 0; i<NU; i++) {
+		xmv[i] = pv_.xmv[i];
+	}
+}
+
 void set_curr_xmv(double* xmv)
 {
 	for (int i = 0; i<NU; i++) {
@@ -1415,6 +1422,6 @@ void set_curr_xmv(double* xmv)
 void set_curr_idv(int* idv)
 {
 	for (int i = 0; i<NIDV; i++) {
-		dvec_.idv[i] = (integer)idv[NIDV];
+		dvec_.idv[i] = (integer)idv[i];
 	}
 }

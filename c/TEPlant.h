@@ -25,7 +25,8 @@
 //	5. increment the simulator
 //  6. repeat from Step 3.
 
-#include <ostream>     // std::cout, std::ostream, std::ios
+#include <ostream>     
+#include <fstream>     
 
 class TEPlant
 {		
@@ -50,8 +51,12 @@ class TEPlant
 		const double* get_xmeas() const;
 		const double get_xmeas(unsigned idx) const { return m_xmeas[idx];	}
 		
-		// set and get for xmv
-		//void set_xmv(const double* xmv);		
+		// set disturbance
+		// 20 different disturbance types as defined by Downs
+		// Set value in array to activate disturbance
+		void set_idv(const double* idv);
+		const int* get_idv() const { return m_idv; }
+		const int get_idv(unsigned idx) const { return m_idv[idx]; }
 
 		// overloaded output stream for TEPlant
 		friend std::ostream& operator<< (std::ostream&, const TEPlant&);
