@@ -14,60 +14,82 @@
 #include "TEController.h"
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 
-dbl last_tMod = 0;
+void print_sim_params(double tstep, double tscan, int nsteps, double simtime)
+{
+	std::cout << "TE simulation" << std::endl;
+	std::cout << "simulation time: " << simtime << "hrs" << std::endl;
+	std::cout << "plant dt: " << tstep << "hrs" << std::endl;
+	std::cout << "ctlr dt: " << tscan << "hrs" << std::endl;
+	std::cout << "time steps: " << nsteps << std::endl;
+}
 
 int main(int argc, char* argv[])
 {
+	double simtime = 0.0;
+	int ilog = 1;
+	if (argc < 2)
+	{
+		std::cerr << "tesim usage error" << std::endl;
+		std::cerr << "usage: tesim <swim_time_in_hours> <save_decimator>" << std::endl;
+		exit(0);
+	}
+	else
+	{
+		simtime = atof(argv[1]);
+		ilog = atoi(argv[2]);
+	}
 	TEPlant* teplant = TEPlant::getInstance();
 	TEController* tectlr = TEController::getInstance();
 
-	// Create the log file
-	#ifndef _DEBUG
-	std::ofstream logFile;
-	logFile.precision(15);
-	logFile.open("xmeas_xmv_outputs.log");
-	#endif
+	// Create the log files
+	std::ofstream plant_log;
+	std::ofstream ctlr_log;
+	plant_log.open("teplant.dat");
+	plant_log.precision(15);
+	ctlr_log.open("tectlr.dat");
+	ctlr_log.precision(15);
 
-	int nsteps = 72 * 2000;
+	// simulation parameters
 	double t, tstep, tscan;
 	double *xmeas, *xmv;
 	t = 0;
-	tstep = 0.0005;
-	tscan = 0.0005;
-
-	// init the controller 
-	tectlr->initialize(tstep, tscan);
-	xmv = (double*)(tectlr->get_xmv());
+	tstep = 0.0005;		// in hours
+	tscan = tstep;		// in hours
+	int nsteps = int(simtime / tstep);
+	print_sim_params(tstep, tscan, nsteps, simtime);
 
 	// init the plant
 	teplant->initialize();
 	xmeas = (double*)(teplant->get_xmeas());
+	plant_log << t << "\t" << *teplant << std::endl;
+
+	// init the controller
+	tectlr->initialize(tstep, tscan);
+	xmv = (double*)(tectlr->get_xmv());
+	ctlr_log << t << "\t" << *tectlr << std::endl;
+
+	// start console time log
+	std::cout << std::setprecision(3) << t << " ";
 
 	for (int ii = 0; ii < nsteps; ii++)
 	{
-		// run the plant
+		// increment the plant and controller
 		xmeas = teplant->increment(t, tstep, xmv);
-
-		// run the controller
 		xmv = tectlr->increment(t, tscan, xmeas);
-
-		//std::cout << *teplant << std::endl;
-		dbl tMod = fmod(t, 0.01);
-		if ((tMod < 0.00005) || (0.01 - tMod) < 0.00005 || t == 0) {
-			#ifndef _DEBUG
-			logFile << t << "\t" << *teplant << *tectlr << std::endl;
-			#endif
-		}
-		//std::cout << teplant->get_xmeas(12) << std::endl;
-
-		// advance the time step
 		t += tstep;
-	}
 
-	#ifndef _DEBUG
-	logFile.close();
-	#endif
+		// log the variables
+		if (!(ii%ilog))
+		{
+			plant_log << t << "\t" << *teplant << std::endl;
+			ctlr_log << t << "\t" << *tectlr << std::endl;
+		}
+
+		// log current time to console
+		if (!(ii % 5000)) { std::cout << std::setprecision(3) << t << " "; }
+	}
 
 	return 0;
 }

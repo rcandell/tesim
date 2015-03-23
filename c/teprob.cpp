@@ -1405,6 +1405,13 @@ void get_curr_xmeas(double* xmeas)
 	}
 }
 
+void get_curr_xmv(double* xmv)
+{
+	for (int i = 0; i<NU; i++) {
+		xmv[i] = pv_.xmv[i];
+	}
+}
+
 void set_curr_xmv(double* xmv)
 {
 	for (int i = 0; i<NU; i++) {
