@@ -47,7 +47,9 @@ int main(int argc, char* argv[])
 	std::ofstream plant_log;
 	std::ofstream ctlr_log;
 	plant_log.open("teplant.dat");
+	plant_log.precision(15);
 	ctlr_log.open("tectlr.dat");
+	ctlr_log.precision(15);
 
 	// simulation parameters
 	double t, tstep, tscan;
@@ -55,7 +57,7 @@ int main(int argc, char* argv[])
 	t = 0;
 	tstep = 0.0005;		// in hours
 	tscan = tstep;		// in hours
-	int nsteps = int(simtime/tstep);
+	int nsteps = int(simtime / tstep);
 	print_sim_params(tstep, tscan, nsteps, simtime);
 
 	// init the plant
@@ -67,19 +69,19 @@ int main(int argc, char* argv[])
 	tectlr->initialize(tstep, tscan);
 	xmv = (double*)(tectlr->get_xmv());
 	ctlr_log << t << "\t" << *tectlr << std::endl;
-	
+
 	// start console time log
 	std::cout << std::setprecision(3) << t << " ";
-	
+
 	for (int ii = 0; ii < nsteps; ii++)
 	{
 		// increment the plant and controller
 		xmeas = teplant->increment(t, tstep, xmv);
-		xmv = tectlr->increment(t, tscan, xmeas); 
+		xmv = tectlr->increment(t, tscan, xmeas);
 		t += tstep;
 
 		// log the variables
-		if ( !(ii%ilog) )
+		if (!(ii%ilog))
 		{
 			plant_log << t << "\t" << *teplant << std::endl;
 			ctlr_log << t << "\t" << *tectlr << std::endl;

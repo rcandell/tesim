@@ -47,6 +47,10 @@ void TEPlant::initialize()
 	m_idv   = new int[TEPlant::NIDV]();	    // idv's
 
 	m_t = 0.0;
+
+	// Turn off disturbances
+	set_curr_idv(m_idv);
+
 	teinit(&TEPlant::NX, &m_t, m_x, m_dxdt);
 
 	// initialize states
@@ -136,6 +140,7 @@ double* TEPlant::increment(double t, double dt, double* new_xmv)
 
 	// apply the new the inputs
 	set_curr_xmv(m_xmv);
+	set_curr_idv(m_idv);
 
 	// update the model outputs and compute derivatives
 	tefunc(&TEPlant::NX, &t, m_x, m_dxdt);
@@ -145,6 +150,10 @@ double* TEPlant::increment(double t, double dt, double* new_xmv)
 
 	// fetch the next outputs
 	get_curr_xmeas(m_xmeas);
+
+	// Calculate dxdt
+	tefunc(&TEPlant::NX, &t, m_x, m_dxdt);
+
 	return m_xmeas;
 }
 
