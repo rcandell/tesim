@@ -60,15 +60,15 @@ int main(int argc, char* argv[])
 	int nsteps = int(simtime / tstep);
 	print_sim_params(tstep, tscan, nsteps, simtime);
 
-	// init the plant
-	teplant->initialize();
-	xmeas = (double*)(teplant->get_xmeas());
-	plant_log << t << "\t" << *teplant << std::endl;
-
 	// init the controller
 	tectlr->initialize(tstep, tscan);
 	xmv = (double*)(tectlr->get_xmv());
-	ctlr_log << t << "\t" << *tectlr << std::endl;
+	//ctlr_log << t << "\t" << *tectlr << std::endl;
+
+	// init the plant
+	teplant->initialize();
+	xmeas = (double*)(teplant->get_xmeas());
+	//plant_log << t << "\t" << *teplant << std::endl;
 
 	// start console time log
 	std::cout << std::setprecision(3) << t << " ";
@@ -78,7 +78,6 @@ int main(int argc, char* argv[])
 		// increment the plant and controller
 		xmeas = teplant->increment(t, tstep, xmv);
 		xmv = tectlr->increment(t, tscan, xmeas);
-		t += tstep;
 
 		// log the variables
 		if (!(ii%ilog))
@@ -89,6 +88,9 @@ int main(int argc, char* argv[])
 
 		// log current time to console
 		if (!(ii % 5000)) { std::cout << std::setprecision(3) << t << " "; }
+
+		// Increment the time
+		t += tstep;
 	}
 
 	return 0;

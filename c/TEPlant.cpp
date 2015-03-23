@@ -179,7 +179,7 @@ std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
 	{
 		lhs << rhs.m_xmv[ii] << "\t";
 	}
-	lhs << rhs.m_xmv[TEPlant::NU - 1];
+	lhs << rhs.m_xmv[TEPlant::NU - 1] << "\t";
 
 	// measured variables
 	for (int ii = 0; ii < TEPlant::NY - 1; ii++)
