@@ -31,8 +31,8 @@ int main(int argc, char* argv[])
 	int ilog = 1;
 	if (argc < 2)
 	{
-		printf("usage error.  simulation duration not specified");
-		printf("tesim <swim_time_in_hours> <save_decimator>");
+		std::cerr << "tesim usage error" << std::endl;
+		std::cerr << "usage: tesim <swim_time_in_hours> <save_decimator>" << std::endl;
 		exit(0);
 	}
 	else
