@@ -104,7 +104,7 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 
 	// Update the ratio trimming and the yA and yAC loops (every 0.1 of t)
 	dbl tMod = fmod(t, 0.1);
-	if ((last_tMod > tMod) || t == 0) {
+	if ((tMod < 0.00005) || (0.1 - tMod) < 0.00005 || t == 0) {
 
 		loop14 = yA_ControlLoop->increment(63.1372, yA, t, dt);
 		loop15 = yAC_ControlLoop->increment(51., yAC, t, dt);
@@ -126,6 +126,14 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	}
 	last_tMod = tMod;
 
+	// Update the production rate
+	Fp = productionRate->increment(22.89, new_xmeas[16], t, dt);
+
+	// Update the feedforward
+	mP_G_SP = pctG_inProduct->getPctGsp();
+	r[1] = (double)((1.5192e-3 * pow(mP_G_SP, 2.)) + (5.9446e-1 * mP_G_SP) + 2.7690e-1) - ((E_Adj * 32.) / Fp);
+	r[2] = (double)((-1.1377e-3 * pow(mP_G_SP, 2.)) + (-8.0893e-1 * mP_G_SP) + 9.1060e1) + ((E_Adj * 46.) / Fp);
+
 	// Update the feed rate loops AFTER the production rate loop!
 	// Update the feed rate loops AFTER the ratio trimming loop!
 	m_xmv[2] = A_FeedRateLoop->increment((r[0] * Fp), new_xmeas[0], t, dt);
@@ -133,37 +141,23 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	m_xmv[1] = E_FeedRateLoop->increment((r[2] * Fp), new_xmeas[2], t, dt);
 	m_xmv[3] = C_FeedRateLoop->increment((r[3] * Fp), new_xmeas[3], t, dt);
 
-	// Update the production rate
-	Fp = productionRate->increment(22.89, new_xmeas[16], t, dt);
-
-	m_xmv[5] = PurgeRateLoop->increment((r[4] * Fp), new_xmeas[9], t, dt);
-
-	// Update the feedforward
-	mP_G_SP = pctG_inProduct->getPctGsp();
-	r[1] = (double)((1.5192e-3 * pow(mP_G_SP, 2.)) + (5.9446e-1 * mP_G_SP) + 2.7690e-1) - ((E_Adj * 32.) / Fp);
-	r[2] = (double)((-1.1377e-3 * pow(mP_G_SP, 2.)) + (-8.0893e-1 * mP_G_SP) + 9.1060e1) + ((E_Adj * 46.) / Fp);
-
-	// Update the Reactor
-	dbl sepTempSP = ReactorLevelLoop->increment(65., new_xmeas[7], t, dt);
 	r[4] = ReactorPressureLoop->increment(2800., new_xmeas[6], t, dt);
+	m_xmv[5] = PurgeRateLoop->increment((r[4] * Fp), new_xmeas[9], t, dt);
+	dbl sepTempSP = ReactorLevelLoop->increment(65., new_xmeas[7], t, dt);
 	m_xmv[9] = ReactorTemperatureLoop->increment(122.9, new_xmeas[8], t, dt);
 
-	// Update the Separator
-	m_xmv[6] = SeparatorFlowLoop->increment((r[5] * Fp), new_xmeas[13], t, dt);
 	r[5] = SeparatorLevelLoop->increment(50., new_xmeas[11], t, dt);
+	m_xmv[6] = SeparatorFlowLoop->increment((r[5] * Fp), new_xmeas[13], t, dt);
 	m_xmv[10] = SeparatorTemperatureLoop->increment(sepTempSP, new_xmeas[10], t, dt);
 
-	// Update the Stripper
-	m_xmv[7] = StripperFlowLoop->increment((r[6] * Fp), new_xmeas[16], t, dt);
 	r[6] = StripperLevelLoop->increment(50., new_xmeas[14], t, dt);
+	m_xmv[7] = StripperFlowLoop->increment((r[6] * Fp), new_xmeas[16], t, dt);
 
 	return m_xmv;
 }
 
-// get for xmeas
 const double* TEController::get_xmv() const
 {
-	get_curr_xmv(m_xmv);
 	return m_xmv;
 }
 
