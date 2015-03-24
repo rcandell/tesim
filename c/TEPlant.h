@@ -25,7 +25,8 @@
 //	5. increment the simulator
 //  6. repeat from Step 3.
 
-#include <ostream>     // std::cout, std::ostream, std::ios
+#include <ostream>     
+#include <fstream>     
 
 class TEPlant
 {		
@@ -53,7 +54,7 @@ class TEPlant
 		// set disturbance
 		// 20 different disturbance types as defined by Downs
 		// Set value in array to activate disturbance
-		void set_idv(const double* idv);	
+		void set_idv(const double* idv);
 		const int* get_idv() const { return m_idv; }
 		const int get_idv(unsigned idx) const { return m_idv[idx]; }
 
