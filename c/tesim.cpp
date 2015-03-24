@@ -55,6 +55,8 @@ int main(int argc, char* argv[])
 	double t, tstep, tscan;
 	double *xmeas, *xmv;
 	t = 0;
+	// Variables 'tstep' and 'tscan' contain a floating-point round-off error.
+	// Scrutinize any calculations that use these variables.
 	tstep = 0.0005;		// in hours
 	tscan = tstep;		// in hours
 	int nsteps = int(simtime / tstep);
@@ -90,7 +92,10 @@ int main(int argc, char* argv[])
 		if (!(ii % 5000)) { std::cout << std::setprecision(3) << t << " "; }
 
 		// Increment the time
-		t += tstep;
+		// Approximation of tstep because of limited memory causes errors to 
+		// integrate over time (round-off error), so we must recalculate t on 
+		// every iteration.
+		t = (double)(ii + 1) * tstep;
 	}
 
 	return 0;
