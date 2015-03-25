@@ -163,16 +163,16 @@ const double* TEController::get_xmv() const
 
 std::ostream& operator<< (std::ostream& lhs, const TEController& rhs)
 {
-	// measured variables
-	for (int ii = 0; ii < TEPlant::NY; ii++)
-	{
-		lhs << rhs.m_xmeas[ii] << "\t";
-	}
-
 	// manipulated variables
 	for (int ii = 0; ii < TEPlant::NU; ii++)
 	{
 		lhs << rhs.m_xmv[ii] << "\t";
+	}
+
+	// measured variables
+	for (int ii = 0; ii < TEPlant::NY; ii++)
+	{
+		lhs << rhs.m_xmeas[ii] << "\t";
 	}
 
 	// r state variables
