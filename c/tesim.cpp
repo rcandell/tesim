@@ -15,13 +15,15 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
+#include <math.h> 
 
-void print_sim_params(double tstep, double tscan, int nsteps, double simtime)
+void print_sim_params(double tstep, double tscan, int nsteps, int steps_per_scan, double simtime)
 {
 	std::cout << "TE simulation" << std::endl;
 	std::cout << "simulation time: " << simtime << "hrs" << std::endl;
 	std::cout << "plant dt: " << tstep << "hrs" << std::endl;
 	std::cout << "ctlr dt: " << tscan << "hrs" << std::endl;
+	std::cout << "steps per scan: " << steps_per_scan << std::endl;
 	std::cout << "time steps: " << nsteps << std::endl;
 }
 
@@ -32,13 +34,13 @@ int main(int argc, char* argv[])
 	if (argc < 2)
 	{
 		std::cerr << "tesim usage error" << std::endl;
-		std::cerr << "usage: tesim <swim_time_in_hours> <save_decimator>" << std::endl;
+		std::cerr << "usage: tesim <sim_time_in_hours> <plant_save_decimator>" << std::endl;
 		exit(0);
 	}
 	else
 	{
 		simtime = atof(argv[1]);
-		ilog = atoi(argv[2]);
+		//ilog = atoi(argv[2]);
 	}
 	TEPlant* teplant = TEPlant::getInstance();
 	TEController* tectlr = TEController::getInstance();
@@ -55,43 +57,48 @@ int main(int argc, char* argv[])
 	double t, tstep, tscan;
 	double *xmeas, *xmv;
 	t = 0;
+
 	// Variables 'tstep' and 'tscan' contain a floating-point round-off error.
 	// Scrutinize any calculations that use these variables.
-	tstep = 0.0005;		// in hours
-	tscan = tstep;		// in hours
-	int nsteps = int(simtime / tstep);
-	print_sim_params(tstep, tscan, nsteps, simtime);
+	tstep = 0.0005; // (10.0E-3) / 3600;		// Plant update time in hours (10 milliseconds)
+	tscan = 0.0005;				// PLC scan time in hours (1.8 seconds, same as Ricker)
+	int nsteps = int(simtime/tstep);
+	int steps_per_scan = (int)round(tscan / tstep);
+	print_sim_params(tstep, tscan, nsteps, steps_per_scan, simtime);
 
 	// init the controller
 	tectlr->initialize(tstep, tscan);
 	xmv = (double*)(tectlr->get_xmv());
-	//ctlr_log << t << "\t" << *tectlr << std::endl;
 
 	// init the plant
 	teplant->initialize();
 	xmeas = (double*)(teplant->get_xmeas());
-	//plant_log << t << "\t" << *teplant << std::endl;
 
 	// start console time log
-	std::cout << std::setprecision(3) << t << " ";
+	std::cout << "time: " << std::setprecision(3) << t << " hours" << std::endl;
 
 	for (int ii = 0; ii < nsteps; ii++)
 	{
 		// increment the plant and controller
 		xmeas = teplant->increment(t, tstep, xmv);
-		xmv = tectlr->increment(t, tscan, xmeas);
 
-		// log the variables
-		if (!(ii%ilog))
+		// run the controller if at scan boundary
+		if (!(ii%steps_per_scan))
 		{
-			plant_log << t << "\t" << *teplant << std::endl;
+			xmv = tectlr->increment(t, tscan, xmeas);
+
+			// log plant and controller data to file
 			ctlr_log << t << "\t" << *tectlr << std::endl;
+			plant_log << t << "\t" << *teplant << std::endl;
 		}
 
 		// log current time to console
-		if (!(ii % 5000)) { std::cout << std::setprecision(3) << t << " "; }
+		if (!(ii % (1000*steps_per_scan)))
+		{ 
+			std::cout << "time: " << std::setprecision(3) << t << " hours" << std::endl; 
+		}
 
-		// Increment the time
+		// Increment to the next time step
 		// Approximation of tstep because of limited memory causes errors to 
 		// integrate over time (round-off error), so we must recalculate t on 
 		// every iteration.
