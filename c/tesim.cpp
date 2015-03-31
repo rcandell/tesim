@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 	print_sim_params(tstep, tscan, nsteps, steps_per_scan, simtime);
 
 	// init the controller
-	tectlr->initialize(tstep, tscan);
+	tectlr->initialize(tscan);
 	xmv = (double*)(tectlr->get_xmv());
 
 	// init the plant
@@ -75,7 +75,6 @@ int main(int argc, char* argv[])
 	xmeas = (double*)(teplant->get_xmeas());
 
 	// start console time log
-	std::cout << "time: " << std::setprecision(3) << t << " hours" << std::endl;
 
 	for (int ii = 0; ii < nsteps; ii++)
 	{
@@ -95,7 +94,7 @@ int main(int argc, char* argv[])
 		// log current time to console
 		if (!(ii % (1000*steps_per_scan)))
 		{ 
-			std::cout << "time: " << std::setprecision(3) << t << " hours" << std::endl; 
+			std::cout << "\r" << "time: " << std::setprecision(3) << t << " hours            "; 
 		}
 
 		// Increment to the next time step

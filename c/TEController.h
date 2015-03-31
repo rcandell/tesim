@@ -25,7 +25,7 @@ public:
 	static TEController* getInstance();
 	virtual ~TEController();
 
-	void initialize(double tstep, double tscan);
+	void initialize(double tscan);
 
 	// run the controller one scan interval
 	// returns new manipulated variables
