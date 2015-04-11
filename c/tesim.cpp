@@ -20,9 +20,9 @@
 void print_sim_params(double tstep, double tscan, int nsteps, int steps_per_scan, double simtime)
 {
 	std::cout << "TE simulation" << std::endl;
-	std::cout << "simulation time: " << simtime << "hrs" << std::endl;
-	std::cout << "plant dt: " << tstep << "hrs" << std::endl;
-	std::cout << "ctlr dt: " << tscan << "hrs" << std::endl;
+	std::cout << "simulation time: " << simtime << " hrs" << std::endl;
+	std::cout << "plant dt: " << tstep << " hrs" << std::endl;
+	std::cout << "ctlr dt: " << tscan << " hrs" << std::endl;
 	std::cout << "steps per scan: " << steps_per_scan << std::endl;
 	std::cout << "time steps: " << nsteps << std::endl;
 }
@@ -40,11 +40,18 @@ int main(int argc, char* argv[])
 	// Scrutinize any calculations that use these variables.
 	tstep = (10.0E-3) / 3600;		// Plant update time in hours (10 milliseconds)
 	tscan = 0.0005;				// PLC scan time in hours (1.8 seconds, same as Ricker)
-
+	if (argc >= 5)
+	{
+		tscan = atof(argv[4]);
+	}
+	if (argc >= 4)
+	{
+		tstep = atof(argv[3]);
+	}
 	if (argc < 2)
 	{
 		std::cerr << "tesim usage error" << std::endl;
-		std::cerr << "usage: tesim <sim_time_in_hours> <plant_save_decimator>" << std::endl;
+		std::cerr << "usage: tesim <sim_time_in_hours> <plant_save_decimator> <tstep - optional> <tscan - optional>" << std::endl;
 		exit(0);
 	}
 	else
