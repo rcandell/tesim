@@ -29,8 +29,18 @@ void print_sim_params(double tstep, double tscan, int nsteps, int steps_per_scan
 
 int main(int argc, char* argv[])
 {
+	// simulation parameters
 	double simtime = 0.0;
 	int ilog = 1;
+	double t, tstep, tscan;
+	double *xmeas, *xmv;
+	t = 0;
+
+	// Variables 'tstep' and 'tscan' contain a floating-point round-off error.
+	// Scrutinize any calculations that use these variables.
+	tstep = (10.0E-3) / 3600;		// Plant update time in hours (10 milliseconds)
+	tscan = 0.0005;				// PLC scan time in hours (1.8 seconds, same as Ricker)
+
 	if (argc < 2)
 	{
 		std::cerr << "tesim usage error" << std::endl;
@@ -53,15 +63,7 @@ int main(int argc, char* argv[])
 	ctlr_log.open("tectlr.dat");
 	ctlr_log.precision(15);
 
-	// simulation parameters
-	double t, tstep, tscan;
-	double *xmeas, *xmv;
-	t = 0;
-
-	// Variables 'tstep' and 'tscan' contain a floating-point round-off error.
-	// Scrutinize any calculations that use these variables.
-	tstep = (10.0E-3) / 3600;		// Plant update time in hours (10 milliseconds)
-	tscan = 0.0005;				// PLC scan time in hours (1.8 seconds, same as Ricker)
+	// derived simulation parameters
 	int nsteps = int(simtime/tstep);
 	int steps_per_scan = (int)round(tscan / tstep);
 	print_sim_params(tstep, tscan, nsteps, steps_per_scan, simtime);
