@@ -88,7 +88,6 @@
     <ClCompile Include="..\TEController.cpp" />
     <ClCompile Include="..\TEPlant.cpp" />
     <ClCompile Include="..\teprob.cpp" />
-    <ClCompile Include="..\tesim.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

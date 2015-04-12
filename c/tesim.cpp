@@ -10,6 +10,8 @@
 // tesim.cpp : Defines the main() entry point for the console application.
 //
 
+#include <boost/system/config.hpp>
+#include <boost/timer/timer.hpp>
 #include "TEPlant.h"
 #include "TEController.h"
 #include <fstream>
@@ -17,7 +19,7 @@
 #include <iomanip>
 #include <math.h> 
 
-void print_sim_params(double tstep, double tscan, int nsteps, int steps_per_scan, double simtime)
+void print_sim_params(double tstep, double tscan, int nsteps, int steps_per_scan, double simtime, unsigned rt)
 {
 	std::cout << "TE simulation" << std::endl;
 	std::cout << "simulation time: " << simtime << " hrs" << std::endl;
@@ -25,11 +27,15 @@ void print_sim_params(double tstep, double tscan, int nsteps, int steps_per_scan
 	std::cout << "ctlr dt: " << tscan << " hrs" << std::endl;
 	std::cout << "steps per scan: " << steps_per_scan << std::endl;
 	std::cout << "time steps: " << nsteps << std::endl;
+	std::cout << "Real-time: " << rt << std::endl;
 }
 
 int main(int argc, char* argv[])
 {
+	boost::timer::auto_cpu_timer t_wall_auto;
+
 	// simulation parameters
+	unsigned RT = 0;
 	double simtime = 0.0;
 	int ilog = 1;
 	double t, tstep, tscan;
@@ -40,6 +46,10 @@ int main(int argc, char* argv[])
 	// Scrutinize any calculations that use these variables.
 	tstep = (10.0E-3) / 3600;		// Plant update time in hours (10 milliseconds)
 	tscan = 0.0005;				// PLC scan time in hours (1.8 seconds, same as Ricker)
+	if (argc >= 6)
+	{
+		RT = atoi(argv[5]);
+	}
 	if (argc >= 5)
 	{
 		tscan = atof(argv[4]);
@@ -51,7 +61,7 @@ int main(int argc, char* argv[])
 	if (argc < 2)
 	{
 		std::cerr << "tesim usage error" << std::endl;
-		std::cerr << "usage: tesim <sim_time_in_hours> <plant_save_decimator> <tstep - optional> <tscan - optional>" << std::endl;
+		std::cerr << "usage: tesim <sim_time_in_hours> <plant_save_decimator> <tstep - optional> <tscan - optional> <reat-time flag>" << std::endl;
 		exit(0);
 	}
 	else
@@ -73,7 +83,7 @@ int main(int argc, char* argv[])
 	// derived simulation parameters
 	int nsteps = int(simtime/tstep);
 	int steps_per_scan = (int)round(tscan / tstep);
-	print_sim_params(tstep, tscan, nsteps, steps_per_scan, simtime);
+	print_sim_params(tstep, tscan, nsteps, steps_per_scan, simtime, RT);
 
 	// init the controller
 	tectlr->initialize(tscan);
@@ -111,8 +121,11 @@ int main(int argc, char* argv[])
 		// integrate over time (round-off error), so we must recalculate t on 
 		// every iteration.
 		t = (double)(ii + 1) * tstep;
+
+		// 
 	}
 
+	std::cout << std::endl;
 	return 0;
 }
 
