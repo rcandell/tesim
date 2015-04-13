@@ -1,0 +1,39 @@
+# Tennessee Eastman C++ ported Simulation
+This section of the TEsim repository is devoted to a C++ implementation of the TE challenge problem. We use the Lawrence  Ricker decentralized control algorithm as our baseline.
+
+## Authors
+Original: Author: Rick Candell <br>
+Co-author: Tim Zimmermand <br>
+National Institute of Standards and Technology (NIST) <br>
+
+## C++ code dependencies
+This implementation requires the following software tools and libraries in order to compile, link, and run.
+* Microsoft Visual Studio 2013 Express.  Every effort has been made to make the code portable to other platforms, but cross-platform functionality has not been validated.
+* Boost C++ version 1.57 32 bits.  Other versions may work, but this has not been tested.  The 64 bit variant did not link using VS 2013 Express. 
+
+## Motivation
+The original TE plant was written in Fortran 77.  Since that time, other implementations were developed under MATLAB/Simulink with the plant ported to C mex code using the f2c utility and the controller implemented in Simulink.  This approach worked well for development of control design; however, this repository is intended to support research in cybersecurity and wireless in factories using hardware-in-the-loop (HIL) mechanisms.  As such, a more portable code base that does not rely on expensive or difficult to manage software tools is needed.  C++ was chosen to accomodate portability and perfomance.
+
+## Tasks
+
+- [x] Port the TE plant to C++
+- [x] Port the Lawrence Ricker controller to C++
+- [x] Breakout TEsim into library and executable projects
+- [x] Implemented wall clock prototype
+- [ ] Implement startup synchronization between controller and plant.
+- [ ] Implement separate plant and controller using Modbus/TCP as the communication mechanism.
+- [ ] Implement Ethernet/IP integration between plant and controller
+- [ ] Port the controller to a PLC and syncrhonize startup from the PLC.
+
+## Directories
+Directory | Purpose
+--- | ---
+C | Top level for VS solutuion and library source code
+f | The original FORTRAN 
+tesimlib | Project directory for *tesimlib*. Does not contain code.
+Debug | Build output directory for Debug build type
+Release | Build output directory for Release build type
+ipy | Contains IPython notebooks for offline analysis
+
+## Description
+### 
