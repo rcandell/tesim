@@ -47,6 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\local\boost_1_57_0_32</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -81,6 +82,7 @@
     <ClInclude Include="..\TELogging.h" />
     <ClInclude Include="..\TEPlant.h" />
     <ClInclude Include="..\teprob.h" />
+    <ClInclude Include="..\TETimeSync.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ControlLoops.cpp" />
@@ -88,6 +90,7 @@
     <ClCompile Include="..\TEController.cpp" />
     <ClCompile Include="..\TEPlant.cpp" />
     <ClCompile Include="..\teprob.cpp" />
+    <ClCompile Include="..\TETimeSync.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
