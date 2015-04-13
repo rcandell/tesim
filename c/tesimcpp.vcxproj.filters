@@ -18,9 +18,6 @@
     <ClCompile Include="tesim.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TETimeSync.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="f\tecommon.inc">
@@ -29,10 +26,5 @@
     <None Include="f\teprob.f">
       <Filter>Resource Files</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="TETimeSync.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
