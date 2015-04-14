@@ -24,7 +24,7 @@
 
 // function prototypes
 void print_sim_params(double tstep, double tscan, int nsteps, int steps_per_scan, double simtime, unsigned rt);
-void log_time_console(unsigned RT, unsigned steps_per_scan, double t, unsigned ii);
+void log_time_console(unsigned RT, double t);
 
 int main(int argc, char* argv[])
 {
@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
 			plant_log << t << "\t" << *teplant << std::endl;
 
 			// log current time to console
-			log_time_console(RT, steps_per_scan, t, ii);
+			log_time_console(RT, t);
 		}
 
 		// Increment to the next time step
@@ -135,16 +135,16 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void log_time_console(unsigned RT, unsigned steps_per_scan, double t, unsigned ii)
+void log_time_console(unsigned RT, double t)
 {
 	if (!RT)
 	{
-		std::cout << "\r" << "time: " << std::setprecision(3) << std::setfill('0') << t << " hours            ";
+		std::cout << "\r" << "time: " << std::setprecision(8) << std::setfill('0') << t << " hours            ";
 	}
 	else
 	{
 		// todo: fixed precision problem when logging
-		std::cout << "\r" << "time: " << std::setprecision(3) << std::setfill('0') << t * 3600.0 << " secs            ";
+		std::cout << "\r" << "time: " << std::setprecision(8) << std::setfill('0') << (t * 3600.0) << " secs            ";
 	}
 }
 
