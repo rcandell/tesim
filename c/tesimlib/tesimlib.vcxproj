@@ -92,6 +92,10 @@
     <ClCompile Include="..\teprob.cpp" />
     <ClCompile Include="..\TETimeSync.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\f\tecommon.inc" />
+    <None Include="..\f\teprob.f" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

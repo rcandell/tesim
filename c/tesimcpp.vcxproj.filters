@@ -19,12 +19,4 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="f\tecommon.inc">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="f\teprob.f">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
 </Project>

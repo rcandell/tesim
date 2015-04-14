@@ -12,8 +12,9 @@
 
 #include <boost/system/config.hpp>
 #include <boost/timer/timer.hpp>
-#include "TETimeSync.h"
+#include <boost/log/trivial.hpp>
 
+#include "TETimeSync.h"
 #include "TEPlant.h"
 #include "TEController.h"
 #include <fstream>
@@ -111,10 +112,10 @@ int main(int argc, char* argv[])
 			// log plant and controller data to file when the controller runs
 			ctlr_log << t << "\t" << *tectlr << std::endl;
 			plant_log << t << "\t" << *teplant << std::endl;
-		}
 
-		// log current time to console
-		log_time_console(RT, steps_per_scan, t, ii);
+			// log current time to console
+			log_time_console(RT, steps_per_scan, t, ii);
+		}
 
 		// Increment to the next time step
 		// Approximation of tstep because of limited memory causes errors to 
@@ -138,28 +139,23 @@ void log_time_console(unsigned RT, unsigned steps_per_scan, double t, unsigned i
 {
 	if (!RT)
 	{
-		if (!(ii % (1000 * steps_per_scan)))
-		{
-			std::cout << "\r" << "time: " << std::setprecision(3) << t << " hours            ";
-		}
+		std::cout << "\r" << "time: " << std::setprecision(3) << std::setfill('0') << t << " hours            ";
 	}
 	else
 	{
-		if (!(ii % 5))
-		{
-			std::cout << "\r" << "time: " << std::setprecision(3) << t * 3600 << " secs            ";
-		}
+		// todo: fixed precision problem when logging
+		std::cout << "\r" << "time: " << std::setprecision(3) << std::setfill('0') << t * 3600.0 << " secs            ";
 	}
 }
 
 void print_sim_params(double tstep, double tscan, int nsteps, int steps_per_scan, double simtime, unsigned rt)
 {
-	std::cout << "TE simulation" << std::endl;
-	std::cout << "simulation time: " << simtime << " hrs" << std::endl;
-	std::cout << "plant dt: " << tstep << " hrs" << std::endl;
-	std::cout << "ctlr dt: " << tscan << " hrs" << std::endl;
-	std::cout << "steps per scan: " << steps_per_scan << std::endl;
-	std::cout << "time steps: " << nsteps << std::endl;
-	std::cout << "Real-time: " << rt << std::endl;
+	BOOST_LOG_TRIVIAL(info) << std::endl << "TE simulation" << std::endl
+	  << "simulation time: " << simtime << " hrs" << std::endl
+	  << "plant dt: " << tstep << " hrs" << std::endl
+	  << "ctlr dt: " << tscan << " hrs" << std::endl
+	  << "steps per scan: " << steps_per_scan << std::endl
+	  << "time steps: " << nsteps << std::endl
+	  << "Real-time: " << rt << std::endl;
 }
 
