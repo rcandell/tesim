@@ -35,5 +35,17 @@ Debug | Build output directory for Debug build type
 Release | Build output directory for Release build type
 ipy | Contains IPython notebooks for offline analysis
 
-## Description
-### 
+## Code Description
+### TESIM Solution (MSVS 2013 Express 32 bits)
+This is the top level "solution" under Microsoft Visual Studio 2013 Express for Windows Desktop.  This solution contains "projects" used to build the software and libraries needed to simulate the 
+
+### TESIMLIB Project
+
+### TESIM Project
+TBD
+
+### TESIMforMODBUSTCP
+TBD
+
+### TESIMforEnetIP
+TBD
