@@ -77,10 +77,14 @@ int main(int argc, char* argv[])
 	// Create the log files
 	std::ofstream plant_log;
 	std::ofstream ctlr_log;
+	std::ofstream time_log;
 	plant_log.open("teplant.dat");
 	plant_log.precision(15);
 	ctlr_log.open("tectlr.dat");
 	ctlr_log.precision(15);
+	time_log.open("time.dat");
+	time_log.precision(15);
+	time_log.fill('0');
 
 	// derived simulation parameters
 	int nsteps = int(simtime/tstep);
@@ -117,18 +121,18 @@ int main(int argc, char* argv[])
 			log_time_console(RT, t);
 		}
 
+		// try to sync sim time to match wall clock time
+		if (RT)
+		{
+			dbl_sec sim_time_dur(t * 3600.0);
+			tesync.sync(sim_time_dur, time_log);
+		}
+
 		// Increment to the next time step
 		// Approximation of tstep because of limited memory causes errors to 
 		// integrate over time (round-off error), so we must recalculate t on 
 		// every iteration using a method that truncates the floating point error.
 		t = (double)(ii + 1) * tstep;
-
-		// try to sync sim time to match wall clock time
-		if (RT)
-		{
-			dbl_sec sim_time_dur(t*3600);
-			tesync.sync(sim_time_dur);
-		}
 	}
 
 	std::cout << std::endl;

@@ -14,6 +14,7 @@
 #define __TETIMESYNC_H__
 
 #include <boost/chrono.hpp>
+#include <fstream>
 
 typedef boost::chrono::duration<double, boost::micro> dbl_us;
 typedef boost::chrono::duration<double> dbl_sec;
@@ -26,13 +27,14 @@ public:
 
 	void init();
 	void sync(dbl_sec sim_time_sec);
+	void sync(dbl_sec sim_time_sec, std::ofstream&);
 
 private:
 	TETimeSync(const TETimeSync&) {};
 	TETimeSync& operator=(const TETimeSync&) {};
 
 	// state variables
-	boost::chrono::steady_clock::time_point m_wall_start;
+	boost::chrono::system_clock::time_point m_wall_start;
 };
 
 #endif 
