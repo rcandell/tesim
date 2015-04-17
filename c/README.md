@@ -3,7 +3,7 @@ This section of the TEsim repository is devoted to a C++ implementation of the T
 
 ## Authors
 Original: Author: Rick Candell <br>
-Co-author: Tim Zimmermand <br>
+Co-author: Tim Zimmerman <br>
 National Institute of Standards and Technology (NIST) <br>
 
 ## C++ code dependencies
@@ -12,7 +12,7 @@ This implementation requires the following software tools and libraries in order
 * Boost C++ version 1.57 32 bits.  Other versions may work, but this has not been tested.  The 64 bit variant did not link using VS 2013 Express. 
 
 ## Motivation
-The original TE plant was written in Fortran 77.  Since that time, other implementations were developed under MATLAB/Simulink with the plant ported to C mex code using the f2c utility and the controller implemented in Simulink.  This approach worked well for development of control design; however, this repository is intended to support research in cybersecurity and wireless in factories using hardware-in-the-loop (HIL) mechanisms.  As such, a more portable code base that does not rely on expensive or difficult to manage software tools is needed.  C++ was chosen to accomodate portability and perfomance.
+The original TE plant was written in Fortran 77.  Since that time, other implementations were developed under MATLAB/Simulink with the plant ported to C MEX code using the f2c utility and the controller implemented in Simulink.  This approach worked well for development of control design; however, this repository is intended to support research in cyber-security and wireless in factories using hardware-in-the-loop (HIL) mechanisms.  As such, a more portable code base that does not rely on expensive or difficult to manage software tools is needed.  C++ was chosen to accommodate portability and performance.
 
 ## Tasks
 
@@ -20,20 +20,32 @@ The original TE plant was written in Fortran 77.  Since that time, other impleme
 - [x] Port the Lawrence Ricker controller to C++
 - [x] Breakout TEsim into library and executable projects
 - [x] Implemented wall clock prototype
-- [ ] Implement startup synchronization between controller and plant.
+- [ ] Implement start-up synchronization between controller and plant.
 - [ ] Implement separate plant and controller using Modbus/TCP as the communication mechanism.
 - [ ] Implement Ethernet/IP integration between plant and controller
-- [ ] Port the controller to a PLC and syncrhonize startup from the PLC.
+- [ ] Port the controller to a PLC and synchronize start-up from the PLC.
 
 ## Directories
 Directory | Purpose
 --- | ---
-C | Top level for VS solutuion and library source code
+C | Top level for VS solution and library source code
 f | The original FORTRAN 
 tesimlib | Project directory for *tesimlib*. Does not contain code.
 Debug | Build output directory for Debug build type
 Release | Build output directory for Release build type
 ipy | Contains IPython notebooks for offline analysis
 
-## Description
-### 
+## Code Description
+### TESIM Solution (MSVS 2013 Express 32 bits)
+This is the top level "solution" under Microsoft Visual Studio 2013 Express for Windows Desktop.  This solution contains "projects" used to build the software and libraries needed to simulate the 
+
+### TESIMLIB Project
+
+### TESIM Project
+TBD
+
+### TESIMforMODBUSTCP
+TBD
+
+### TESIMforEnetIP
+TBD
