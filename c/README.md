@@ -50,7 +50,6 @@ TBD
 ### TESIMforEnetIP
 TBD
 
-# Installation Notes
-
-*Install Visual Studio 2013 Community Edition (Base VS IDE)
-*Install boost c++ using 32 bit binaries no the 64 bit ones  
+# Installation Notes 
+* Install Visual Studio 2013 Community Edition (Base VS IDE) <br>
+* Install boost c++ using 32 bit binaries no the 64 bit ones  <br>
