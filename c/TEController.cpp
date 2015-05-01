@@ -93,7 +93,7 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	std::memcpy(m_xmeas, new_xmeas, TEPlant::NY*sizeof(double));
 
 	//
-	dbl prodSP = 0, E_Adj, loop14 = 0, loop15 = 0;
+	double prodSP = 0, E_Adj, loop14 = 0, loop15 = 0;
 
 	// Update the % G in product
 	E_Adj = pctG_inProduct->increment(53.8, new_xmeas[39], t, dt);
@@ -103,7 +103,7 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	yA = (new_xmeas[22] * 100.) / yAC;
 
 	// Update the ratio trimming and the yA and yAC loops (every 0.1 of t)
-	dbl tMod = fmod(t, 0.1);
+	double tMod = fmod(t, 0.1);
 	if ((tMod < 0.00005) || (0.1 - tMod) < 0.00005 || t == 0) {
 
 		loop14 = yA_ControlLoop->increment(63.1372, yA, t, dt);
@@ -143,7 +143,7 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 
 	r[4] = ReactorPressureLoop->increment(2800., new_xmeas[6], t, dt);
 	m_xmv[5] = PurgeRateLoop->increment((r[4] * Fp), new_xmeas[9], t, dt);
-	dbl sepTempSP = ReactorLevelLoop->increment(65., new_xmeas[7], t, dt);
+	double sepTempSP = ReactorLevelLoop->increment(65., new_xmeas[7], t, dt);
 	m_xmv[9] = ReactorTemperatureLoop->increment(122.9, new_xmeas[8], t, dt);
 
 	r[5] = SeparatorLevelLoop->increment(50., new_xmeas[11], t, dt);
