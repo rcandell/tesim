@@ -86,6 +86,10 @@ int main(int argc, char* argv[])
 	time_log.precision(15);
 	time_log.fill('0');
 
+	// platn shutdown indicator
+	int shutdown = 0;
+	char * plant_msg = NULL;
+
 	// derived simulation parameters
 	int nsteps = int(simtime/tstep);
 	int steps_per_scan = (int)round(tscan / tstep);
@@ -106,7 +110,16 @@ int main(int argc, char* argv[])
 	for (int ii = 0; ii < nsteps; ii++)
 	{
 		// increment the plant and controller
-		xmeas = teplant->increment(t, tstep, xmv);
+		try
+		{
+			xmeas = teplant->increment(t, tstep, xmv, &shutdown);
+		}
+		catch (TEPlant::ShutdownException& e)
+		{
+			std::cerr << e << std::endl;
+			std::cerr << "ending simulation" << std::endl;
+			return 0;
+		}
 
 		// run the controller if time is at a scan boundary
 		if (!(ii%steps_per_scan))
