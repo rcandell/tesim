@@ -256,6 +256,9 @@ void get_curr_xmeas(double* xmeas);
 void get_curr_xmv(double* xmv);
 void set_curr_xmv(double* xmv);
 void set_curr_idv(int* idv);
+int get_curr_shutdown();
+char* get_shutdown_msg();
+
 int tefunc(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp);
 int teinit(const integer *nn, doublereal *time, doublereal *yy, doublereal *yp);
 int tesub1_(doublereal *z__, doublereal *t, doublereal *h__, 

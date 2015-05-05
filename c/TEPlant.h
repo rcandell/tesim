@@ -26,11 +26,31 @@
 //  6. repeat from Step 3.
 
 #include <ostream>     
-#include <fstream>     
+#include <fstream>  
+#include <exception>
 
 class TEPlant
 {		
     public:
+
+		class ShutdownException : public std::exception
+		{
+			public:
+				ShutdownException(int sd_code, char* sd_msg)
+					: m_sd_code(sd_code), m_sd_msg(sd_msg) {}
+
+				char* m_sd_msg;
+				int m_sd_code;
+
+				friend std::ostream& operator<< (std::ostream& lhs, const ShutdownException& rhs)
+				{
+					lhs << "plant shutdown" << std::endl <<
+						"code: " << rhs.m_sd_code << std::endl <<
+						"msg: " << rhs.m_sd_msg << std::endl;
+					return lhs;
+				}
+		};
+
         static TEPlant* getInstance();
 		virtual ~TEPlant();
 
@@ -45,7 +65,7 @@ class TEPlant
 		
 		// run the plant one time step
 		// returns the measured variables
-		double* increment(double t, double dt, double* xmv);
+		double* increment(double t, double dt, double* xmv, int* shutdown);
 		
 		// set and get for xmeas
 		const double* get_xmeas() const;
@@ -57,6 +77,10 @@ class TEPlant
 		void set_idv(const double* idv);
 		const int* get_idv() const { return m_idv; }
 		const int get_idv(unsigned idx) const { return m_idv[idx]; }
+
+		// get shutdown condition
+		const int get_shutdown() const;
+		char* shutdown_msg() const;
 
 		// overloaded output stream for TEPlant
 		friend std::ostream& operator<< (std::ostream&, const TEPlant&);
