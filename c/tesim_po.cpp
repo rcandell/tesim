@@ -27,7 +27,7 @@
 #include <utility>
 
 // function prototypes
-void print_sim_params(double tstep, double tscan, double simtime, bool rt, per_pair per_xmeas, per_pair per_xmv);
+void print_sim_params(double tstep, double tscan, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq);
 void log_time_console(unsigned RT, double t);
 
 int main(int argc, char* argv[])
@@ -41,16 +41,18 @@ int main(int argc, char* argv[])
 		("simtime,s", po::value<double>()->required(), "set the simulation time in hours")
 		("tstep,t", po::value<double>(), "set the base time step in hours")
 		("tscan,c", po::value<double>(), "set the scan interval in hours")
+		("ksave,k", po::value<unsigned>(), "decimation factor for saving trace data")
 		("real-time,r", "run the simulation in real time")
-		("xmeas-per", po::value<per_pair>(), "xmeas burst packet error rate tuple, (Perror:Precover)")
-		("xmv-per", po::value<per_pair>(), "xmv purst packet error rate tuple, (Perror:Precover)")
+		("xmeas-pq", po::value<pq_pair>(), "xmeas burst link status probabilities, (Perror:Precover)")
+		("xmv-pq", po::value<pq_pair>(), "xmv burst link status probabilities, (Perror:Precover)")
 		("logfile-prefix,p", po::value<std::string>(), "prefix for all of the log files")
+		("append-data,a", "append plant data to output file")
 		;
 
 	po::variables_map vm;
 	try	{
 		po::store(po::parse_command_line(argc, argv, desc), vm);
-		if( vm.count("help") )
+		if (vm.count("help"))
 		{
 			std::cout << desc << std::endl;
 			return 0;
@@ -67,9 +69,11 @@ int main(int argc, char* argv[])
 
 	// simulation parameters
 	std::string log_file_prefix = "nochan";
+	bool append_flag = false;
 	bool RT = 0;
 	double simtime = 0.0;
 	double t, tstep, tscan;
+	unsigned ksave = 1;
 	double *xmeas, *xmv;
 	t = 0;
 
@@ -78,8 +82,8 @@ int main(int argc, char* argv[])
 	tscan = tstep;					// PLC scan time in hours (1.8 seconds, same as Ricker)
 
 	// error channel parameters
-	per_pair per_xmeas = std::make_pair(0.0, 1.0);
-	per_pair per_xmv = std::make_pair(0.0, 1.0);
+	pq_pair xmeas_pq = std::make_pair(0.0, 1.0);
+	pq_pair xmv_pq = std::make_pair(0.0, 1.0);
 
 	try {
 		if (vm.count("real-time"))
@@ -102,19 +106,28 @@ int main(int argc, char* argv[])
 		{
 			tscan = tstep;
 		}
-		if (vm.count("xmeas-per"))
+		if (vm.count("ksave"))
 		{
-			per_xmeas = vm["xmeas-per"].as<per_pair>();
+			ksave = vm["ksave"].as<unsigned>();
 		}
-		if (vm.count("xmv-per"))
+		if (vm.count("xmeas-pq"))
 		{
-			per_xmv = vm["xmv-per"].as<per_pair>();
+			xmeas_pq = vm["xmeas-pq"].as<pq_pair>();
+		}
+		if (vm.count("xmv-pq"))
+		{
+			xmv_pq = vm["xmv-pq"].as<pq_pair>();
 		}
 		if (vm.count("logfile-prefix"))
 		{
 			log_file_prefix = vm["logfile-prefix"].as<std::string>();
 		}
-	} catch (po::error& e) {
+		if (vm.count("append-data"))
+		{
+			append_flag = true;
+		}
+	}
+	catch (po::error& e) {
 		std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
 		std::cerr << desc << std::endl;
 		return 0;
@@ -130,9 +143,14 @@ int main(int argc, char* argv[])
 	std::ofstream xmeas_chan_log;
 	std::ofstream xmv_chan_log;
 
-	plant_log.open(log_file_prefix+"_plant.dat");
+	if (append_flag)
+		plant_log.open(log_file_prefix + "_plant.dat", std::fstream::out | std::fstream::app);
+	else
+	{
+		plant_log.open(log_file_prefix + "_plant.dat");
+		plant_log << TENames::xmeas_pq() << "\t" << TENames::xmv_pq() << "\t" << TENames::time() << "\t" << TENames::xmv() << "\t" << TENames::xmeas() << "\t" << TENames::idv() << std::endl;
+	}
 	plant_log.precision(15);
-	plant_log << TENames::time() << "\t" << TENames::xmv() << "\t" << TENames::xmeas() << "\t" << TENames::idv() << std::endl;
 
 	ctlr_log.open(log_file_prefix + "_tectlr.dat");
 	ctlr_log.precision(15);
@@ -151,7 +169,7 @@ int main(int argc, char* argv[])
 	// derived simulation parameters
 	int nsteps = int(simtime/tstep);
 	int steps_per_scan = (int)round(tscan / tstep);
-	print_sim_params(tstep, tscan, simtime, RT, per_xmeas, per_xmv);
+	print_sim_params(tstep, tscan, simtime, RT, xmeas_pq, xmv_pq);
 
 	// auto timer used as a performance profiler
 	boost::timer::auto_cpu_timer t_wall_auto;
@@ -170,8 +188,8 @@ int main(int argc, char* argv[])
 
 	// create the communications channels
 	int seed_rand = 17;
-	TEErrorChannel xmeas_channel(per_xmeas, TEPlant::NY, teplant->get_xmeas(), seed_rand);
-	TEErrorChannel xmv_channel(per_xmv, TEPlant::NU, tectlr->get_xmv(), seed_rand);
+	TEErrorChannel xmeas_channel(xmeas_pq, TEPlant::NY, teplant->get_xmeas(), seed_rand);
+	TEErrorChannel xmv_channel(xmv_pq, TEPlant::NU, tectlr->get_xmv(), seed_rand);
 
 	for (int ii = 0; ii < nsteps; ii++)
 	{
@@ -181,7 +199,7 @@ int main(int argc, char* argv[])
 			xmeas = teplant->increment(t, tstep, xmv, &shutdown);
 
 			// apply the sensors channel
-			if (per_xmeas.first > 0.0)
+			if (xmeas_pq.first > 0.0)
 			{
 				xmeas = xmeas_channel + xmeas;
 				xmeas_chan_log << xmeas_channel << std::endl;
@@ -200,18 +218,24 @@ int main(int argc, char* argv[])
 			xmv = tectlr->increment(t, tscan, xmeas);
 
 			// apply the control channel
-			if (per_xmv.first > 0.0)
+			if (xmv_pq.first > 0.0)
 			{
 				xmv = xmv_channel + xmv;
 				xmv_chan_log << xmv_channel << std::endl;
 			}
 
-			// log plant and controller data to file when the controller runs
-			ctlr_log << t << "\t" << *tectlr << std::endl;
-			plant_log << t << "\t" << *teplant << std::endl;
-
 			// log current time to console
 			log_time_console(RT, t);
+		}
+
+		// log plant and controller data
+		if (!(ii%ksave))
+		{
+			//plant
+			plant_log << xmeas_pq << "\t" << xmv_pq << "\t" << t << "\t" << *teplant << std::endl;
+
+			//controller
+			ctlr_log << t << "\t" << *tectlr << std::endl;
 		}
 
 		// try to sync sim time to match wall clock time
@@ -245,14 +269,14 @@ void log_time_console(unsigned RT, double t)
 	}
 }
 
-void print_sim_params(double tstep, double tscan, double simtime, bool rt, per_pair per_xmeas, per_pair per_xmv)
+void print_sim_params(double tstep, double tscan, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq)
 {
 	BOOST_LOG_TRIVIAL(info) << std::endl << "TE simulation" << std::endl
 	  << "simulation time: " << simtime << " hrs" << std::endl
 	  << "plant dt: " << tstep << " hrs" << std::endl
 	  << "ctlr dt: " << tscan << " hrs" << std::endl
 	  << "Real-time: " << rt << std::endl
-	  << "PER (xmeas): " << per_xmeas << std::endl
-	  << "PER (xmv): " << per_xmv << std::endl;
+	  << "PER (xmeas): " << xmeas_pq << std::endl
+	  << "PER (xmv): " << xmv_pq << std::endl;
 }
 

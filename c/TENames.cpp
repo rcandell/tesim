@@ -11,6 +11,10 @@
 #include  "TENames.h"
 #include "TEPlant.h"
 
+const char * TENames::xmeas_pq::names[] = { "xmeas_p", "xmeas_q" };
+
+const char * TENames::xmv_pq::names[] = { "xmv_p", "xmv_q" };
+
 const char * TENames::xmeas::names[] = {
 	"A Feed (kscmh)",
 	"D Feed (kg/hr)",
@@ -107,3 +111,16 @@ std::ostream& operator<< (std::ostream& lhs, const TENames::time& rhs)
 	lhs << "time (hrs)";
 	return lhs;
 }
+
+std::ostream& operator<< (std::ostream& lhs, const TENames::xmeas_pq& rhs)
+{
+	lhs << TENames::xmeas_pq::names[0] << "\t" << TENames::xmeas_pq::names[1];
+	return lhs;
+}
+
+std::ostream& operator<< (std::ostream& lhs, const TENames::xmv_pq& rhs)
+{
+	lhs << TENames::xmv_pq::names[0] << "\t" << TENames::xmv_pq::names[1];
+	return lhs;
+}
+

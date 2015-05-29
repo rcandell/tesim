@@ -29,6 +29,8 @@
 #include <fstream>  
 #include <exception>
 
+#include "TELogging.h"
+
 class TEPlant
 {
 public:

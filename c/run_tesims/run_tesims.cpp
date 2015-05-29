@@ -9,13 +9,77 @@
 
 */
 
+#include <boost/random.hpp>
 #include <string>
 #include <sstream>
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
 
+int tc_xmeas_sweep_noxmv(int argc, char* argv[]);
+int tc_all_mc(int argc, char* argv[]);
+
 int main(int argc, char* argv[])
+{
+	//return tc_xmeas_sweep_noxmv(argc, argv);
+	//return tc_xmv_sweep_noxmeas(argc, argv);
+	return tc_all_mc(argc, argv);
+}
+
+int tc_all_mc(int argc, char* argv[])
+{
+	const std::string exec("..\\debug\\tesim");
+	const double simtime = 32;
+	const double tstep = 0.0005;
+	const double tscan = 0.0005;
+	const unsigned ksave = 20;
+
+	// monte carlo parameters
+	unsigned N = 50;
+
+	std::string logfile_prefix = "mc_20150529";
+
+	boost::mt19937 rng_p;
+	boost::uniform_real<float> u_p(0.6F, 1.0F);
+	boost::variate_generator<boost::mt19937&, boost::uniform_real<float> > gen_p(rng_p, u_p);
+	boost::mt19937 rng_q;
+	boost::uniform_real<float> u_q(0.05F, 0.5F);
+	boost::variate_generator<boost::mt19937&, boost::uniform_real<float> > gen_q(rng_q, u_q);
+
+	unsigned ii = 0;
+	while (ii < N)
+	{
+		float xmeas_p = gen_p();
+		float xmeas_q = gen_q();
+		float xmv_p = gen_p();
+		float xmv_q = gen_q();
+
+		std::string the_call;
+		std::ostringstream the_call_ss;
+		the_call_ss << exec << " "
+			<< "-s " << std::to_string(simtime) << " "
+			<< "-t " << std::to_string(tstep) << " "
+			<< "-c " << std::to_string(tscan) << " "
+			<< "-k " << std::to_string(ksave) << " "
+			<< "--xmeas-pq " << std::to_string(xmeas_p) << ":" << std::to_string(xmeas_q) << " "
+			<< "--xmv-pq " << std::to_string(xmv_p) << ":" << std::to_string(xmv_q) << " "
+			<< "--logfile-prefix " << logfile_prefix;
+		if (ii > 0)
+			the_call_ss << " -a";
+		the_call = the_call_ss.str();
+		std::cout << the_call << std::endl;
+		
+		// run the program
+		std::system(the_call.c_str());
+
+
+		ii++;
+	}
+
+	return 0;
+}
+
+int tc_xmeas_sweep_noxmv(int argc, char* argv[])
 {
 	const std::string exec("..\\debug\\tesim");
 	const double simtime = 32;
@@ -39,7 +103,7 @@ int main(int argc, char* argv[])
 
 			std::string the_call;
 			std::ostringstream the_call_ss;
-			the_call_ss << exec << " " 
+			the_call_ss << exec << " "
 				<< "-s " << std::to_string(simtime) << " "
 				<< "-t " << std::to_string(tstep) << " "
 				<< "-c " << std::to_string(tscan) << " "
@@ -52,7 +116,6 @@ int main(int argc, char* argv[])
 			std::system(the_call.c_str());
 		}
 	}
-	
+
 	return 0;
 }
-

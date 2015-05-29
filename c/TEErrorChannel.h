@@ -16,11 +16,7 @@
 #include <boost/random.hpp>
 #include <iostream>
 
-typedef std::pair<double, double> per_pair;
-namespace std {
-	std::istream& operator>>(std::istream& in, per_pair& ss);
-	std::ostream& operator<<(std::ostream& in, const per_pair& ss);
-}
+#include "TETypes.h"
 
 class TEErrorChannel
 {
@@ -32,7 +28,7 @@ class TEErrorChannel
 public:
 	// Construct a channel object with global packet error rate, 
 	// length of the data, and initial values.
-	TEErrorChannel(per_pair error_rate, unsigned dlen, const double* init_values, int seed = 17);
+	TEErrorChannel(pq_pair error_rate, unsigned dlen, const double* init_values, int seed = 17);
 
 	// destroys all memory associate with object and deletes object
 	virtual ~TEErrorChannel();
@@ -51,7 +47,7 @@ public:
 	// accessors
 	unsigned dlen() const { return m_dlen; }
 	const double* previous() const { return m_previous; }
-	per_pair error_rate() const { return m_error_rate; }
+	pq_pair error_rate() const { return m_error_rate; }
 	const bool* chan_state() const { return m_chan_state; }
 
 private:
@@ -60,7 +56,7 @@ private:
 	TEErrorChannel& operator=(const TEErrorChannel&) {};
 
 	// state variables
-	per_pair m_error_rate;	// global error rate
+	pq_pair m_error_rate;	// global error rate
 	double* m_previous;		// previous elements
 	unsigned m_dlen;		// number of elements
 	bool* m_chan_state;		// channel state of last increment, true means channel is up
