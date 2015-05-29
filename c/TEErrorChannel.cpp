@@ -15,7 +15,7 @@
 
 #include "TEErrorChannel.h"
 
-TEErrorChannel::TEErrorChannel(per_pair error_rate, unsigned dlen, const double* init_values, int seed)
+TEErrorChannel::TEErrorChannel(pq_pair error_rate, unsigned dlen, const double* init_values, int seed)
 	:m_error_rate(error_rate), m_dlen(dlen), m_previous(0), m_chan_state(0), m_distribution(0.0, 1.0), m_numberGenerator(m_generator, m_distribution)
 {
 	m_previous = new double[m_dlen]();
@@ -82,27 +82,3 @@ std::ostream& operator<< (std::ostream& lhs, const TEErrorChannel& rhs)
 	return lhs;
 }
 
-namespace std {
-
-	std::istream& operator>>(std::istream& in, per_pair& ss) {
-		std::string s;
-		in >> s;
-		const size_t sep = s.find(':');
-		if (sep == std::string::npos) {
-			ss.first = 0.0;
-			ss.second = std::stod(s);
-		}
-		else {
-			ss.first = std::stod(s.substr(0, sep));
-			ss.second = std::stod(s.substr(sep + 1));
-		}
-		return in;
-	}
-
-	std::ostream& operator<<(std::ostream& lhs, const per_pair& rhs)
-	{
-		lhs << "(" << rhs.first << "," << rhs.second << ")" ;
-		return lhs;
-	}
-
-}

@@ -85,6 +85,7 @@
     <ClInclude Include="..\TEPlant.h" />
     <ClInclude Include="..\teprob.h" />
     <ClInclude Include="..\TETimeSync.h" />
+    <ClInclude Include="..\TETypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ControlLoops.cpp" />
@@ -95,6 +96,7 @@
     <ClCompile Include="..\TEPlant.cpp" />
     <ClCompile Include="..\teprob.cpp" />
     <ClCompile Include="..\TETimeSync.cpp" />
+    <ClCompile Include="..\TETypes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\f\tecommon.inc" />

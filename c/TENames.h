@@ -10,12 +10,24 @@
 
 #include <iostream>
 
+#include "TETypes.h"
+
 #ifndef __TENAMES_H__
 #define __TENAMES_H__
 
 class TENames
 {
 public:
+	struct xmeas_pq
+	{
+		static const char * names[];
+		friend std::ostream& operator<< (std::ostream& lhs, const xmeas_pq& rhs);
+	};
+	struct xmv_pq
+	{
+		static const char * names[];
+		friend std::ostream& operator<< (std::ostream& lhs, const xmv_pq& rhs);
+	};
 	struct time
 	{
 		static const char * names[];
