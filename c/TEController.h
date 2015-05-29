@@ -20,6 +20,7 @@
 
 class TEController
 {
+
 public:
 
 	static TEController* getInstance();

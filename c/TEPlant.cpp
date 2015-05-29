@@ -44,7 +44,7 @@ void TEPlant::initialize()
 	m_dxdt	= new double[TEPlant::NX]();	// the state derivatives
 	m_xmeas = new double[TEPlant::NY]();	// measured
 	m_xmv	= new double[TEPlant::NU]();	// manipulated
-	m_idv   = new int[TEPlant::NIDV]();	    // idv's
+	m_idv   = new int[TEPlant::NIDV]();	    // idv"s
 
 	m_t = 0.0;
 
@@ -123,7 +123,7 @@ void TEPlant::initialize()
 	std::memcpy(m_xmv, u0, NU*sizeof(double));
 
 	// We have to run the plant one iteration with the m_x values above in order to
-	// obtain the correct xmeas values for the controller's first iteration.
+	// obtain the correct xmeas values for the controller"s first iteration.
 	tefunc(&TEPlant::NX, &m_t, m_x, m_dxdt);
 }
 
@@ -204,7 +204,7 @@ std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
 	{
 		lhs << rhs.m_xmeas[ii] << "\t";
 	}
-	lhs << rhs.m_xmeas[TEPlant::NY - 1];
+	lhs << rhs.m_xmeas[TEPlant::NY - 1] << "\t";
 
 	// disturbance vector
 	for (int ii = 0; ii < TEPlant::NIDV - 1; ii++)

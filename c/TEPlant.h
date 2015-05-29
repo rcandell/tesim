@@ -30,86 +30,86 @@
 #include <exception>
 
 class TEPlant
-{		
-    public:
+{
+public:
 
-		class ShutdownException : public std::exception
-		{
-			public:
-				ShutdownException(int sd_code, char* sd_msg)
-					: m_sd_code(sd_code), m_sd_msg(sd_msg) {}
+	class ShutdownException : public std::exception
+	{
+		public:
+			ShutdownException(int sd_code, char* sd_msg)
+				: m_sd_code(sd_code), m_sd_msg(sd_msg) {}
 
-				char* m_sd_msg;
-				int m_sd_code;
+			char* m_sd_msg;
+			int m_sd_code;
 
-				friend std::ostream& operator<< (std::ostream& lhs, const ShutdownException& rhs)
-				{
-					lhs << "plant shutdown" << std::endl <<
-						"code: " << rhs.m_sd_code << std::endl <<
-						"msg: " << rhs.m_sd_msg << std::endl;
-					return lhs;
-				}
-		};
+			friend std::ostream& operator<< (std::ostream& lhs, const ShutdownException& rhs)
+			{
+				lhs << "plant shutdown" << std::endl <<
+					"code: " << rhs.m_sd_code << std::endl <<
+					"msg: " << rhs.m_sd_msg << std::endl;
+				return lhs;
+			}
+	};
 
-        static TEPlant* getInstance();
-		virtual ~TEPlant();
+    static TEPlant* getInstance();
+	virtual ~TEPlant();
 
-		// constants
-		static const long int NX;			// number of states
-		static const long int NU;			// number of xmv
-		static const long int NY;			// number of xmeas
-		static const long int NIDV;			// number of disturbance types
+	// constants
+	static const long int NX;			// number of states
+	static const long int NU;			// number of xmv
+	static const long int NY;			// number of xmeas
+	static const long int NIDV;			// number of disturbance types
 
-		// initialize the simulation
-		void initialize();
+	// initialize the simulation
+	void initialize();
 		
-		// run the plant one time step
-		// returns the measured variables
-		double* increment(double t, double dt, double* xmv, int* shutdown);
+	// run the plant one time step
+	// returns the measured variables
+	double* increment(double t, double dt, double* xmv, int* shutdown);
 		
-		// set and get for xmeas
-		const double* get_xmeas() const;
-		const double get_xmeas(unsigned idx) const { return m_xmeas[idx];	}
+	// set and get for xmeas
+	const double* get_xmeas() const;
+	const double get_xmeas(unsigned idx) const { return m_xmeas[idx];	}
 		
-		// set disturbance
-		// 20 different disturbance types as defined by Downs
-		// Set value in array to activate disturbance
-		void set_idv(const double* idv);
-		const int* get_idv() const { return m_idv; }
-		const int get_idv(unsigned idx) const { return m_idv[idx]; }
+	// set disturbance
+	// 20 different disturbance types as defined by Downs
+	// Set value in array to activate disturbance
+	void set_idv(const double* idv);
+	const int* get_idv() const { return m_idv; }
+	const int get_idv(unsigned idx) const { return m_idv[idx]; }
 
-		// get shutdown condition
-		const int get_shutdown() const;
-		char* shutdown_msg() const;
+	// get shutdown condition
+	const int get_shutdown() const;
+	char* shutdown_msg() const;
 
-		// overloaded output stream for TEPlant
-		friend std::ostream& operator<< (std::ostream&, const TEPlant&);
+	// overloaded output stream for TEPlant
+	friend std::ostream& operator<< (std::ostream&, const TEPlant&);
 		
-    private:
-        TEPlant() {}; 
-        TEPlant(TEPlant const&);    // Singleton: Don't Implement
-        TEPlant& operator=(const TEPlant&); // Singleton: Don't implement
+private:
+    TEPlant() {}; 
+    TEPlant(TEPlant const&);    // Singleton: Don't Implement
+    TEPlant& operator=(const TEPlant&); // Singleton: Don't implement
 
-		// variables
-		double 		m_ts_ode;			// time step for the ode solver
-		double 		m_ts_plant;			// time step for the plant
-		double 		m_ts_ctlr;			// time step for the controller
-		unsigned 	m_ode_per_tstep;
-		unsigned 	m_ode_per_tscan;
+	// variables
+	double 		m_ts_ode;			// time step for the ode solver
+	double 		m_ts_plant;			// time step for the plant
+	double 		m_ts_ctlr;			// time step for the controller
+	unsigned 	m_ode_per_tstep;
+	unsigned 	m_ode_per_tscan;
 
-		static TEPlant*    instance; 
+	static TEPlant*    instance; 
 
-		// process variables memory
-		double*		m_x;		// the states
-		double*		m_dxdt;		// the state derivatives
-		double		m_t;			// current time
+	// process variables memory
+	double*		m_x;		// the states
+	double*		m_dxdt;		// the state derivatives
+	double		m_t;			// current time
 
-		// input/output memory
-		double*		m_xmeas;	// measured
-		double*		m_xmv;		// manipulated
-		int*		m_idv;		// dist. vector
+	// input/output memory
+	double*		m_xmeas;	// measured
+	double*		m_xmv;		// manipulated
+	int*		m_idv;		// dist. vector
 
-		static void euler(int nn, double t, double dt, double *yy, double *yp);
+	static void euler(int nn, double t, double dt, double *yy, double *yp);
 
 };
 

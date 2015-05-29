@@ -42,6 +42,12 @@
     <ClInclude Include="..\TETimeSync.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\TEErrorChannel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TENames.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\ControlLoops.cpp">
@@ -60,6 +66,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\TETimeSync.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TEErrorChannel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TENames.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
