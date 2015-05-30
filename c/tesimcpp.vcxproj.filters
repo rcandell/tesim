@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tesim.cpp">
+    <ClCompile Include="tesim_po.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tesim_po.cpp">
+    <ClCompile Include="tesim_orig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
