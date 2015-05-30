@@ -39,17 +39,6 @@ ipy | Contains IPython notebooks for offline analysis
 ### TESIM Solution (MSVS 2013 Express 32 bits)
 This is the top level "solution" under Microsoft Visual Studio 2013 Express for Windows Desktop.  This solution contains "projects" used to build the software and libraries needed to simulate the 
 
-### TESIMLIB Project
-
-### TESIM Project
-TBD
-
-### TESIMforMODBUSTCP
-TBD
-
-### TESIMforEnetIP
-TBD
-
-# Installation Notes 
+# Installation Prerequisites and Notes 
 * Install Visual Studio 2013 Community Edition (Base VS IDE) <br>
 * Install boost c++ 1.57 or later using 32 bit binaries <br>
