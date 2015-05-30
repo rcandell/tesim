@@ -19,11 +19,10 @@ The original TE plant was written in Fortran 77.  Since that time, other impleme
 - [x] Port the TE plant to C++
 - [x] Port the Lawrence Ricker controller to C++
 - [x] Breakout TEsim into library and executable projects
-- [x] Implemented wall clock prototype
-- [ ] Implement start-up synchronization between controller and plant.
-- [ ] Implement separate plant and controller using Modbus/TCP as the communication mechanism.
-- [ ] Implement Ethernet/IP integration between plant and controller
-- [ ] Port the controller to a PLC and synchronize start-up from the PLC.
+- [x] Implement wall clock synchonrization (real-time sync)
+- [x] Add support for Gilbert Elliot channel model for all variables.
+- [x] Add program options and Monte Carlo support for channel
+- [ ] Add Beckhoff ADS interface integration for measured variables.
 
 ## Directories
 Directory | Purpose
@@ -33,6 +32,7 @@ f | The original FORTRAN
 tesimlib | Project directory for *tesimlib*. Does not contain code.
 Debug | Build output directory for Debug build type
 Release | Build output directory for Release build type
+data | Location of output data files and post processing scripts
 ipy | Contains IPython notebooks for offline analysis
 
 ## Code Description
@@ -52,4 +52,4 @@ TBD
 
 # Installation Notes 
 * Install Visual Studio 2013 Community Edition (Base VS IDE) <br>
-* Install boost c++ using 32 bit binaries no the 64 bit ones  <br>
+* Install boost c++ 1.57 or later using 32 bit binaries <br>
