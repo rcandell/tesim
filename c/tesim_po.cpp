@@ -149,12 +149,6 @@ int main(int argc, char* argv[])
 	{
 		plant_log.open(log_file_prefix + "_plant.dat");
 		plant_log << TENames::plant_all() << std::endl;
-#if 0
-		plant_log << TENames::xmeas_pq() << "\t" << TENames::xmv_pq() << "\t"
-			<< TENames::time() << "\t" << TENames::xmv() << "\t" << TENames::xmeas()
-			<< "\t" << TENames::idv() << "\t" << TENames::shutdown() << std::endl;
-#endif // 0
-
 	}
 	plant_log.precision(15);
 
@@ -213,7 +207,8 @@ int main(int argc, char* argv[])
 		}
 		catch (TEPlant::ShutdownException& e)
 		{
-			plant_log << e.logstr() << std::endl;
+			plant_log << xmeas_pq << "\t" << xmv_pq << "\t" << t << "\t" << *teplant 
+				<< "\t" << e.sdcode_log_str() << std::endl;
 			std::cerr << e << std::endl;
 			std::cerr << "ending simulation" << std::endl;
 			return 0;
