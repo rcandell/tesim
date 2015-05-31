@@ -48,7 +48,7 @@ public:
 			char* m_sd_msg;
 			int m_sd_code;
 
-			std::string logstr() const
+			std::string sdcode_log_str() const
 			{
 				std::string logstr;
 				std::ostringstream logss;
