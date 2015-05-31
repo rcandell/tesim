@@ -24,20 +24,20 @@ const char * TENames::xmeas::names[] = {
 	"Reactor Feed (kscmh)",
 	"Reactor Pressure (kPa)",
 	"Reactor Level (%)",
-	"Reactor Temp. (°C)",
+	"Reactor Temp. (C)",
 	"Purge Rate (kscmh)",
 	"Sep Temp. (°C)",
 	"Sep Level (%)",
 	"Sep Pressure (kPa)",
-	"Sep Underflow (m³/hr)",
+	"Sep Underflow (m3/hr)",
 	"Stripper Level (%)",
 	"Stripper Pressure (kPa)",
-	"Stripper Underflow (m³/hr)",
-	"Stripper Temp. (°C)",
+	"Stripper Underflow (m3/hr)",
+	"Stripper Temp. (C)",
 	"Steam Flow (kg/hr)",
 	"Compressor Work (kW)",
-	"React. Cool. Temp. (°C)",
-	"Cond. Cool. Temp. (°C)",
+	"React. Cool. Temp. (C)",
+	"Cond. Cool. Temp. (C)",
 	"Feed A (mole %)",
 	"Feed B (mole %)",
 	"Feed C (mole %)",
@@ -124,3 +124,21 @@ std::ostream& operator<< (std::ostream& lhs, const TENames::xmv_pq& rhs)
 	return lhs;
 }
 
+std::ostream& operator<< (std::ostream& lhs, const TENames::shutdown& rhs)
+{
+	lhs << "SD_Code";
+	return lhs;
+}
+
+std::ostream& operator<< (std::ostream& lhs, const TENames::plant_all& rhs)
+{
+	lhs << TENames::xmeas_pq() << "\t" 
+		<< TENames::xmv_pq() << "\t"
+		<< TENames::time() << "\t" 
+		<< TENames::xmv() << "\t" 
+		<< TENames::xmeas()
+		<< "\t" << TENames::idv() 
+		<< "\t" << TENames::shutdown();
+
+	return lhs;
+}

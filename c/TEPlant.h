@@ -24,10 +24,14 @@
 //  4. update TEPlant with xmeas and xmv using set methods for each
 //	5. increment the simulator
 //  6. repeat from Step 3.
-
-#include <ostream>     
+   
 #include <fstream>  
 #include <exception>
+#include <string>
+#include <sstream>
+#include <cstdlib>
+#include <iomanip>
+#include <iostream>
 
 #include "TELogging.h"
 
@@ -43,6 +47,15 @@ public:
 
 			char* m_sd_msg;
 			int m_sd_code;
+
+			std::string logstr() const
+			{
+				std::string logstr;
+				std::ostringstream logss;
+				logss << "\t" << m_sd_code;
+				logstr = logss.str();
+				return logstr;
+			}
 
 			friend std::ostream& operator<< (std::ostream& lhs, const ShutdownException& rhs)
 			{
