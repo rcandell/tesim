@@ -35,9 +35,9 @@ int tc_all_mc(int argc, char* argv[])
 	const unsigned ksave = 20;
 
 	// monte carlo parameters
-	unsigned N = 50;
+	unsigned N = 100;
 
-	std::string logfile_prefix = "mc_20150529";
+	std::string logfile_prefix = "mc_20150530";
 
 	boost::mt19937 rng_p;
 	boost::uniform_real<float> u_p(0.6F, 1.0F);
@@ -51,8 +51,8 @@ int tc_all_mc(int argc, char* argv[])
 	{
 		float xmeas_p = gen_p();
 		float xmeas_q = gen_q();
-		float xmv_p = gen_p();
-		float xmv_q = gen_q();
+		float xmv_p = xmeas_p; // gen_p();
+		float xmv_q = xmeas_q; // gen_q();
 
 		std::string the_call;
 		std::ostringstream the_call_ss;
@@ -71,7 +71,6 @@ int tc_all_mc(int argc, char* argv[])
 		
 		// run the program
 		std::system(the_call.c_str());
-
 
 		ii++;
 	}
