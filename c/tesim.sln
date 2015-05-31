@@ -11,6 +11,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tesimlib", "tesimlib\tesimlib.vcxproj", "{B61029C4-DD9A-48C4-8A41-17CA1B535DFE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "run_tesims", "run_tesims\run_tesims.vcxproj", "{D1F92417-9FCE-45FC-A510-10776A998A31}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE} = {B61029C4-DD9A-48C4-8A41-17CA1B535DFE}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
