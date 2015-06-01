@@ -1425,3 +1425,13 @@ void set_curr_idv(int* idv)
 		dvec_.idv[i] = (integer)idv[i];
 	}
 }
+
+int get_curr_shutdown()
+{
+	return dvec_.idv[NIDV];
+}
+
+char* get_shutdown_msg()
+{
+	return msg;
+}

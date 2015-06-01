@@ -44,7 +44,7 @@ void TEPlant::initialize()
 	m_dxdt	= new double[TEPlant::NX]();	// the state derivatives
 	m_xmeas = new double[TEPlant::NY]();	// measured
 	m_xmv	= new double[TEPlant::NU]();	// manipulated
-	m_idv   = new int[TEPlant::NIDV]();	    // idv's
+	m_idv   = new int[TEPlant::NIDV]();	    // idv"s
 
 	m_t = 0.0;
 
@@ -123,14 +123,14 @@ void TEPlant::initialize()
 	std::memcpy(m_xmv, u0, NU*sizeof(double));
 
 	// We have to run the plant one iteration with the m_x values above in order to
-	// obtain the correct xmeas values for the controller's first iteration.
+	// obtain the correct xmeas values for the controller"s first iteration.
 	tefunc(&TEPlant::NX, &m_t, m_x, m_dxdt);
 }
 
 // run the plant one time step
 // reference: http://www.mathworks.com/help/simulink/sfg/how-s-functions-work.html
 //  the plant incrementation operates like simulink solver with euler method
-double* TEPlant::increment(double t, double dt, double* new_xmv)
+double* TEPlant::increment(double t, double dt, double* new_xmv, int* shutdown)
 {
 	// update time
 	m_t = t;
@@ -154,6 +154,14 @@ double* TEPlant::increment(double t, double dt, double* new_xmv)
 	// Calculate dxdt
 	tefunc(&TEPlant::NX, &t, m_x, m_dxdt);
 
+	// check if plant has shutdown
+	*shutdown = get_curr_shutdown();
+	if (*shutdown > 0)
+	{
+		ShutdownException shutdown_ex(*shutdown, get_shutdown_msg());
+		throw shutdown_ex;
+	}
+
 	return m_xmeas;
 }
 
@@ -172,6 +180,16 @@ void TEPlant::euler(int nn, double t, double dt, double* yy, double* yp)
 	}
 }
 
+const int TEPlant::get_shutdown() const
+{
+	return get_curr_shutdown();
+}
+
+char* TEPlant::shutdown_msg() const
+{
+	return get_shutdown_msg();
+}
+
 std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
 {
 	// manipulated variables
@@ -186,7 +204,14 @@ std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
 	{
 		lhs << rhs.m_xmeas[ii] << "\t";
 	}
-	lhs << rhs.m_xmeas[TEPlant::NY - 1];
+	lhs << rhs.m_xmeas[TEPlant::NY - 1] << "\t";
+
+	// disturbance vector
+	for (int ii = 0; ii < TEPlant::NIDV - 1; ii++)
+	{
+		lhs << rhs.m_idv[ii] << "\t";
+	}
+	lhs << rhs.m_idv[TEPlant::NIDV - 1];
 
 	return lhs;
 }

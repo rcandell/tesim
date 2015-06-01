@@ -11,14 +11,14 @@
 //      DISCRETE PI LOOP      //
 ////////////////////////////////
 
-SimpleDiscretePILoop::SimpleDiscretePILoop(dbl ic, dbl v_ic, dbl kc, dbl lo, dbl hi, dbl ts, dbl ti) :
+SimpleDiscretePILoop::SimpleDiscretePILoop(double ic, double v_ic, double kc, double lo, double hi, double ts, double ti) :
 	discretePI_Object(ic, v_ic, kc, lo, hi, ts, ti)
 {
 }
 
-double SimpleDiscretePILoop::increment(dbl sp, dbl meas, dbl t, dbl dt)
+double SimpleDiscretePILoop::increment(double sp, double meas, double t, double dt)
 {
-	dbl value = discretePI_Object.increment(sp, meas, t, dt);
+	double value = discretePI_Object.increment(sp, meas, t, dt);
 	return value;
 }
 
@@ -27,14 +27,14 @@ double SimpleDiscretePILoop::increment(dbl sp, dbl meas, dbl t, dbl dt)
 //      VELOCITY PI LOOP      //
 ////////////////////////////////
 
-SimpleVelocityPILoop::SimpleVelocityPILoop(dbl v_ic, dbl kc, dbl ts, dbl ti) :
+SimpleVelocityPILoop::SimpleVelocityPILoop(double v_ic, double kc, double ts, double ti) :
 	velocityPI_Object(v_ic, kc, ts, ti)
 {
 }
 
-double SimpleVelocityPILoop::increment(dbl sp, dbl meas, dbl t, dbl dt)
+double SimpleVelocityPILoop::increment(double sp, double meas, double t, double dt)
 {
-	dbl value = velocityPI_Object.increment(sp, meas);
+	double value = velocityPI_Object.increment(sp, meas);
 	return value;
 }
 
@@ -42,23 +42,23 @@ double SimpleVelocityPILoop::increment(dbl sp, dbl meas, dbl t, dbl dt)
 //      % G IN PRODUCT      //
 //////////////////////////////
 
-PercentG_inProduct::PercentG_inProduct(dbl ic, dbl v_ic, dbl pos_R, dbl neg_R, dbl kc, dbl lo, dbl hi, dbl ts, dbl ti) :
+PercentG_inProduct::PercentG_inProduct(double ic, double v_ic, double pos_R, double neg_R, double kc, double lo, double hi, double ts, double ti) :
 	discretePI_Object(ic, v_ic, kc, lo, hi, ts, ti),
 	pos_R(pos_R), neg_R(neg_R)
 {
 }
 
-double PercentG_inProduct::increment(dbl sp, dbl meas, dbl t, dbl dt)
+double PercentG_inProduct::increment(double sp, double meas, double t, double dt)
 {
-	dbl input;
+	double input;
 	input = rateLimiter(sp, t, dt);
 	pctGsp = input;	// Store for the users' viewing pleasure
 	return discretePI_Object.increment(input, meas, t, dt);
 }
 
-double PercentG_inProduct::rateLimiter(dbl sp, dbl t, dbl dt)
+double PercentG_inProduct::rateLimiter(double sp, double t, double dt)
 {
-	dbl out, rate;
+	double out, rate;
 	if (t != 0.) {
 		rate = (sp - lastOut) / (t - lastTime);
 		if (rate > pos_R) out = (t - lastTime) * pos_R + lastOut;
@@ -77,23 +77,23 @@ double PercentG_inProduct::rateLimiter(dbl sp, dbl t, dbl dt)
 //      PRODUCTION RATE      //
 ///////////////////////////////
 
-ProductionRate::ProductionRate(dbl ic, dbl v_ic, dbl pos_R, dbl neg_R, dbl kc, dbl lo, dbl hi, dbl ts, dbl ti) :
+ProductionRate::ProductionRate(double ic, double v_ic, double pos_R, double neg_R, double kc, double lo, double hi, double ts, double ti) :
 	discretePI_Object(ic, v_ic, kc, lo, hi, ts, ti),
 	pos_R(pos_R), neg_R(neg_R)
 {
 }
 
-double ProductionRate::increment(dbl sp, dbl meas, dbl t, dbl dt)
+double ProductionRate::increment(double sp, double meas, double t, double dt)
 {
-	dbl input;
+	double input;
 	input = rateLimiter(sp, t, dt);
 	prodRate = input;	// Store for the users' viewing pleasure
 	return ((input * (100. / 22.89)) + discretePI_Object.increment(input, meas, t, dt));
 }
 
-double ProductionRate::rateLimiter(dbl sp, dbl t, dbl dt)
+double ProductionRate::rateLimiter(double sp, double t, double dt)
 {
-	dbl out, rate;
+	double out, rate;
 	if (t != 0.) {
 		rate = (sp - lastOut) / (t - lastTime);
 		if (rate > pos_R) out = (t - lastTime) * pos_R + lastOut;

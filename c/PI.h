@@ -8,8 +8,6 @@
 #ifndef __PI_H__
 #define __PI_H__
 
-#define dbl double
-
 /////////////////
 // Velocity PI //
 /////////////////
@@ -17,8 +15,8 @@
 class velocityPI
 {
 public:
-	dbl increment(dbl sp, dbl meas);
-	velocityPI(dbl v_ic, dbl kc_in, dbl ts_in, dbl ti_in);
+	double increment(double sp, double meas);
+	velocityPI(double v_ic, double kc_in, double ts_in, double ti_in);
 private:
 	double err, out, kc, ti, ts, lastErr = 0;
 };
@@ -30,13 +28,13 @@ private:
 class discretePI
 {
 private:
-	double	saturation(dbl hi, dbl lo, dbl val);
+	double	saturation(double hi, double lo, double val);
 	velocityPI vpi;
 
 public:
 	double	tstep, tscan, prevDelta, ts, ti, kc, lo, hi, ic, lastErr;
-	double	increment(dbl sp, dbl meas, dbl t, dbl dt);
-	discretePI(dbl ic, dbl v_ic, dbl kc, dbl lo, dbl hi, dbl ts, dbl ti);
+	double	increment(double sp, double meas, double t, double dt);
+	discretePI(double ic, double v_ic, double kc, double lo, double hi, double ts, double ti);
 };
 
 #endif
