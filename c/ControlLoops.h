@@ -8,8 +8,6 @@
 #ifndef __CONTROLLOOPS_H__
 #define __CONTROLLOOPS_H__
 
-#define dbl double
-
 #include "PI.h"
 
 class SimpleDiscretePILoop
@@ -21,8 +19,8 @@ private:
 	SimpleDiscretePILoop& operator=(const SimpleDiscretePILoop&);	// Cannot call the assignment operator
 
 public:
-	dbl increment(dbl sp, dbl meas, dbl t, dbl dt);
-	SimpleDiscretePILoop(dbl ic, dbl v_ic, dbl kc, dbl lo, dbl hi, dbl ts, dbl ti);
+	double increment(double sp, double meas, double t, double dt);
+	SimpleDiscretePILoop(double ic, double v_ic, double kc, double lo, double hi, double ts, double ti);
 	//virtual ~SimpleRateLoop();
 };
 
@@ -30,15 +28,15 @@ public:
 class SimpleVelocityPILoop
 {
 private:
-	dbl ts, ti;
+	double ts, ti;
 	velocityPI velocityPI_Object;									// Create the discrete PI loop object
 	SimpleVelocityPILoop();											// Forces a compiler error if you do not enter parameters
 	SimpleVelocityPILoop(const SimpleVelocityPILoop&);				// ''
 	SimpleVelocityPILoop& operator=(const SimpleVelocityPILoop&);	// Cannot call the assignment operator
 
 public:
-	dbl increment(dbl sp, dbl meas, dbl t, dbl dt);
-	SimpleVelocityPILoop(dbl v_ic, dbl kc, dbl ts, dbl ti);
+	double increment(double sp, double meas, double t, double dt);
+	SimpleVelocityPILoop(double v_ic, double kc, double ts, double ti);
 	//virtual ~SimpleRateLoop();
 };
 
@@ -46,23 +44,23 @@ class PercentG_inProduct
 {
 	double pos_R, neg_R, lastTime = 0., lastOut, pctGsp;
 	discretePI discretePI_Object;									// Create the discrete PI loop object
-	double rateLimiter(dbl sp, dbl t, dbl dt);
+	double rateLimiter(double sp, double t, double dt);
 public:
-	dbl increment(dbl sp, dbl meas, dbl t, dbl dt);
-	dbl getPctGsp(void) { return pctGsp; }
-	PercentG_inProduct(dbl ic, dbl v_ic, dbl pos_R, dbl neg_R, dbl kc, dbl lo, dbl hi, dbl ts, dbl ti);
+	double increment(double sp, double meas, double t, double dt);
+	double getPctGsp(void) { return pctGsp; }
+	PercentG_inProduct(double ic, double v_ic, double pos_R, double neg_R, double kc, double lo, double hi, double ts, double ti);
 };
 
 class ProductionRate
 {
 private:
-	dbl pos_R, neg_R, lastTime = 0., lastOut, prodRate;
+	double pos_R, neg_R, lastTime = 0., lastOut, prodRate;
 	discretePI discretePI_Object;									// Create the discrete PI loop object
-	double rateLimiter(dbl sp, dbl t, dbl dt);
+	double rateLimiter(double sp, double t, double dt);
 public:
-	dbl increment(dbl sp, dbl meas, dbl t, dbl dt);
-	dbl getProductionRate(void) { return prodRate; }
-	ProductionRate(dbl ic, dbl v_ic, dbl pos_R, dbl neg_R, dbl kc, dbl lo, dbl hi, dbl ts, dbl ti);
+	double increment(double sp, double meas, double t, double dt);
+	double getProductionRate(void) { return prodRate; }
+	ProductionRate(double ic, double v_ic, double pos_R, double neg_R, double kc, double lo, double hi, double ts, double ti);
 };
 
 #endif

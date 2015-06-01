@@ -19,5 +19,8 @@ slprj
 # Other files
 *.zip
 
+#octave files
+octave-workspace
 
 
+Thumbs.db

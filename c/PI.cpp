@@ -11,12 +11,12 @@
 // Velocity PI //
 /////////////////
 
-velocityPI::velocityPI(dbl v_ic, dbl kc_in, dbl ts_in, dbl ti_in) :
+velocityPI::velocityPI(double v_ic, double kc_in, double ts_in, double ti_in) :
 	kc(kc_in), ti(ti_in), ts(ts_in), lastErr(v_ic)
 {
 }
 
-double velocityPI::increment(dbl sp, dbl meas)
+double velocityPI::increment(double sp, double meas)
 {
 	double err, out;
 	err = sp - meas;								// Calculate the error
@@ -29,13 +29,13 @@ double velocityPI::increment(dbl sp, dbl meas)
 // Discrete PI //
 /////////////////
 
-discretePI::discretePI(dbl ic, dbl v_ic, dbl kc, dbl lo, dbl hi, dbl ts, dbl ti) : 
+discretePI::discretePI(double ic, double v_ic, double kc, double lo, double hi, double ts, double ti) : 
 	vpi(v_ic, kc, ts, ti),
 	ic(ic), kc(kc), lo(lo), hi(hi), ts(ts), ti(ti)
 {
 }
 
-double discretePI::increment(dbl sp, dbl meas, dbl t, dbl dt)
+double discretePI::increment(double sp, double meas, double t, double dt)
 {
 	double out, delta;
 	delta = vpi.increment(sp, meas);				// Calc velocity PI

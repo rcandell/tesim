@@ -28,7 +28,7 @@ TEController::~TEController()
 	TEController::instance = 0;
 }
 
-void TEController::initialize(double tstep, double tscan)
+void TEController::initialize(double tscan)
 {
 	// measured variables
 	m_xmeas = new double[TEPlant::NY]();
@@ -66,23 +66,23 @@ void TEController::initialize(double tstep, double tscan)
 	for (int ii = 0; ii < 7; ii++) r[ii] = r_0[ii];
 
 	// Create the control loops
-	pctG_inProduct           = new PercentG_inProduct(0.632250244508519, -0.506656747709997, (0.3*22.95 / 24.), (-0.3*22.95 / 24.), -0.4, neg_inf, pos_inf, tstep, (100. / 60.));
+	pctG_inProduct           = new PercentG_inProduct(0.632250244508519, -0.506656747709997, (0.3*22.95 / 24.), (-0.3*22.95 / 24.), -0.4, neg_inf, pos_inf, tscan, (100. / 60.));
 	yA_ControlLoop           = new SimpleVelocityPILoop(0.156799893651460, 2.0e-4, 0.1, 1.);
 	yAC_ControlLoop          = new SimpleVelocityPILoop(-0.193592358293763, 3.0e-4, 0.1, 2.);
-	A_FeedRateLoop           = new SimpleDiscretePILoop(u0[2], 0.002694050999489, 0.01, 0., 100., tstep, (0.001 / 60.));
-	D_FeedRateLoop           = new SimpleDiscretePILoop(u0[0], 62.429570964992760, 1.6e-6, 0., 100., tstep, (0.001 / 60.));
-	E_FeedRateLoop           = new SimpleDiscretePILoop(u0[1], 9.723386274665245, 1.8e-6, 0., 100., tstep, (0.001 / 60.));
-	C_FeedRateLoop           = new SimpleDiscretePILoop(u0[3], 0.083514558990949, 0.003, 0., 100., tstep, (0.001 / 60.));
-	PurgeRateLoop            = new SimpleDiscretePILoop(u0[5], -0.006360143307706, 0.01, 0., 100., tstep, (0.001 / 60.));
-	productionRate           = new ProductionRate(-0.448883361482739, -0.140664345075038, (0.3*22.95 / 24.), (-0.3*22.95 / 24.), 3.2, -30., 30., tstep, (120. / 60.));
-	ReactorLevelLoop         = new SimpleDiscretePILoop(92.020048977831070, 0.040751615684570, 0.8, 0., 120., tstep, (60. / 60.));
-	ReactorPressureLoop      = new SimpleDiscretePILoop(r_0[4], 1.040853861903997, -1.0e-4, 0., 100., tstep, (20. / 60.));
-	ReactorTemperatureLoop   = new SimpleDiscretePILoop(u0[9], 0.007961389832360, -8.0, 0., 100., tstep, (7.5 / 60.));
-	SeparatorFlowLoop        = new SimpleDiscretePILoop(u0[6], 0.048094569533532, 4.0e-4, 0., 100., tstep, (0.001 / 60.));
-	SeparatorLevelLoop       = new SimpleDiscretePILoop(r_0[5], -1.041770047054492, -1.0e-3, 0., 100., tstep, (200. / 60.));
-	SeparatorTemperatureLoop = new SimpleDiscretePILoop(u0[10], -0.141566616033629, -4.0, 0., 100., tstep, (15. / 60.));
-	StripperFlowLoop         = new SimpleDiscretePILoop(u0[7], 0.077381965807636, 4.0e-4, 0., 100., tstep, (0.001 / 60.));
-	StripperLevelLoop        = new SimpleDiscretePILoop(r_0[6], 0.949174713615896, -2.0e-4, 0., 100., tstep, (200. / 60.));
+	A_FeedRateLoop           = new SimpleDiscretePILoop(u0[2], 0.002694050999489, 0.01, 0., 100., tscan, (0.001 / 60.));
+	D_FeedRateLoop           = new SimpleDiscretePILoop(u0[0], 62.429570964992760, 1.6e-6, 0., 100., tscan, (0.001 / 60.));
+	E_FeedRateLoop           = new SimpleDiscretePILoop(u0[1], 9.723386274665245, 1.8e-6, 0., 100., tscan, (0.001 / 60.));
+	C_FeedRateLoop           = new SimpleDiscretePILoop(u0[3], 0.083514558990949, 0.003, 0., 100., tscan, (0.001 / 60.));
+	PurgeRateLoop            = new SimpleDiscretePILoop(u0[5], -0.006360143307706, 0.01, 0., 100., tscan, (0.001 / 60.));
+	productionRate           = new ProductionRate(-0.448883361482739, -0.140664345075038, (0.3*22.95 / 24.), (-0.3*22.95 / 24.), 3.2, -30., 30., tscan, (120. / 60.));
+	ReactorLevelLoop         = new SimpleDiscretePILoop(92.020048977831070, 0.040751615684570, 0.8, 0., 120., tscan, (60. / 60.));
+	ReactorPressureLoop      = new SimpleDiscretePILoop(r_0[4], 1.040853861903997, -1.0e-4, 0., 100., tscan, (20. / 60.));
+	ReactorTemperatureLoop   = new SimpleDiscretePILoop(u0[9], 0.007961389832360, -8.0, 0., 100., tscan, (7.5 / 60.));
+	SeparatorFlowLoop        = new SimpleDiscretePILoop(u0[6], 0.048094569533532, 4.0e-4, 0., 100., tscan, (0.001 / 60.));
+	SeparatorLevelLoop       = new SimpleDiscretePILoop(r_0[5], -1.041770047054492, -1.0e-3, 0., 100., tscan, (200. / 60.));
+	SeparatorTemperatureLoop = new SimpleDiscretePILoop(u0[10], -0.141566616033629, -4.0, 0., 100., tscan, (15. / 60.));
+	StripperFlowLoop         = new SimpleDiscretePILoop(u0[7], 0.077381965807636, 4.0e-4, 0., 100., tscan, (0.001 / 60.));
+	StripperLevelLoop        = new SimpleDiscretePILoop(r_0[6], 0.949174713615896, -2.0e-4, 0., 100., tscan, (200. / 60.));
 }
 
 // run the controller one scan interval
@@ -93,7 +93,7 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	std::memcpy(m_xmeas, new_xmeas, TEPlant::NY*sizeof(double));
 
 	//
-	dbl prodSP = 0, E_Adj, loop14 = 0, loop15 = 0;
+	double prodSP = 0, E_Adj, loop14 = 0, loop15 = 0;
 
 	// Update the % G in product
 	E_Adj = pctG_inProduct->increment(53.8, new_xmeas[39], t, dt);
@@ -103,7 +103,7 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	yA = (new_xmeas[22] * 100.) / yAC;
 
 	// Update the ratio trimming and the yA and yAC loops (every 0.1 of t)
-	dbl tMod = fmod(t, 0.1);
+	double tMod = fmod(t, 0.1);
 	if ((tMod < 0.00005) || (0.1 - tMod) < 0.00005 || t == 0) {
 
 		loop14 = yA_ControlLoop->increment(63.1372, yA, t, dt);
@@ -143,7 +143,7 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 
 	r[4] = ReactorPressureLoop->increment(2800., new_xmeas[6], t, dt);
 	m_xmv[5] = PurgeRateLoop->increment((r[4] * Fp), new_xmeas[9], t, dt);
-	dbl sepTempSP = ReactorLevelLoop->increment(65., new_xmeas[7], t, dt);
+	double sepTempSP = ReactorLevelLoop->increment(65., new_xmeas[7], t, dt);
 	m_xmv[9] = ReactorTemperatureLoop->increment(122.9, new_xmeas[8], t, dt);
 
 	r[5] = SeparatorLevelLoop->increment(50., new_xmeas[11], t, dt);
@@ -186,6 +186,7 @@ std::ostream& operator<< (std::ostream& lhs, const TEController& rhs)
 
 	return lhs;
 }
+
 
 
 
