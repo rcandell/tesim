@@ -19,7 +19,8 @@
 #include <iomanip>
 #include <iostream>
 
-int tc_xmeas_sweep_noxmv(int argc, char* argv[]);
+int tc_nochan_baseline(int argc, char* argv[]);
+int tc_idv_baseline(int argc, char* argv[]); 
 int tc_all_mc(int argc, char* argv[]);
 
 int main(int argc, char* argv[])
@@ -27,9 +28,9 @@ int main(int argc, char* argv[])
 	// auto timer used as a performance profiler
 	boost::timer::auto_cpu_timer t_wall_auto;
 
-	//return tc_xmeas_sweep_noxmv(argc, argv);
-	//return tc_xmv_sweep_noxmeas(argc, argv);
-	return tc_all_mc(argc, argv);
+	// return tc_all_nochan_baseline(argc, argv);
+	return tc_idv_baseline(argc, argv);
+	// return tc_all_mc(argc, argv);
 }
 
 int tc_all_mc(int argc, char* argv[])
@@ -114,42 +115,117 @@ int tc_all_mc(int argc, char* argv[])
 	return 0;
 }
 
-int tc_xmeas_sweep_noxmv(int argc, char* argv[])
+int tc_nochan_baseline(int argc, char* argv[])
 {
+	std::string logfile_prefix;
+
+	// program options
+	namespace po = boost::program_options;
+	po::options_description desc("Allowed options");
+	desc.add_options()
+		("help,h", "print the help message")
+		("output-prefix,p", po::value<std::string>(&logfile_prefix)->required(), "set the prefix for the output files.")
+		;
+
+	po::variables_map vm;
+	try	{
+		po::store(po::parse_command_line(argc, argv, desc), vm);
+		if (vm.count("help"))
+		{
+			std::cout << desc << std::endl;
+			return 0;
+		}
+
+		po::notify(vm);
+	}
+	catch (po::error& e) {
+		std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
+		std::cerr << desc << std::endl;
+		return 0;
+	}
+	po::notify(vm);
+
 	const std::string exec("..\\debug\\tesim");
 	const double simtime = 32;
 	const double tstep = 0.0005;
 	const double tscan = 0.0005;
-	double xmeas_p_min = 0.5, xmeas_p_max = 1.0, xmeas_p_step = 0.1;
-	double xmeas_q_min = 0.5, xmeas_q_max = 1.0, xmeas_q_step = 0.1;
+	const unsigned ksave = 20;
 
+	std::string the_call;
+	std::ostringstream the_call_ss;
+	the_call_ss << exec << " "
+		<< "-s " << std::to_string(simtime) << " "
+		<< "-t " << std::to_string(tstep) << " "
+		<< "-c " << std::to_string(tscan) << " "
+		<< "-k " << std::to_string(ksave) << " "
+		<< "--xmeas-pq " << std::to_string(0.0) << ":" << std::to_string(1.0) << " "
+		<< "--xmv-pq " << std::to_string(0.0) << ":" << std::to_string(1.0) << " "
+		<< "--logfile-prefix " << logfile_prefix;
+
+	the_call = the_call_ss.str();
+	std::cout << the_call << std::endl;
+
+	// run the program
+	std::system(the_call.c_str());
+
+	return 0;
+}
+
+int tc_idv_baseline(int argc, char* argv[])
+{
 	std::string logfile_prefix;
 
-	for (double xmeas_p = xmeas_p_min; xmeas_p <= xmeas_p_max; xmeas_p += xmeas_p_step)
-	{
-		for (double xmeas_q = xmeas_q_min; xmeas_q <= xmeas_q_max; xmeas_q += xmeas_q_step)
+	// program options
+	namespace po = boost::program_options;
+	po::options_description desc("Allowed options");
+	desc.add_options()
+		("help,h", "print the help message")
+		("output-prefix,p", po::value<std::string>(&logfile_prefix)->required(), "set the prefix for the output files.")
+		;
+
+	po::variables_map vm;
+	try	{
+		po::store(po::parse_command_line(argc, argv, desc), vm);
+		if (vm.count("help"))
 		{
-			std::string logfile_prefix;
-			std::ostringstream lfp_ss;
-			lfp_ss << "xmeas_" << std::fixed << std::setprecision(5) << xmeas_p << "_"
-				<< std::fixed << std::setprecision(5) << xmeas_q
-				<< "_noxmvchan";
-			logfile_prefix = lfp_ss.str();
-
-			std::string the_call;
-			std::ostringstream the_call_ss;
-			the_call_ss << exec << " "
-				<< "-s " << std::to_string(simtime) << " "
-				<< "-t " << std::to_string(tstep) << " "
-				<< "-c " << std::to_string(tscan) << " "
-				<< "--xmeas-per " << std::to_string(xmeas_p) << ":" << std::to_string(xmeas_q) << " "
-				<< "--xmv-per 0.0:1.0 "
-				<< "--logfile-prefix " << logfile_prefix;
-			the_call = the_call_ss.str();
-			std::cout << the_call << std::endl;
-
-			std::system(the_call.c_str());
+			std::cout << desc << std::endl;
+			return 0;
 		}
+
+		po::notify(vm);
+	}
+	catch (po::error& e) {
+		std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
+		std::cerr << desc << std::endl;
+		return 0;
+	}
+	po::notify(vm);
+
+	const std::string exec("..\\debug\\tesim");
+	const double simtime = 32;
+	const double tstep = 0.0005;
+	const double tscan = 0.0005;
+	const unsigned ksave = 20;
+
+	for (unsigned idv_idx = 1; idv_idx <= 20; idv_idx++)
+	{
+		std::string the_call;
+		std::ostringstream the_call_ss;
+		the_call_ss << exec << " "
+			<< "-s " << std::to_string(simtime) << " "
+			<< "-t " << std::to_string(tstep) << " "
+			<< "-c " << std::to_string(tscan) << " "
+			<< "-k " << std::to_string(ksave) << " "
+			<< "--xmeas-pq " << std::to_string(0.0) << ":" << std::to_string(1.0) << " "
+			<< "--xmv-pq " << std::to_string(0.0) << ":" << std::to_string(1.0) << " "
+			<< "--logfile-prefix " << logfile_prefix << "_" << std::to_string(idv_idx) << " "
+			<< "-i " << idv_idx;
+
+		the_call = the_call_ss.str();
+		std::cout << the_call << std::endl;
+
+		// run the program
+		std::system(the_call.c_str());
 	}
 
 	return 0;

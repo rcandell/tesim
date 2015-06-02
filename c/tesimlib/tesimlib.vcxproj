@@ -80,6 +80,8 @@
     <ClInclude Include="..\PlantInterface.h" />
     <ClInclude Include="..\TEController.h" />
     <ClInclude Include="..\TEErrorChannel.h" />
+    <ClInclude Include="..\TEGEErrorChannel.h" />
+    <ClInclude Include="..\TEIIDErrorChannel.h" />
     <ClInclude Include="..\TELogging.h" />
     <ClInclude Include="..\TENames.h" />
     <ClInclude Include="..\TEPlant.h" />
@@ -91,7 +93,8 @@
     <ClCompile Include="..\ControlLoops.cpp" />
     <ClCompile Include="..\PI.cpp" />
     <ClCompile Include="..\TEController.cpp" />
-    <ClCompile Include="..\TEErrorChannel.cpp" />
+    <ClCompile Include="..\TEGEErrorChannel.cpp" />
+    <ClCompile Include="..\TEIIDErrorChannel.cpp" />
     <ClCompile Include="..\TENames.cpp" />
     <ClCompile Include="..\TEPlant.cpp" />
     <ClCompile Include="..\teprob.cpp" />
