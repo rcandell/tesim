@@ -16,7 +16,8 @@
 #include <boost/program_options.hpp>
 
 #include "TENames.h"
-#include "TEErrorChannel.h"
+#include "TEIIDErrorChannel.h"
+#include "TEGEErrorChannel.h"
 #include "TETimeSync.h"
 #include "TEPlant.h"
 #include "TEController.h"
@@ -32,6 +33,27 @@ void log_time_console(unsigned RT, double t);
 
 int main(int argc, char* argv[])
 {
+	// simulation parameters
+	std::string log_file_prefix = "nochan";
+	bool append_flag = false;
+	bool RT = 0;
+	bool gechan_on = false;
+	bool idv_on = false;
+	double simtime = 0.0;
+	double t, tstep, tscan;
+	unsigned ksave = 1;
+	unsigned idv_idx = 0;
+	double *xmeas, *xmv;
+	t = 0;
+
+	// important time steps used by the simulation
+	tstep = (10.0E-3) / 3600;		// Plant update time in hours (10 milliseconds)
+	tscan = tstep;					// PLC scan time in hours (1.8 seconds, same as Ricker)
+
+	// error channel parameters
+	double per = 0.0;
+	pq_pair xmeas_pq = std::make_pair(0.0, 1.0);
+	pq_pair xmv_pq = std::make_pair(0.0, 1.0);
 
 	// program options
 	namespace po = boost::program_options;
@@ -42,7 +64,10 @@ int main(int argc, char* argv[])
 		("tstep,t", po::value<double>(), "set the base time step in hours")
 		("tscan,c", po::value<double>(), "set the scan interval in hours")
 		("ksave,k", po::value<unsigned>(), "decimation factor for saving trace data")
+		("setidv,i", po::value<unsigned>(), "set the idv at index provided (1 - 20)")
 		("real-time,r", "run the simulation in real time")
+		("per", po::value<double>(&per), "enable iid packet error rate between 0.0 and 1.0.")
+		("enable-ge-channel,g", "enable the Gilbert Elliot channel model.  Specify pq parameter with later options.")
 		("xmeas-pq", po::value<pq_pair>(), "xmeas burst link status probabilities, (Perror:Precover)")
 		("xmv-pq", po::value<pq_pair>(), "xmv burst link status probabilities, (Perror:Precover)")
 		("logfile-prefix,p", po::value<std::string>(), "prefix for all of the log files")
@@ -67,37 +92,23 @@ int main(int argc, char* argv[])
 	}
 	po::notify(vm);
 
-	// simulation parameters
-	std::string log_file_prefix = "nochan";
-	bool append_flag = false;
-	bool RT = 0;
-	double simtime = 0.0;
-	double t, tstep, tscan;
-	unsigned ksave = 1;
-	double *xmeas, *xmv;
-	t = 0;
-
-	// important time steps used by the simulation
-	tstep = (10.0E-3) / 3600;		// Plant update time in hours (10 milliseconds)
-	tscan = tstep;					// PLC scan time in hours (1.8 seconds, same as Ricker)
-
-	// error channel parameters
-	pq_pair xmeas_pq = std::make_pair(0.0, 1.0);
-	pq_pair xmv_pq = std::make_pair(0.0, 1.0);
-
 	try {
+
 		if (vm.count("real-time"))
 		{
 			RT = true;
 		}
+
 		if (vm.count("simtime"))
 		{
 			simtime = vm["simtime"].as<double>();
 		}
+
 		if (vm.count("tstep"))
 		{
 			tstep = vm["tstep"].as<double>();
 		}
+
 		if (vm.count("tscan"))
 		{
 			tscan = vm["tscan"].as<double>();
@@ -106,22 +117,37 @@ int main(int argc, char* argv[])
 		{
 			tscan = tstep;
 		}
+
 		if (vm.count("ksave"))
 		{
 			ksave = vm["ksave"].as<unsigned>();
 		}
-		if (vm.count("xmeas-pq"))
+
+		if (vm.count("setidv"))
 		{
-			xmeas_pq = vm["xmeas-pq"].as<pq_pair>();
+			idv_on = true;
+			idv_idx = vm["setidv"].as<unsigned>();
 		}
-		if (vm.count("xmv-pq"))
+
+		if (vm.count("enable-ge-channel"))
 		{
-			xmv_pq = vm["xmv-pq"].as<pq_pair>();
+			gechan_on = true;
+			if (vm.count("xmeas-pq"))
+			{
+				xmeas_pq = vm["xmeas-pq"].as<pq_pair>();
+			}
+
+			if (vm.count("xmv-pq"))
+			{
+				xmv_pq = vm["xmv-pq"].as<pq_pair>();
+			}
 		}
+
 		if (vm.count("logfile-prefix"))
 		{
 			log_file_prefix = vm["logfile-prefix"].as<std::string>();
 		}
+
 		if (vm.count("append-data"))
 		{
 			append_flag = true;
@@ -188,21 +214,43 @@ int main(int argc, char* argv[])
 
 	// create the communications channels
 	int seed_rand = 17;
-	TEErrorChannel xmeas_channel(xmeas_pq, TEPlant::NY, teplant->get_xmeas(), seed_rand);
-	TEErrorChannel xmv_channel(xmv_pq, TEPlant::NU, tectlr->get_xmv(), seed_rand);
-
+	TEErrorChannel* xmeas_channel = 0;
+	TEErrorChannel* xmv_channel = 0;
+	if (per > 0.0)
+	{
+		xmeas_channel = new TEIIDErrorChannel(per, TEPlant::NY, teplant->get_xmeas(), seed_rand);
+		xmv_channel = new TEIIDErrorChannel(per, TEPlant::NU, tectlr->get_xmv(), seed_rand);
+	}
+	else if (gechan_on)
+	{
+		xmeas_channel = new TEGEErrorChannel(xmeas_pq, TEPlant::NY, teplant->get_xmeas(), seed_rand);
+		xmv_channel = new TEGEErrorChannel(xmv_pq, TEPlant::NU, tectlr->get_xmv(), seed_rand);
+	}
+	
 	for (int ii = 0; ii < nsteps; ii++)
 	{
 		// increment the plant and controller
 		try
 		{
+			// set the disturbance
+			if (idv_on)
+			{
+				teplant->idv(idv_idx-1);
+			}
+
+			// increment the plant
 			xmeas = teplant->increment(t, tstep, xmv, &shutdown);
 
 			// apply the sensors channel
-			if (xmeas_pq.first > 0.0)
+			if (per > 0.0)
 			{
-				xmeas = xmeas_channel + xmeas;
-				xmeas_chan_log << xmeas_channel << std::endl;
+				xmeas = *static_cast<TEIIDErrorChannel*>(xmeas_channel)+xmeas;
+				xmeas_chan_log << *static_cast<TEIIDErrorChannel*>(xmeas_channel) << std::endl;
+			}
+			else if (gechan_on)
+			{
+				xmeas = *static_cast<TEGEErrorChannel*>(xmeas_channel) + xmeas;
+				xmeas_chan_log << *static_cast<TEGEErrorChannel*>(xmeas_channel) << std::endl;
 			}
 		}
 		catch (TEPlant::ShutdownException& e)
@@ -220,10 +268,15 @@ int main(int argc, char* argv[])
 			xmv = tectlr->increment(t, tscan, xmeas);
 
 			// apply the control channel
-			if (xmv_pq.first > 0.0)
+			if (per > 0.0)
 			{
-				xmv = xmv_channel + xmv;
-				xmv_chan_log << xmv_channel << std::endl;
+				xmv = *static_cast<TEIIDErrorChannel*>(xmv_channel)+xmv;
+				xmv_chan_log << *static_cast<TEIIDErrorChannel*>(xmv_channel) << std::endl;
+			}
+			else if (gechan_on)
+			{
+				xmv = *static_cast<TEGEErrorChannel*>(xmv_channel) + xmv;
+				xmv_chan_log << *static_cast<TEGEErrorChannel*>(xmv_channel) << std::endl;
 			}
 
 			// log current time to console

@@ -42,13 +42,19 @@
     <ClInclude Include="..\TETimeSync.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\TEErrorChannel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\TENames.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\TETypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TEGEErrorChannel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TEIIDErrorChannel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TEErrorChannel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -71,13 +77,16 @@
     <ClCompile Include="..\TETimeSync.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\TEErrorChannel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\TENames.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\TETypes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TEGEErrorChannel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TEIIDErrorChannel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
