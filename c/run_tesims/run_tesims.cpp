@@ -216,8 +216,6 @@ int tc_idv_baseline(int argc, char* argv[])
 			<< "-t " << std::to_string(tstep) << " "
 			<< "-c " << std::to_string(tscan) << " "
 			<< "-k " << std::to_string(ksave) << " "
-			<< "--xmeas-pq " << std::to_string(0.0) << ":" << std::to_string(1.0) << " "
-			<< "--xmv-pq " << std::to_string(0.0) << ":" << std::to_string(1.0) << " "
 			<< "--logfile-prefix " << logfile_prefix << "_" << std::to_string(idv_idx) << " "
 			<< "-i " << idv_idx;
 
