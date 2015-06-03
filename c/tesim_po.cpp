@@ -170,7 +170,10 @@ int main(int argc, char* argv[])
 	std::ofstream xmv_chan_log;
 
 	if (append_flag)
+	{
 		plant_log.open(log_file_prefix + "_plant.dat", std::fstream::out | std::fstream::app);
+		std::cout << "plant data file: " << log_file_prefix << "_plant.dat" << std::endl;
+	}
 	else
 	{
 		plant_log.open(log_file_prefix + "_plant.dat");
@@ -181,19 +184,25 @@ int main(int argc, char* argv[])
 	ctlr_log.open(log_file_prefix + "_tectlr.dat");
 	ctlr_log.precision(15);
 
-	time_log.open(log_file_prefix + "_time.dat");
-	time_log.precision(15);
-	time_log.fill('0');
+	if (RT)
+	{
+		time_log.open(log_file_prefix + "_time.dat");
+		time_log.precision(15);
+		time_log.fill('0');
+	}
 
-	xmeas_chan_log.open(log_file_prefix + "_xmeas_chan.log");
-	xmv_chan_log.open(log_file_prefix + "_xmv_chan.log");
+	if (gechan_on || per>0.0)
+	{
+		xmeas_chan_log.open(log_file_prefix + "_xmeas_chan.log");
+		xmv_chan_log.open(log_file_prefix + "_xmv_chan.log");
+	}
 
 	// plant shutdown indicator
 	int shutdown = 0;
 	char * plant_msg = NULL;
 
 	// derived simulation parameters
-	int nsteps = int(simtime/tstep);
+	int nsteps = int(simtime/tstep) + 1;
 	int steps_per_scan = (int)round(tscan / tstep);
 	print_sim_params(tstep, tscan, simtime, RT, xmeas_pq, xmv_pq);
 
