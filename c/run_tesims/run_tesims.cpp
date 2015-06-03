@@ -202,7 +202,7 @@ int tc_idv_baseline(int argc, char* argv[])
 	po::notify(vm);
 
 	const std::string exec("..\\debug\\tesim");
-	const double simtime = 32;
+	const double simtime = 10;
 	const double tstep = 0.0005;
 	const double tscan = 0.0005;
 	const unsigned ksave = 20;
@@ -216,8 +216,13 @@ int tc_idv_baseline(int argc, char* argv[])
 			<< "-t " << std::to_string(tstep) << " "
 			<< "-c " << std::to_string(tscan) << " "
 			<< "-k " << std::to_string(ksave) << " "
-			<< "--logfile-prefix " << logfile_prefix << "_" << std::to_string(idv_idx) << " "
+			<< "--logfile-prefix " << logfile_prefix << " "
 			<< "-i " << idv_idx;
+
+		if (idv_idx > 1)
+		{
+			the_call_ss << " -a ";
+		}
 
 		the_call = the_call_ss.str();
 		std::cout << the_call << std::endl;
