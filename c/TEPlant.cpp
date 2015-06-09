@@ -154,6 +154,9 @@ double* TEPlant::increment(double t, double dt, double* new_xmv, int* shutdown)
 	// Calculate dxdt
 	tefunc(&TEPlant::NX, &t, m_x, m_dxdt);
 
+	// update cost
+	updateHourlyCost(m_xmeas, m_xmv);
+
 	// check if plant has shutdown
 	*shutdown = get_curr_shutdown();
 	if (*shutdown > 0)
@@ -163,6 +166,27 @@ double* TEPlant::increment(double t, double dt, double* new_xmv, int* shutdown)
 	}
 
 	return m_xmeas;
+}
+
+void TEPlant::updateHourlyCost(double* xmeas, double* xmv)
+{
+	// stage 0
+	static const double gain0[] = { 0.0318, 0.0536 };
+	// stage 1
+	static const double gain1 = 0.44791;
+	// stage 2
+	static const double gain2[] = { 2.209, 6.177, 22.06, 14.56, 17.89, 30.44, 22.94 };
+	// stage 3
+	static const double gain3[] = {0.2206, 0.1456, 0.1789};
+	// stage 4
+	static const double gain4 = 4.541;
+
+	m_hourlyCost =
+		(gain0[0]*m_xmeas[18] + gain0[1]*m_xmeas[19]) +
+
+		gain1*m_xmeas[9] * (gain2[0]*m_xmeas[28] + gain2[1]*m_xmeas[30] + gain2[2]*m_xmeas[31] + gain2[3]*m_xmeas[32] + gain2[4]*m_xmeas[33] + gain2[5]*m_xmeas[34] + gain2[6]*m_xmeas[35]) +
+
+		(gain3[0]*m_xmeas[36] + gain3[1]*m_xmeas[37] + gain3[2]*m_xmeas[38]) * gain4*m_xmv[7]; 
 }
 
 // get for xmeas
@@ -205,6 +229,9 @@ std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
 		lhs << rhs.m_xmeas[ii] << "\t";
 	}
 	lhs << rhs.m_xmeas[TEPlant::NY - 1] << "\t";
+
+	// hourly cost
+	lhs << rhs.m_hourlyCost << "\t";
 
 	// disturbance vector
 	for (int ii = 0; ii < TEPlant::NIDV - 1; ii++)

@@ -188,5 +188,3 @@ std::ostream& operator<< (std::ostream& lhs, const TEController& rhs)
 }
 
 
-
-

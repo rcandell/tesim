@@ -105,6 +105,8 @@ private:
     TEPlant(TEPlant const&);    // Singleton: Don't Implement
     TEPlant& operator=(const TEPlant&); // Singleton: Don't implement
 
+	void updateHourlyCost(double* xmeas, double* xmv);
+
 	// variables
 	double 		m_ts_ode;			// time step for the ode solver
 	double 		m_ts_plant;			// time step for the plant
@@ -123,6 +125,8 @@ private:
 	double*		m_xmeas;	// measured
 	double*		m_xmv;		// manipulated
 	int*		m_idv;		// dist. vector
+
+	double		m_hourlyCost;
 
 	static void euler(int nn, double t, double dt, double *yy, double *yp);
 

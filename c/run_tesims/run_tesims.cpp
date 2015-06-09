@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 	// auto timer used as a performance profiler
 	boost::timer::auto_cpu_timer t_wall_auto;
 
-	// return tc_all_nochan_baseline(argc, argv);
+	// return tc_nochan_baseline(argc, argv);
 	return tc_idv_baseline(argc, argv);
 	// return tc_all_mc(argc, argv);
 }
@@ -202,12 +202,12 @@ int tc_idv_baseline(int argc, char* argv[])
 	po::notify(vm);
 
 	const std::string exec("..\\debug\\tesim");
-	const double simtime = 10;
+	const double simtime = 36;
 	const double tstep = 0.0005;
 	const double tscan = 0.0005;
 	const unsigned ksave = 20;
 
-	for (unsigned idv_idx = 1; idv_idx <= 20; idv_idx++)
+	for (unsigned idv_idx = 1; idv_idx <= 15; idv_idx++)
 	{
 		std::string the_call;
 		std::ostringstream the_call_ss;

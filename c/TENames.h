@@ -51,6 +51,11 @@ public:
 		friend std::ostream& operator<< (std::ostream& lhs, const idv& rhs);
 	};
 
+	struct hourly_cost
+	{
+		friend std::ostream& operator<< (std::ostream& lhs, const hourly_cost& rhs);
+	};
+
 	struct shutdown
 	{
 		friend std::ostream& operator<< (std::ostream& lhs, const shutdown& rhs);
