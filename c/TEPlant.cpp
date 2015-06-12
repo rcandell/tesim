@@ -234,11 +234,12 @@ std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
 	lhs << rhs.m_hourlyCost << "\t";
 
 	// disturbance vector
+	unsigned idv = 0;
 	for (int ii = 0; ii < TEPlant::NIDV - 1; ii++)
 	{
-		lhs << rhs.m_idv[ii] << "\t";
+		idv += std::pow(2, ii)*rhs.m_idv[ii];
 	}
-	lhs << rhs.m_idv[TEPlant::NIDV - 1];
+	lhs << idv;
 
 	return lhs;
 }
