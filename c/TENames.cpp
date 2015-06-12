@@ -98,11 +98,7 @@ std::ostream& operator<< (std::ostream& lhs, const TENames::xmv& rhs)
 
 std::ostream& operator<< (std::ostream& lhs, const TENames::idv& rhs)
 {
-	for (int ii = 1; ii < TEPlant::NIDV; ii++)
-	{
-		lhs << "IDV" << ii << "\t";
-	}
-	lhs << "IDV" << (TEPlant::NIDV);
+	lhs << "IDV";
 	return lhs;
 }
 
