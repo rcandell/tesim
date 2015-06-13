@@ -216,6 +216,8 @@ char* TEPlant::shutdown_msg() const
 
 std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
 {
+	// TODO: It appears from the loop conditions that I am dropping a measured variable
+
 	// manipulated variables
 	for (int ii = 0; ii < TEPlant::NU-1; ii++)
 	{
@@ -235,9 +237,9 @@ std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
 
 	// disturbance vector
 	unsigned idv = 0;
-	for (int ii = 0; ii < TEPlant::NIDV - 1; ii++)
+	for (int ii = 0; ii < TEPlant::NIDV; ii++)
 	{
-		idv += std::pow(2, ii)*rhs.m_idv[ii];
+		idv += static_cast<unsigned>(std::pow(2, ii)*rhs.m_idv[ii]);
 	}
 	lhs << idv;
 

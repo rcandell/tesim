@@ -202,7 +202,7 @@ int tc_idv_baseline(int argc, char* argv[])
 	po::notify(vm);
 
 	const std::string exec("..\\debug\\tesim");
-	const double simtime = 36;
+	const double simtime = 32;
 	const double tstep = 0.0005;
 	const double tscan = 0.0005;
 	const unsigned ksave = 20;

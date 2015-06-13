@@ -1,19 +1,25 @@
 
-
+rm(list=ls())
+source("common.R")
 source("multiplot.R")
+source("calculate_kpis.R")
 
-library(ggplot2)
+base.df <- read.table("nochan/allidv_plant.dat", header = TRUE, sep = "\t", fill = TRUE, check.names = TRUE)
 
-source("calc_kpis.R")
-
-base.df <- read.table("nochan/nochan_noidv_plant.dat", header = TRUE, sep = "\t", fill = TRUE, check.names = TRUE)
-xmeas_idx <- c( 5, c(1:4, 5, 7:12, 14, 15, 17, 23, 25, 40, 42) + 17)
-xmv_idx <- c( 5, c(6:17))
-all_disturbs <- c( 5, c(60:74, 80))
-base.time <- base.df$time
-base.xmeas <- base.df[xmeas_idx]
-base.xmv <- base.df[xmv_idx]
-base.vars <- base.df[all_disturbs]
-
-calc_itae(data = base.xmeas, t = "time", x = "Reactor.Pressure.kPa")
-
+for (idvs in 2**c(1:15))
+{
+  base.time <- base.df[base.df$IDV==idvs,]$time
+  base.xmeas <- base.df[base.df$IDV==idvs, xmeas_idx]
+  base.xmeas <- base.xmeas[complete.cases(base.xmeas),]
+  
+  # compares set points with process variable and computes KPI's
+  sp_name<-names(base.xmeas)
+  sp_value<-c(2800,65,122.9,50,15,22.89,53.8,0.0)
+  sp<-data.frame(sp_name,sp_value)
+  base.kpis<-kpidf(df = base.xmeas, sp=sp, tm=base.time)
+  print(format(base.kpis, digits=2))
+  
+  # save the kpi's to file
+  fname<-paste0("ricker_idv_",log2(idvs),"_kpis.txt")
+  write.table(format(base.kpis, digits=2), fname, sep="\t", row.names = F)
+}

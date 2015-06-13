@@ -52,7 +52,7 @@ public:
 			{
 				std::string logstr;
 				std::ostringstream logss;
-				logss << "\t" << m_sd_code;
+				logss << m_sd_code;
 				logstr = logss.str();
 				return logstr;
 			}

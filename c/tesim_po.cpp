@@ -265,7 +265,7 @@ int main(int argc, char* argv[])
 		catch (TEPlant::ShutdownException& e)
 		{
 			plant_log << xmeas_pq << "\t" << xmv_pq << "\t" << t << "\t" << *teplant 
-				<< "\t" << e.sdcode_log_str() << std::endl;
+				<< "\t" << e.m_sd_code << std::endl;
 			std::cerr << e << std::endl;
 			std::cerr << "ending simulation" << std::endl;
 			return 0;
@@ -296,7 +296,7 @@ int main(int argc, char* argv[])
 		if (!(ii%ksave))
 		{
 			//plant
-			plant_log << xmeas_pq << "\t" << xmv_pq << "\t" << t << "\t" << *teplant << std::endl;
+			plant_log << xmeas_pq << "\t" << xmv_pq << "\t" << t << "\t" << *teplant << "\t" << 0 << std::endl;
 
 			//controller
 			ctlr_log << t << "\t" << *tectlr << std::endl;
