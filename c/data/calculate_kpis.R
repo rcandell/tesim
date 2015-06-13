@@ -42,7 +42,7 @@ kpidf<-function(df, tm, sp)
   {
     v<-df[nn]
     kpis$msae[sp_name==nn]   <-  calc_msae(v=v, tm = tm, sp = sp[sp_name==nn,]$sp_value)
-    kpis$iae[sp_name==nn]    <-  calc_msae(v=v, tm = tm, sp = sp[sp_name==nn,]$sp_value)
+    kpis$iae[sp_name==nn]    <-  calc_iae(v=v, tm = tm, sp = sp[sp_name==nn,]$sp_value)
     kpis$itae[sp_name==nn]   <-  calc_itae(v=v, tm = tm, sp = sp[sp_name==nn,]$sp_value)
     kpis$uae[sp_name==nn]    <-  sapply(v-sp[sp_name==nn,]$sp_value, mean)
     kpis$varae[sp_name==nn]  <-  sapply(v-sp[sp_name==nn,]$sp_value, var)
