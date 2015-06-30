@@ -9,7 +9,7 @@ setwd("C:/Users/rnc4/git/TEsim/C/data")
 # the indexes for selected process variables
 source("common.R")
 
-plot_titles<-data.frame(n=names(idv.df[xmeas_idx]),l=xmeas_labels)
+plot_titles<-data.frame(n=names(base.df[xmeas_idx]),l=xmeas_labels)
 
 # load the baseline data
 base.df <- read.table("nochan/nochan_noidv_plant.dat", header = TRUE, sep = "\t", fill = TRUE, check.names = TRUE)
