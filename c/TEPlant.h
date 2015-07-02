@@ -52,7 +52,7 @@ public:
 			{
 				std::string logstr;
 				std::ostringstream logss;
-				logss << "\t" << m_sd_code;
+				logss << m_sd_code;
 				logstr = logss.str();
 				return logstr;
 			}
@@ -89,7 +89,7 @@ public:
 	// set disturbance
 	// 20 different disturbance types as defined by Downs
 	// Set value in array to activate disturbance
-	void set_idv(const double* idv);
+	void idv(unsigned idx) { m_idv[idx] = 1;  }
 	const int* get_idv() const { return m_idv; }
 	const int get_idv(unsigned idx) const { return m_idv[idx]; }
 
@@ -104,6 +104,8 @@ private:
     TEPlant() {}; 
     TEPlant(TEPlant const&);    // Singleton: Don't Implement
     TEPlant& operator=(const TEPlant&); // Singleton: Don't implement
+
+	void updateHourlyCost(double* xmeas, double* xmv);
 
 	// variables
 	double 		m_ts_ode;			// time step for the ode solver
@@ -123,6 +125,8 @@ private:
 	double*		m_xmeas;	// measured
 	double*		m_xmv;		// manipulated
 	int*		m_idv;		// dist. vector
+
+	double		m_hourlyCost;
 
 	static void euler(int nn, double t, double dt, double *yy, double *yp);
 

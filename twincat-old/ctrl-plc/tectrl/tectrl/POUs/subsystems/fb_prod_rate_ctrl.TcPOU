@@ -1,0 +1,417 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.26">
+  <POU Name="fb_prod_rate_ctrl" Id="{12afc640-1cc9-456e-b128-0a54a95b7ca0}">
+    <Declaration><![CDATA[FUNCTION_BLOCK fb_prod_rate_ctrl
+
+VAR_INPUT
+	kc: REAL;
+	ti:REAL;
+	ts:REAL;
+	hi:REAL;
+	lo:REAL;
+	x0:REAL := 0;
+	set_prod_rate: REAL := g_set_production;
+	//xmv17: REAL;
+
+END_VAR
+
+VAR_OUTPUT
+	Prodsp: REAL;
+	Fp: REAL;
+END_VAR
+
+VAR
+	
+	slewrate_limiter: fb_slewrate_limiter := (pos_slewrate_limit := 0.286875, neg_slewrate_limit := -0.286875);
+	prodsp_scaled: REAL;
+	prodrate_discrete_pi: fb_discrete_pi := (kc := 3.2, ti := 120, ts := g_Ts_base, hi := 30, lo := -30, x0:=0);
+END_VAR
+
+VAR CONSTANT
+	ProdspGain: REAL := 100/22.89;
+END_VAR]]></Declaration>
+    <Implementation>
+      <NWL>
+        <XmlArchive>
+          <Data>
+            <o xml:space="preserve" t="NWLImplementationObject">
+              <v n="NetworkListComment">""</v>
+              <v n="DefaultViewMode">"Fbd"</v>
+              <l2 n="NetworkList" cet="Network">
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems" />
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" />
+                  <l2 n="Connectors" />
+                  <v n="Id">278L</v>
+                </o>
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems">
+                    <o t="BoxTreeDemux">
+                      <v n="VarId">5</v>
+                      <o n="Input" t="BoxTreeBox">
+                        <v n="BoxType">"fb_slewrate_limiter"</v>
+                        <o n="Instance" t="Operand">
+                          <v n="Operand">"slewrate_limiter"</v>
+                          <v n="Type">"fb_slewrate_limiter"</v>
+                          <v n="Comment">""</v>
+                          <v n="SymbolComment">""</v>
+                          <v n="Address">""</v>
+                          <o n="Flags" t="Flags">
+                            <v n="Flags">0</v>
+                            <v n="Fixed">false</v>
+                          </o>
+                          <v n="LValue">false</v>
+                          <v n="Boolean">false</v>
+                          <v n="Id">655L</v>
+                        </o>
+                        <o n="OutputItems" t="OutputItemList">
+                          <l2 n="OutputItems">
+                            <n />
+                          </l2>
+                        </o>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">true</v>
+                        </o>
+                        <n n="InputFlags" />
+                        <l2 n="InputItems" cet="BoxTreeOperand">
+                          <o>
+                            <o n="Operand" t="Operand">
+                              <v n="Operand">"g_set_production"</v>
+                              <v n="Type">"REAL"</v>
+                              <v n="Comment">""</v>
+                              <v n="SymbolComment">" the initial setpoints"</v>
+                              <v n="Address">""</v>
+                              <o n="Flags" t="Flags">
+                                <v n="Flags">0</v>
+                                <v n="Fixed">false</v>
+                              </o>
+                              <v n="LValue">false</v>
+                              <v n="Boolean">false</v>
+                              <v n="Id">144L</v>
+                            </o>
+                            <v n="Id">143L</v>
+                          </o>
+                        </l2>
+                        <o n="InputParam" t="ParamList">
+                          <l2 n="Names" cet="String">
+                            <v>in</v>
+                          </l2>
+                          <l2 n="Types" cet="String">
+                            <v>REAL</v>
+                          </l2>
+                        </o>
+                        <o n="OutputParam" t="ParamList">
+                          <l2 n="Names" cet="String">
+                            <v>out</v>
+                          </l2>
+                          <l2 n="Types" cet="String">
+                            <v>REAL</v>
+                          </l2>
+                        </o>
+                        <v n="CallType" t="Operator">FunctionBlock</v>
+                        <v n="EN">false</v>
+                        <v n="ENO">false</v>
+                        <v n="Id">656L</v>
+                      </o>
+                      <v n="Id">755L</v>
+                    </o>
+                    <o t="BoxTreeAssign">
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" cet="Operand">
+                          <o>
+                            <v n="Operand">"g_Fp"</v>
+                            <v n="Type">"REAL"</v>
+                            <v n="Comment">""</v>
+                            <v n="SymbolComment">""</v>
+                            <v n="Address">""</v>
+                            <o n="Flags" t="Flags">
+                              <v n="Flags">0</v>
+                              <v n="Fixed">false</v>
+                            </o>
+                            <v n="LValue">true</v>
+                            <v n="Boolean">false</v>
+                            <v n="Id">715L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">false</v>
+                      </o>
+                      <o n="RValue" t="BoxTreeBox">
+                        <v n="BoxType">"ADD"</v>
+                        <o n="Instance" t="Operand">
+                          <n n="Operand" />
+                          <v n="Type">""</v>
+                          <v n="Comment">""</v>
+                          <v n="SymbolComment">""</v>
+                          <v n="Address">""</v>
+                          <o n="Flags" t="Flags">
+                            <v n="Flags">0</v>
+                            <v n="Fixed">false</v>
+                          </o>
+                          <v n="LValue">false</v>
+                          <v n="Boolean">false</v>
+                          <v n="Id">708L</v>
+                        </o>
+                        <o n="OutputItems" t="OutputItemList">
+                          <l2 n="OutputItems">
+                            <n />
+                          </l2>
+                        </o>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">false</v>
+                        </o>
+                        <n n="InputFlags" />
+                        <l2 n="InputItems" cet="BoxTreeBox">
+                          <o>
+                            <v n="BoxType">"MUL"</v>
+                            <o n="Instance" t="Operand">
+                              <n n="Operand" />
+                              <v n="Type">""</v>
+                              <v n="Comment">""</v>
+                              <v n="SymbolComment">""</v>
+                              <v n="Address">""</v>
+                              <o n="Flags" t="Flags">
+                                <v n="Flags">0</v>
+                                <v n="Fixed">false</v>
+                              </o>
+                              <v n="LValue">false</v>
+                              <v n="Boolean">false</v>
+                              <v n="Id">224L</v>
+                            </o>
+                            <o n="OutputItems" t="OutputItemList">
+                              <l2 n="OutputItems">
+                                <n />
+                              </l2>
+                            </o>
+                            <o n="Flags" t="Flags">
+                              <v n="Flags">0</v>
+                              <v n="Fixed">false</v>
+                            </o>
+                            <n n="InputFlags" />
+                            <l2 n="InputItems">
+                              <o t="BoxTreeDemux">
+                                <v n="VarId">5</v>
+                                <n n="Input" />
+                                <v n="Id">756L</v>
+                              </o>
+                              <o t="BoxTreeOperand">
+                                <o n="Operand" t="Operand">
+                                  <v n="Operand">"ProdspGain"</v>
+                                  <v n="Type">"REAL"</v>
+                                  <v n="Comment">""</v>
+                                  <v n="SymbolComment">""</v>
+                                  <v n="Address">""</v>
+                                  <o n="Flags" t="Flags">
+                                    <v n="Flags">0</v>
+                                    <v n="Fixed">false</v>
+                                  </o>
+                                  <v n="LValue">false</v>
+                                  <v n="Boolean">false</v>
+                                  <v n="Id">227L</v>
+                                </o>
+                                <v n="Id">226L</v>
+                              </o>
+                            </l2>
+                            <o n="InputParam" t="ParamList">
+                              <l2 n="Names" />
+                              <l2 n="Types" />
+                            </o>
+                            <o n="OutputParam" t="ParamList">
+                              <l2 n="Names" cet="String">
+                                <v></v>
+                              </l2>
+                              <l2 n="Types" cet="String">
+                                <v>INT</v>
+                              </l2>
+                            </o>
+                            <v n="CallType" t="Operator">Mul</v>
+                            <v n="EN">false</v>
+                            <v n="ENO">false</v>
+                            <v n="Id">225L</v>
+                          </o>
+                          <o>
+                            <v n="BoxType">"fb_discrete_pi"</v>
+                            <o n="Instance" t="Operand">
+                              <v n="Operand">"prodrate_discrete_pi"</v>
+                              <v n="Type">"fb_discrete_pi"</v>
+                              <v n="Comment">""</v>
+                              <v n="SymbolComment">""</v>
+                              <v n="Address">""</v>
+                              <o n="Flags" t="Flags">
+                                <v n="Flags">0</v>
+                                <v n="Fixed">false</v>
+                              </o>
+                              <v n="LValue">false</v>
+                              <v n="Boolean">false</v>
+                              <v n="Id">735L</v>
+                            </o>
+                            <o n="OutputItems" t="OutputItemList">
+                              <l2 n="OutputItems">
+                                <n />
+                              </l2>
+                            </o>
+                            <o n="Flags" t="Flags">
+                              <v n="Flags">0</v>
+                              <v n="Fixed">true</v>
+                            </o>
+                            <n n="InputFlags" />
+                            <l2 n="InputItems" cet="BoxTreeOperand">
+                              <o>
+                                <o n="Operand" t="Operand">
+                                  <v n="Operand">"g_Prodsp"</v>
+                                  <v n="Type">"REAL"</v>
+                                  <v n="Comment">""</v>
+                                  <v n="SymbolComment">" production rate variables"</v>
+                                  <v n="Address">""</v>
+                                  <o n="Flags" t="Flags">
+                                    <v n="Flags">0</v>
+                                    <v n="Fixed">false</v>
+                                  </o>
+                                  <v n="LValue">false</v>
+                                  <v n="Boolean">false</v>
+                                  <v n="Id">711L</v>
+                                </o>
+                                <v n="Id">710L</v>
+                              </o>
+                              <o>
+                                <o n="Operand" t="Operand">
+                                  <v n="Operand">"g_xmeas[17]"</v>
+                                  <v n="Type">"REAL"</v>
+                                  <v n="Comment">""</v>
+                                  <v n="SymbolComment">" storage variables for sub-controllers"</v>
+                                  <v n="Address">""</v>
+                                  <o n="Flags" t="Flags">
+                                    <v n="Flags">0</v>
+                                    <v n="Fixed">false</v>
+                                  </o>
+                                  <v n="LValue">false</v>
+                                  <v n="Boolean">false</v>
+                                  <v n="Id">738L</v>
+                                </o>
+                                <v n="Id">737L</v>
+                              </o>
+                            </l2>
+                            <o n="InputParam" t="ParamList">
+                              <l2 n="Names" cet="String">
+                                <v>set_point</v>
+                                <v>xmeas_in</v>
+                              </l2>
+                              <l2 n="Types" cet="String">
+                                <v>REAL</v>
+                                <v>REAL</v>
+                              </l2>
+                            </o>
+                            <o n="OutputParam" t="ParamList">
+                              <l2 n="Names" cet="String">
+                                <v>yout</v>
+                              </l2>
+                              <l2 n="Types" cet="String">
+                                <v>REAL</v>
+                              </l2>
+                            </o>
+                            <v n="CallType" t="Operator">FunctionBlock</v>
+                            <v n="EN">false</v>
+                            <v n="ENO">false</v>
+                            <v n="Id">736L</v>
+                          </o>
+                        </l2>
+                        <o n="InputParam" t="ParamList">
+                          <l2 n="Names" />
+                          <l2 n="Types" />
+                        </o>
+                        <o n="OutputParam" t="ParamList">
+                          <l2 n="Names" cet="String">
+                            <v></v>
+                          </l2>
+                          <l2 n="Types" cet="String">
+                            <v>INT</v>
+                          </l2>
+                        </o>
+                        <v n="CallType" t="Operator">Add</v>
+                        <v n="EN">false</v>
+                        <v n="ENO">false</v>
+                        <v n="Id">709L</v>
+                      </o>
+                      <v n="Id">716L</v>
+                    </o>
+                    <o t="BoxTreeAssign">
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" cet="Operand">
+                          <o>
+                            <v n="Operand">"g_Prodsp"</v>
+                            <v n="Type">"REAL"</v>
+                            <v n="Comment">""</v>
+                            <v n="SymbolComment">" production rate variables"</v>
+                            <v n="Address">""</v>
+                            <o n="Flags" t="Flags">
+                              <v n="Flags">0</v>
+                              <v n="Fixed">false</v>
+                            </o>
+                            <v n="LValue">true</v>
+                            <v n="Boolean">false</v>
+                            <v n="Id">758L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">false</v>
+                      </o>
+                      <o n="RValue" t="BoxTreeDemux">
+                        <v n="VarId">5</v>
+                        <n n="Input" />
+                        <v n="Id">757L</v>
+                      </o>
+                      <v n="Id">759L</v>
+                    </o>
+                  </l2>
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" />
+                  <l2 n="Connectors" />
+                  <v n="Id">79L</v>
+                </o>
+              </l2>
+              <v n="BranchCounter">5</v>
+              <v n="ValidIds">true</v>
+            </o>
+          </Data>
+          <TypeList>
+            <Type n="Boolean">System.Boolean</Type>
+            <Type n="BoxTreeAssign">{9873c309-1f09-4ebf-9078-42d8057ef11b}</Type>
+            <Type n="BoxTreeBox">{acfc6f68-8e3a-4af5-bf81-3dd512095a46}</Type>
+            <Type n="BoxTreeDemux">{b1d55618-017c-4bc5-990a-55c2f27d9d3a}</Type>
+            <Type n="BoxTreeOperand">{9de7f100-1b87-424c-a62e-45b0cfc85ed2}</Type>
+            <Type n="Flags">{668066f2-6069-46b3-8962-8db8d13d7db2}</Type>
+            <Type n="Int32">System.Int32</Type>
+            <Type n="Int64">System.Int64</Type>
+            <Type n="Network">{d9a99d73-b633-47db-b876-a752acb25871}</Type>
+            <Type n="NWLImplementationObject">{25e509de-33d4-4447-93f8-c9e4ea381c8b}</Type>
+            <Type n="Operand">{c9b2f165-48a2-4a45-8326-3952d8a3d708}</Type>
+            <Type n="Operator">{bffb3c53-f105-4e85-aba2-e30df579d75f}</Type>
+            <Type n="OutputItemList">{f40d3e09-c02c-4522-a88c-dac23558cfc4}</Type>
+            <Type n="ParamList">{71496971-9e0c-4677-a832-b9583b571130}</Type>
+            <Type n="String">System.String</Type>
+          </TypeList>
+        </XmlArchive>
+      </NWL>
+    </Implementation>
+    <ObjectProperties />
+  </POU>
+</TcPlcObject>

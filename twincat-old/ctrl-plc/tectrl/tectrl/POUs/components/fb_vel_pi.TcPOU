@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.26">
+  <POU Name="fb_vel_pi" Id="{8c175265-583c-4690-a84f-fc4edfd16dc0}">
+    <Declaration><![CDATA[FUNCTION_BLOCK fb_vel_pi
+
+VAR_INPUT
+	setpoint_in: LREAL;
+	xmeas_in: LREAL;
+	
+	// parameters
+	kc: REAL;
+	ti: REAL;
+	ts: REAL;
+	
+END_VAR
+
+VAR_OUTPUT
+	delta_out: REAL;
+END_VAR
+
+VAR
+	e: REAL;
+	e_last : REAL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+// calculate teh error signal
+e := setpoint_in - xmeas_in;
+
+// compute the output
+delta_out := (e + (ts/ti)*e - e_last) * kc;
+
+// save e for the next call
+e_last := e;
+
+]]></ST>
+    </Implementation>
+    <ObjectProperties />
+  </POU>
+</TcPlcObject>

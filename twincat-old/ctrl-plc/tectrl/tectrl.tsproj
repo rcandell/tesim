@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0">
+	<Project ProjectGUID="{38E5C6FE-0519-48AD-8D59-BF6F6707ED8B}" ModifiedGUID="{AEA4CCCF-046A-4908-A39E-9E70F3167766}" Target64Bit="true">
+		<System>
+			<Settings>
+				<Cpu RtLimit="50"/>
+			</Settings>
+			<Tasks>
+				<Task Id="2" Priority="20" CycleTime="1000000" AmsPort="350" Affinity="#x00000001">
+					<Name>PlcTask</Name>
+				</Task>
+			</Tasks>
+		</System>
+		<Plc>
+			<Project GUID="{B6784025-77AA-4261-97D1-617C0E412C9D}" Name="tectrl" PrjFilePath="tectrl\tectrl.plcproj" TmcFilePath="tectrl\tectrl.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e">
+				<Instance Id="#x01010010" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+					<Name>tectrl Instance</Name>
+					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+				</Instance>
+			</Project>
+			<PlcAuxTask Affinity="#x00000001"/>
+		</Plc>
+	</Project>
+</TcSmProject>

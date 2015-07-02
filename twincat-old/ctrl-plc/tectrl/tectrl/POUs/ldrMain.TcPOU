@@ -1,0 +1,771 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.26">
+  <POU Name="ldrMain" Id="{2b4bc59a-59cf-4d59-b1b8-494101288844}">
+    <Declaration><![CDATA[PROGRAM ldrMain
+
+
+// Notes
+//  I imagine that the control loops can run as independent threads/tasks under the main PlcTask
+//  xmeas, xmv, r, and maybe others could be stored in a GVL 
+VAR
+	
+	// data acquitistion from IO blocks
+	xmeas_acquire: fb_xmeas_acquire;
+
+	// Molar Percent G control loop
+	//pct_g_dpi: fb_discrete_pi		  := (kc:=1, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, x0:=Eadj_0);
+	
+	// production rate control loop
+	prod_rate_loop: fb_prod_rate_ctrl := (kc:=3.2, ti:=120/60, ts:=g_Ts_base, x0:=0, hi:=30, lo:=0);	
+	
+	// feed ratio control loop
+	feed_ratio_ctrl: fb_feed_ratio_ctrl;
+	
+	// process levels/invetory controller
+	level_ctrl: fb_level_ctrl;
+		
+	// product comnposition controller
+	prod_comp_ctrl: fb_prod_comp_ctrl;
+	
+	// A & C ratio controller
+	ac_ratio_ctrl: fb_ac_ratio_ctrl;
+	
+	// temperature controller
+	temp_ctrl: fb_temp_ctrl;
+	
+	// simulated measurements for debug
+	xmeas_simulated: fb_xmeas_simulated;
+END_VAR
+
+VAR_INPUT
+	
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <NWL>
+        <XmlArchive>
+          <Data>
+            <o xml:space="preserve" t="NWLImplementationObject">
+              <v n="NetworkListComment">""</v>
+              <v n="DefaultViewMode">"Fbd"</v>
+              <l2 n="NetworkList" cet="Network">
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems">
+                    <o t="BoxTreeDemux">
+                      <v n="VarId">6</v>
+                      <o n="Input" t="BoxTreeBox">
+                        <v n="BoxType">"AND"</v>
+                        <o n="Instance" t="Operand">
+                          <n n="Operand" />
+                          <v n="Type">""</v>
+                          <v n="Comment">""</v>
+                          <v n="SymbolComment">""</v>
+                          <v n="Address">""</v>
+                          <o n="Flags" t="Flags">
+                            <v n="Flags">0</v>
+                            <v n="Fixed">false</v>
+                          </o>
+                          <v n="LValue">false</v>
+                          <v n="Boolean">false</v>
+                          <v n="Id">16L</v>
+                        </o>
+                        <o n="OutputItems" t="OutputItemList">
+                          <l2 n="OutputItems" />
+                        </o>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">false</v>
+                        </o>
+                        <n n="InputFlags" />
+                        <l2 n="InputItems" cet="BoxTreeOperand">
+                          <o>
+                            <o n="Operand" t="Operand">
+                              <v n="Operand">"g_START"</v>
+                              <v n="Type">"BOOL"</v>
+                              <v n="Comment">""</v>
+                              <v n="SymbolComment">""</v>
+                              <v n="Address">""</v>
+                              <o n="Flags" t="Flags">
+                                <v n="Flags">0</v>
+                                <v n="Fixed">true</v>
+                              </o>
+                              <v n="LValue">false</v>
+                              <v n="Boolean">true</v>
+                              <v n="Id">14L</v>
+                            </o>
+                            <v n="Id">13L</v>
+                          </o>
+                          <o>
+                            <o n="Operand" t="Operand">
+                              <v n="Operand">"g_ESTOP"</v>
+                              <v n="Type">"BOOL"</v>
+                              <v n="Comment">""</v>
+                              <v n="SymbolComment">" E-STOP"</v>
+                              <v n="Address">""</v>
+                              <o n="Flags" t="Flags">
+                                <v n="Flags">1</v>
+                                <v n="Fixed">true</v>
+                              </o>
+                              <v n="LValue">false</v>
+                              <v n="Boolean">true</v>
+                              <v n="Id">19L</v>
+                            </o>
+                            <v n="Id">18L</v>
+                          </o>
+                        </l2>
+                        <o n="InputParam" t="ParamList">
+                          <l2 n="Names" />
+                          <l2 n="Types" />
+                        </o>
+                        <o n="OutputParam" t="ParamList">
+                          <l2 n="Names" />
+                          <l2 n="Types" />
+                        </o>
+                        <v n="CallType" t="Operator">And</v>
+                        <n n="EN" />
+                        <n n="ENO" />
+                        <v n="Id">17L</v>
+                      </o>
+                      <v n="Id">473L</v>
+                    </o>
+                    <o t="BoxTreeAssign">
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" cet="Operand">
+                          <o>
+                            <v n="Operand">"g_RUNNING"</v>
+                            <v n="Type">"BOOL"</v>
+                            <v n="Comment">""</v>
+                            <v n="SymbolComment">" used for main start/stop/estop"</v>
+                            <v n="Address">""</v>
+                            <o n="Flags" t="Flags">
+                              <v n="Flags">0</v>
+                              <v n="Fixed">false</v>
+                            </o>
+                            <v n="LValue">true</v>
+                            <v n="Boolean">true</v>
+                            <v n="Id">10L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">false</v>
+                      </o>
+                      <o n="RValue" t="BoxTreeDemux">
+                        <v n="VarId">6</v>
+                        <n n="Input" />
+                        <v n="Id">474L</v>
+                      </o>
+                      <v n="Id">11L</v>
+                    </o>
+                    <o t="BoxTreeAssign">
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" cet="Operand">
+                          <o>
+                            <v n="Operand">"???"</v>
+                            <v n="Type">""</v>
+                            <v n="Comment">""</v>
+                            <v n="SymbolComment">""</v>
+                            <v n="Address">""</v>
+                            <o n="Flags" t="Flags">
+                              <v n="Flags">8</v>
+                              <v n="Fixed">false</v>
+                            </o>
+                            <v n="LValue">true</v>
+                            <v n="Boolean">false</v>
+                            <v n="Id">482L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">1</v>
+                        <v n="Fixed">true</v>
+                      </o>
+                      <o n="RValue" t="BoxTreeDemux">
+                        <v n="VarId">6</v>
+                        <n n="Input" />
+                        <v n="Id">475L</v>
+                      </o>
+                      <v n="Id">483L</v>
+                    </o>
+                  </l2>
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" cet="ILStatement">
+                    <o>
+                      <v n="Operator">"LD"</v>
+                      <v n="Prefix">""</v>
+                      <o n="Operand" t="Operand">
+                        <v n="Operand">"gSTART"</v>
+                        <v n="Type">"BOOL"</v>
+                        <v n="Comment">""</v>
+                        <v n="SymbolComment">""</v>
+                        <v n="Address">""</v>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">true</v>
+                        </o>
+                        <v n="LValue">false</v>
+                        <v n="Boolean">true</v>
+                        <v n="Id">14L</v>
+                      </o>
+                      <v n="Postfix">""</v>
+                      <v n="Id">124L</v>
+                    </o>
+                    <o>
+                      <v n="Operator">"ANDN"</v>
+                      <v n="Prefix">""</v>
+                      <o n="Operand" t="Operand">
+                        <v n="Operand">"gESTOP"</v>
+                        <v n="Type">"BOOL"</v>
+                        <v n="Comment">""</v>
+                        <v n="SymbolComment">""</v>
+                        <v n="Address">""</v>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">1</v>
+                          <v n="Fixed">true</v>
+                        </o>
+                        <v n="LValue">false</v>
+                        <v n="Boolean">true</v>
+                        <v n="Id">19L</v>
+                      </o>
+                      <v n="Postfix">""</v>
+                      <v n="Id">125L</v>
+                    </o>
+                    <o>
+                      <v n="Operator">"ST"</v>
+                      <v n="Prefix">""</v>
+                      <o n="Operand" t="Operand">
+                        <v n="Operand">"gRUNNING"</v>
+                        <v n="Type">"BOOL"</v>
+                        <v n="Comment">""</v>
+                        <v n="SymbolComment">""</v>
+                        <v n="Address">""</v>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">false</v>
+                        </o>
+                        <v n="LValue">true</v>
+                        <v n="Boolean">true</v>
+                        <v n="Id">10L</v>
+                      </o>
+                      <v n="Postfix">""</v>
+                      <v n="Id">126L</v>
+                    </o>
+                  </l2>
+                  <l2 n="Connectors" />
+                  <v n="Id">5L</v>
+                </o>
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems" cet="BoxTreeBox">
+                    <o>
+                      <v n="BoxType">"fb_xmeas_simulated"</v>
+                      <o n="Instance" t="Operand">
+                        <v n="Operand">"xmeas_simulated"</v>
+                        <v n="Type">"fb_xmeas_simulated"</v>
+                        <v n="Comment">""</v>
+                        <v n="SymbolComment">" simulated measurements for debug"</v>
+                        <v n="Address">""</v>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">false</v>
+                        </o>
+                        <v n="LValue">false</v>
+                        <v n="Boolean">false</v>
+                        <v n="Id">1432L</v>
+                      </o>
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems">
+                          <n />
+                        </l2>
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">false</v>
+                      </o>
+                      <n n="InputFlags" />
+                      <l2 n="InputItems" />
+                      <o n="InputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <o n="OutputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <v n="CallType" t="Operator">FunctionBlock</v>
+                      <v n="EN">false</v>
+                      <v n="ENO">false</v>
+                      <v n="Id">1433L</v>
+                    </o>
+                  </l2>
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" />
+                  <l2 n="Connectors" />
+                  <v n="Id">1431L</v>
+                </o>
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems" cet="BoxTreeAssign">
+                    <o>
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" cet="Operand">
+                          <o>
+                            <v n="Operand">"???"</v>
+                            <v n="Type">"BOOL"</v>
+                            <v n="Comment">""</v>
+                            <v n="SymbolComment">""</v>
+                            <v n="Address">""</v>
+                            <o n="Flags" t="Flags">
+                              <v n="Flags">8</v>
+                              <v n="Fixed">false</v>
+                            </o>
+                            <v n="LValue">true</v>
+                            <v n="Boolean">false</v>
+                            <v n="Id">1441L</v>
+                          </o>
+                        </l2>
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">false</v>
+                      </o>
+                      <o n="RValue" t="BoxTreeOperand">
+                        <o n="Operand" t="Operand">
+                          <v n="Operand">"TRUE"</v>
+                          <v n="Type">"BOOL"</v>
+                          <v n="Comment">""</v>
+                          <v n="SymbolComment">""</v>
+                          <v n="Address">""</v>
+                          <o n="Flags" t="Flags">
+                            <v n="Flags">0</v>
+                            <v n="Fixed">false</v>
+                          </o>
+                          <v n="LValue">false</v>
+                          <v n="Boolean">false</v>
+                          <v n="Id">1438L</v>
+                        </o>
+                        <v n="Id">1437L</v>
+                      </o>
+                      <v n="Id">1440L</v>
+                    </o>
+                  </l2>
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" />
+                  <l2 n="Connectors" />
+                  <v n="Id">1436L</v>
+                </o>
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems" cet="BoxTreeBox">
+                    <o>
+                      <v n="BoxType">"fb_xmeas_acquire"</v>
+                      <o n="Instance" t="Operand">
+                        <v n="Operand">"xmeas_acquire"</v>
+                        <v n="Type">"fb_xmeas_acquire"</v>
+                        <v n="Comment">""</v>
+                        <v n="SymbolComment">" data acquitistion from IO blocks"</v>
+                        <v n="Address">""</v>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">false</v>
+                        </o>
+                        <v n="LValue">false</v>
+                        <v n="Boolean">false</v>
+                        <v n="Id">1390L</v>
+                      </o>
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems">
+                          <n />
+                        </l2>
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">false</v>
+                      </o>
+                      <n n="InputFlags" />
+                      <l2 n="InputItems" />
+                      <o n="InputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <o n="OutputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <v n="CallType" t="Operator">FunctionBlock</v>
+                      <v n="EN">false</v>
+                      <v n="ENO">false</v>
+                      <v n="Id">1391L</v>
+                    </o>
+                  </l2>
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" />
+                  <l2 n="Connectors" />
+                  <v n="Id">1389L</v>
+                </o>
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems" cet="BoxTreeBox">
+                    <o>
+                      <v n="BoxType">"fb_feed_ratio_ctrl"</v>
+                      <o n="Instance" t="Operand">
+                        <v n="Operand">"feed_ratio_ctrl"</v>
+                        <v n="Type">"fb_feed_ratio_ctrl"</v>
+                        <v n="Comment">""</v>
+                        <v n="SymbolComment">" feed ratio control loop"</v>
+                        <v n="Address">""</v>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">false</v>
+                        </o>
+                        <v n="LValue">false</v>
+                        <v n="Boolean">false</v>
+                        <v n="Id">1348L</v>
+                      </o>
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" />
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">true</v>
+                      </o>
+                      <n n="InputFlags" />
+                      <l2 n="InputItems" />
+                      <o n="InputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <o n="OutputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <v n="CallType" t="Operator">FunctionBlock</v>
+                      <v n="EN">false</v>
+                      <v n="ENO">false</v>
+                      <v n="Id">1349L</v>
+                    </o>
+                  </l2>
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" />
+                  <l2 n="Connectors" />
+                  <v n="Id">1194L</v>
+                </o>
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems" cet="BoxTreeBox">
+                    <o>
+                      <v n="BoxType">"fb_prod_rate_ctrl"</v>
+                      <o n="Instance" t="Operand">
+                        <v n="Operand">"prod_rate_loop"</v>
+                        <v n="Type">"fb_prod_rate_ctrl"</v>
+                        <v n="Comment">""</v>
+                        <v n="SymbolComment">" Molar Percent G control loop
+pct_g_dpi: fb_discrete_pi		  := (kc:=1, ti:=0.001/60, Ts:=g_Ts_base, hi :=100, lo:=0, x0:=Eadj_0);
+ production rate control loop"</v>
+                        <v n="Address">""</v>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">false</v>
+                        </o>
+                        <v n="LValue">false</v>
+                        <v n="Boolean">false</v>
+                        <v n="Id">1260L</v>
+                      </o>
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" />
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">true</v>
+                      </o>
+                      <n n="InputFlags" />
+                      <l2 n="InputItems" />
+                      <o n="InputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <o n="OutputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <v n="CallType" t="Operator">FunctionBlock</v>
+                      <v n="EN">false</v>
+                      <v n="ENO">false</v>
+                      <v n="Id">1261L</v>
+                    </o>
+                  </l2>
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" />
+                  <l2 n="Connectors" />
+                  <v n="Id">1259L</v>
+                </o>
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems" cet="BoxTreeBox">
+                    <o>
+                      <v n="BoxType">"fb_level_ctrl"</v>
+                      <o n="Instance" t="Operand">
+                        <v n="Operand">"level_ctrl"</v>
+                        <v n="Type">"fb_level_ctrl"</v>
+                        <v n="Comment">""</v>
+                        <v n="SymbolComment">" process levels/invetory controller"</v>
+                        <v n="Address">""</v>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">false</v>
+                        </o>
+                        <v n="LValue">false</v>
+                        <v n="Boolean">false</v>
+                        <v n="Id">1344L</v>
+                      </o>
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" />
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">true</v>
+                      </o>
+                      <n n="InputFlags" />
+                      <l2 n="InputItems" />
+                      <o n="InputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <o n="OutputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <v n="CallType" t="Operator">FunctionBlock</v>
+                      <v n="EN">false</v>
+                      <v n="ENO">false</v>
+                      <v n="Id">1345L</v>
+                    </o>
+                  </l2>
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" />
+                  <l2 n="Connectors" />
+                  <v n="Id">955L</v>
+                </o>
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems" cet="BoxTreeBox">
+                    <o>
+                      <v n="BoxType">"fb_prod_comp_ctrl"</v>
+                      <o n="Instance" t="Operand">
+                        <v n="Operand">"prod_comp_ctrl"</v>
+                        <v n="Type">"fb_prod_comp_ctrl"</v>
+                        <v n="Comment">""</v>
+                        <v n="SymbolComment">" product comnposition controller"</v>
+                        <v n="Address">""</v>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">false</v>
+                        </o>
+                        <v n="LValue">false</v>
+                        <v n="Boolean">false</v>
+                        <v n="Id">1289L</v>
+                      </o>
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" />
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">true</v>
+                      </o>
+                      <n n="InputFlags" />
+                      <l2 n="InputItems" />
+                      <o n="InputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <o n="OutputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <v n="CallType" t="Operator">FunctionBlock</v>
+                      <v n="EN">false</v>
+                      <v n="ENO">false</v>
+                      <v n="Id">1290L</v>
+                    </o>
+                  </l2>
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" />
+                  <l2 n="Connectors" />
+                  <v n="Id">1270L</v>
+                </o>
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems" cet="BoxTreeBox">
+                    <o>
+                      <v n="BoxType">"fb_ac_ratio_ctrl"</v>
+                      <o n="Instance" t="Operand">
+                        <v n="Operand">"ac_ratio_ctrl"</v>
+                        <v n="Type">"fb_ac_ratio_ctrl"</v>
+                        <v n="Comment">""</v>
+                        <v n="SymbolComment">" A &amp; C ratio controller"</v>
+                        <v n="Address">""</v>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">false</v>
+                        </o>
+                        <v n="LValue">false</v>
+                        <v n="Boolean">false</v>
+                        <v n="Id">1293L</v>
+                      </o>
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" />
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">true</v>
+                      </o>
+                      <n n="InputFlags" />
+                      <l2 n="InputItems" />
+                      <o n="InputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <o n="OutputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <v n="CallType" t="Operator">FunctionBlock</v>
+                      <v n="EN">false</v>
+                      <v n="ENO">false</v>
+                      <v n="Id">1294L</v>
+                    </o>
+                  </l2>
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" />
+                  <l2 n="Connectors" />
+                  <v n="Id">1292L</v>
+                </o>
+                <o>
+                  <v n="Comment">""</v>
+                  <v n="Title">""</v>
+                  <v n="Label">""</v>
+                  <v n="OutCommented">false</v>
+                  <l2 n="NetworkItems" cet="BoxTreeBox">
+                    <o>
+                      <v n="BoxType">"fb_temp_ctrl"</v>
+                      <o n="Instance" t="Operand">
+                        <v n="Operand">"temp_ctrl"</v>
+                        <v n="Type">"fb_temp_ctrl"</v>
+                        <v n="Comment">""</v>
+                        <v n="SymbolComment">" temperature controller"</v>
+                        <v n="Address">""</v>
+                        <o n="Flags" t="Flags">
+                          <v n="Flags">0</v>
+                          <v n="Fixed">false</v>
+                        </o>
+                        <v n="LValue">false</v>
+                        <v n="Boolean">false</v>
+                        <v n="Id">1342L</v>
+                      </o>
+                      <o n="OutputItems" t="OutputItemList">
+                        <l2 n="OutputItems" />
+                      </o>
+                      <o n="Flags" t="Flags">
+                        <v n="Flags">0</v>
+                        <v n="Fixed">true</v>
+                      </o>
+                      <n n="InputFlags" />
+                      <l2 n="InputItems" />
+                      <o n="InputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <o n="OutputParam" t="ParamList">
+                        <l2 n="Names" />
+                        <l2 n="Types" />
+                      </o>
+                      <v n="CallType" t="Operator">FunctionBlock</v>
+                      <v n="EN">false</v>
+                      <v n="ENO">false</v>
+                      <v n="Id">1343L</v>
+                    </o>
+                  </l2>
+                  <v n="ILActive">false</v>
+                  <v n="FBDValid">false</v>
+                  <v n="ILValid">false</v>
+                  <l2 n="ILLines" />
+                  <l2 n="Connectors" />
+                  <v n="Id">1291L</v>
+                </o>
+              </l2>
+              <v n="BranchCounter">7</v>
+              <v n="ValidIds">true</v>
+            </o>
+          </Data>
+          <TypeList>
+            <Type n="Boolean">System.Boolean</Type>
+            <Type n="BoxTreeAssign">{9873c309-1f09-4ebf-9078-42d8057ef11b}</Type>
+            <Type n="BoxTreeBox">{acfc6f68-8e3a-4af5-bf81-3dd512095a46}</Type>
+            <Type n="BoxTreeDemux">{b1d55618-017c-4bc5-990a-55c2f27d9d3a}</Type>
+            <Type n="BoxTreeOperand">{9de7f100-1b87-424c-a62e-45b0cfc85ed2}</Type>
+            <Type n="Flags">{668066f2-6069-46b3-8962-8db8d13d7db2}</Type>
+            <Type n="ILStatement">{6a53a656-0ed2-439d-9798-f11da86e9f5e}</Type>
+            <Type n="Int32">System.Int32</Type>
+            <Type n="Int64">System.Int64</Type>
+            <Type n="Network">{d9a99d73-b633-47db-b876-a752acb25871}</Type>
+            <Type n="NWLImplementationObject">{25e509de-33d4-4447-93f8-c9e4ea381c8b}</Type>
+            <Type n="Operand">{c9b2f165-48a2-4a45-8326-3952d8a3d708}</Type>
+            <Type n="Operator">{bffb3c53-f105-4e85-aba2-e30df579d75f}</Type>
+            <Type n="OutputItemList">{f40d3e09-c02c-4522-a88c-dac23558cfc4}</Type>
+            <Type n="ParamList">{71496971-9e0c-4677-a832-b9583b571130}</Type>
+            <Type n="String">System.String</Type>
+          </TypeList>
+        </XmlArchive>
+      </NWL>
+    </Implementation>
+    <ObjectProperties />
+  </POU>
+</TcPlcObject>
