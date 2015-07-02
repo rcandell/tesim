@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.0.26">
+  <POU Name="fb_unitdelay_real" Id="{4dfcd6b8-2520-44fd-8b5a-43fdd1c76784}">
+    <Declaration><![CDATA[FUNCTION_BLOCK fb_unitdelay_real
+
+VAR_INPUT
+	x:REAL;
+END_VAR
+
+VAR_OUTPUT
+	y:REAL;
+END_VAR
+
+VAR
+	xlast	:REAL;	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+y:=xlast;
+xlast:=x;]]></ST>
+    </Implementation>
+    <ObjectProperties />
+  </POU>
+</TcPlcObject>
