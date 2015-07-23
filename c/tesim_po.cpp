@@ -29,25 +29,31 @@
 #include <math.h> 
 #include <utility>
 
+#define XMV_SHMEM_NAME ("xmv_shmem")
+#define IDV_SHMEM_NAME ("idv_shmem")
+
 // function prototypes
 void print_sim_params(double tstep, double tscan, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq);
 void log_time_console(unsigned RT, double t);
 
 using namespace boost::interprocess;
 
+typedef struct { int index; double value; } xmv_pair;
+typedef struct { int index; int value;    } idv_pair;
+
 struct shm_remove
 {
 	shm_remove()
 	{
-		shared_memory_object::remove("xmv_shmem");
-		shared_memory_object::remove("idv_shmem");
+		shared_memory_object::remove(XMV_SHMEM_NAME);
+		shared_memory_object::remove(IDV_SHMEM_NAME);
 	}
 	~shm_remove()
 	{
-		shared_memory_object::remove("xmv_shmem");
-		shared_memory_object::remove("idv_shmem");
+		shared_memory_object::remove(XMV_SHMEM_NAME);
+		shared_memory_object::remove(IDV_SHMEM_NAME);
 	}
-} remover;
+};
 
 int main(int argc, char* argv[])
 {
@@ -64,6 +70,8 @@ int main(int argc, char* argv[])
 	unsigned idv_idx = 0;
 	double *xmeas, *xmv;
 	t = 0;
+
+	shm_remove remover;
 
 	// important time steps used by the simulation
 	tstep = (10.0E-3) / 3600;		// Plant update time in hours (10 milliseconds)
@@ -195,20 +203,25 @@ int main(int argc, char* argv[])
 
 	// create shared memory for control of the plant
 	using namespace boost::interprocess;
-	shared_memory_object * xmv_shm;
-	shared_memory_object * idv_shm;
-	mapped_region *reg_xmv, *reg_idv;
+	shared_memory_object * xmv_shm = 0;
+	shared_memory_object * idv_shm = 0;
 	if (shdmem_on && RT)
 	{
-		std::cout << "shared memory interface is enabled" << std::endl;
+		try
+		{
+			xmv_shm = new shared_memory_object(open_or_create, XMV_SHMEM_NAME, read_write);
+			xmv_shm->truncate(sizeof(xmv_pair));
+			std::cout << "xmv shared memory object created" << std::endl;
 
-		xmv_shm = new shared_memory_object(open_or_create, "xmv_shmem", read_write);
-		xmv_shm->truncate(sizeof(double)*TEPlant::NU);
-		reg_xmv = new mapped_region(*xmv_shm, read_write);
-
-		idv_shm = new shared_memory_object(open_or_create, "idv_shmem", read_write);
-		idv_shm->truncate(sizeof(double)*TEPlant::NIDV);
-		reg_idv = new mapped_region(*idv_shm, read_write);
+			idv_shm = new shared_memory_object(open_or_create, IDV_SHMEM_NAME, read_write);
+			idv_shm->truncate(sizeof(idv_pair));
+			std::cout << "idv shared memory object created" << std::endl;
+		}
+		catch (interprocess_exception & ex)
+		{
+			std::cout << "shared memory error: " << ex.what() << std::endl;
+			return 1;
+		}
 	}
 
 	// do we append or create a new log file?
@@ -288,13 +301,21 @@ int main(int argc, char* argv[])
 			// examine shared memory
 			if (shdmem_on && RT)
 			{
-				int *mem = static_cast<int*>(reg_idv->get_address());
+				// first update the disturbance vector
+				mapped_region reg_idv(*idv_shm, read_write);
+				idv_pair *mem1 = static_cast<idv_pair*>(reg_idv.get_address());
+				teplant->idv(mem1->index, mem1->value);
 				for (int ii = 0; ii < TEPlant::NIDV; ii++)
 				{
-					std::cout << mem[ii] << ",";
-					teplant->idv(ii, mem[ii]);
+					std::cout << (teplant->get_idv())[ii] << ",";
 				}
 				std::cout << std::endl;
+
+				// apply new control/setpoint updates
+				mapped_region reg_xmv(*idv_shm, read_write);
+				xmv_pair * mem2 = static_cast<xmv_pair*>(reg_xmv.get_address());
+				tectlr->set_xmv(mem2->index, mem2->value);
+				std::cout << "xmv " << mem2->index << "set to " << tectlr->get_xmv(mem2->index) << std::endl;
 			}
 
 			// set the disturbance
