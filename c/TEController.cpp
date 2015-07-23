@@ -156,11 +156,6 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	return m_xmv;
 }
 
-const double* TEController::get_xmv() const
-{
-	return m_xmv;
-}
-
 std::ostream& operator<< (std::ostream& lhs, const TEController& rhs)
 {
 	// manipulated variables

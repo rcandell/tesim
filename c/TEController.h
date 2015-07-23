@@ -33,8 +33,9 @@ public:
 	double* increment(double t, double dt, double* xmeas);
 
 	// set and get for xmv
-	const double* get_xmv() const;
-	const double get_xmv(unsigned idx) const { return m_xmv[idx]; }
+	const double* get_xmv() const { return m_xmv; }
+	const double  get_xmv(unsigned idx) const { return m_xmv[idx]; }
+	void set_xmv(const unsigned idx, const double xmv) { m_xmv[idx] = xmv; }
 
 	// overloaded output stream for the controller
 	friend std::ostream& operator<< (std::ostream&, const TEController&);
