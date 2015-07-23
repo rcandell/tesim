@@ -22,7 +22,7 @@ The original TE plant was written in Fortran 77.  Since that time, other impleme
 - [x] Implement wall clock synchonrization (real-time sync)
 - [x] Add support for Gilbert Elliot channel model for all variables.
 - [x] Add program options and Monte Carlo support for channel
-- [ ] Add Beckhoff ADS interface integration for measured variables.
+- [x] Add Beckhoff ADS interface integration for measured variables.
 
 ## Directories
 Directory | Purpose
