@@ -14,6 +14,8 @@
 #include <boost/timer/timer.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/program_options.hpp>
+#include <boost/interprocess/shared_memory_object.hpp>
+#include <boost/interprocess/mapped_region.hpp>
 
 #include "TENames.h"
 #include "TEIIDErrorChannel.h"
@@ -31,6 +33,22 @@
 void print_sim_params(double tstep, double tscan, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq);
 void log_time_console(unsigned RT, double t);
 
+using namespace boost::interprocess;
+
+struct shm_remove
+{
+	shm_remove()
+	{
+		shared_memory_object::remove("xmv_shmem");
+		shared_memory_object::remove("idv_shmem");
+	}
+	~shm_remove()
+	{
+		shared_memory_object::remove("xmv_shmem");
+		shared_memory_object::remove("idv_shmem");
+	}
+} remover;
+
 int main(int argc, char* argv[])
 {
 	// simulation parameters
@@ -39,6 +57,7 @@ int main(int argc, char* argv[])
 	bool RT = 0;
 	bool gechan_on = false;
 	bool idv_on = false;
+	bool shdmem_on = false;
 	double simtime = 0.0;
 	double t, tstep, tscan;
 	unsigned ksave = 1;
@@ -72,6 +91,7 @@ int main(int argc, char* argv[])
 		("xmv-pq", po::value<pq_pair>(), "xmv burst link status probabilities, (Perror:Precover)")
 		("logfile-prefix,p", po::value<std::string>(), "prefix for all of the log files")
 		("append-data,a", "append plant data to output file")
+		("shared-memory", "xmv and idv variables")
 		;
 
 	po::variables_map vm;
@@ -97,6 +117,10 @@ int main(int argc, char* argv[])
 		if (vm.count("real-time"))
 		{
 			RT = true;
+			if (vm.count("shared-memory"))
+			{
+				shdmem_on = true;
+			}
 		}
 
 		if (vm.count("simtime"))
@@ -169,6 +193,25 @@ int main(int argc, char* argv[])
 	std::ofstream xmeas_chan_log;
 	std::ofstream xmv_chan_log;
 
+	// create shared memory for control of the plant
+	using namespace boost::interprocess;
+	shared_memory_object * xmv_shm;
+	shared_memory_object * idv_shm;
+	mapped_region *reg_xmv, *reg_idv;
+	if (shdmem_on && RT)
+	{
+		std::cout << "shared memory interface is enabled" << std::endl;
+
+		xmv_shm = new shared_memory_object(open_or_create, "xmv_shmem", read_write);
+		xmv_shm->truncate(sizeof(double)*TEPlant::NU);
+		reg_xmv = new mapped_region(*xmv_shm, read_write);
+
+		idv_shm = new shared_memory_object(open_or_create, "idv_shmem", read_write);
+		idv_shm->truncate(sizeof(double)*TEPlant::NIDV);
+		reg_idv = new mapped_region(*idv_shm, read_write);
+	}
+
+	// do we append or create a new log file?
 	if (append_flag)
 	{
 		plant_log.open(log_file_prefix + "_plant.dat", std::fstream::out | std::fstream::app);
@@ -184,6 +227,7 @@ int main(int argc, char* argv[])
 	ctlr_log.open(log_file_prefix + "_tectlr.dat");
 	ctlr_log.precision(15);
 
+	// if we run in real-time, then create a time synch log
 	if (RT)
 	{
 		time_log.open(log_file_prefix + "_time.dat");
@@ -241,6 +285,18 @@ int main(int argc, char* argv[])
 		// increment the plant and controller
 		try
 		{
+			// examine shared memory
+			if (shdmem_on && RT)
+			{
+				int *mem = static_cast<int*>(reg_idv->get_address());
+				for (int ii = 0; ii < TEPlant::NIDV; ii++)
+				{
+					std::cout << mem[ii] << ",";
+					teplant->idv(ii, mem[ii]);
+				}
+				std::cout << std::endl;
+			}
+
 			// set the disturbance
 			if (idv_on)
 			{

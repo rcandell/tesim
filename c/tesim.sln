@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "run_tesims", "run_tesims\ru
 		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE} = {B61029C4-DD9A-48C4-8A41-17CA1B535DFE}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rtclient", "rtclient\rtclient.vcxproj", "{250A4C20-4722-4E74-857C-20E1B1D0A486}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -33,6 +35,10 @@ Global
 		{D1F92417-9FCE-45FC-A510-10776A998A31}.Debug|Win32.Build.0 = Debug|Win32
 		{D1F92417-9FCE-45FC-A510-10776A998A31}.Release|Win32.ActiveCfg = Release|Win32
 		{D1F92417-9FCE-45FC-A510-10776A998A31}.Release|Win32.Build.0 = Release|Win32
+		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Debug|Win32.ActiveCfg = Debug|Win32
+		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Debug|Win32.Build.0 = Debug|Win32
+		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Release|Win32.ActiveCfg = Release|Win32
+		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
