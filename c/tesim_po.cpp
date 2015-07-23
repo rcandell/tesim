@@ -23,6 +23,7 @@
 #include "TETimeSync.h"
 #include "TEPlant.h"
 #include "TEController.h"
+#include "TEADSInterface.h"
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -61,6 +62,8 @@ int main(int argc, char* argv[])
 	std::string log_file_prefix = "nochan";
 	bool append_flag = false;
 	bool RT = 0;
+	bool use_ads = false;
+	bool ads_remote = false;
 	bool gechan_on = false;
 	bool idv_on = false;
 	bool shdmem_on = false;
@@ -99,7 +102,12 @@ int main(int argc, char* argv[])
 		("xmv-pq", po::value<pq_pair>(), "xmv burst link status probabilities, (Perror:Precover)")
 		("logfile-prefix,p", po::value<std::string>(), "prefix for all of the log files")
 		("append-data,a", "append plant data to output file")
+<<<<<<< HEAD
 		("shared-memory", "xmv and idv variables")
+=======
+		("enable-ads", "turns on the ADS interface to PLC")
+		("ads-remote", "enables remote connection.  remote connection is current hard-coded to 5.20.215.224.1.1")
+>>>>>>> b11015787517468732ff444a8092e429fd9f150a
 		;
 
 	po::variables_map vm;
@@ -159,6 +167,16 @@ int main(int argc, char* argv[])
 		{
 			idv_on = true;
 			idv_idx = vm["setidv"].as<unsigned>();
+		}
+
+		if (vm.count("enable-ads"))
+		{
+			use_ads = true;
+		}
+
+		if (vm.count("ads-remote"))
+		{
+			ads_remote = true;
 		}
 
 		if (vm.count("enable-ge-channel"))
@@ -254,6 +272,28 @@ int main(int argc, char* argv[])
 		xmv_chan_log.open(log_file_prefix + "_xmv_chan.log");
 	}
 
+	// setup the ads interface
+	TEADSInterface ads;
+	if (use_ads)
+	{
+		if (ads_remote)
+		{
+			AmsAddr plc_addr;
+			plc_addr.netId.b[0] = 5;
+			plc_addr.netId.b[1] = 20; 
+			plc_addr.netId.b[2] = 215; 
+			plc_addr.netId.b[3] = 224;
+			plc_addr.netId.b[4] = 1; 
+			plc_addr.netId.b[5] = 1;
+			plc_addr.port = 851;
+			ads.connect("G_IO.XMEAS", &plc_addr);
+		}
+		else
+		{
+			ads.connect("MAIN.XMEAS", 851);
+		}
+	}
+
 	// plant shutdown indicator
 	int shutdown = 0;
 	char * plant_msg = NULL;
@@ -326,6 +366,12 @@ int main(int argc, char* argv[])
 
 			// increment the plant
 			xmeas = teplant->increment(t, tstep, xmv, &shutdown);
+
+			// send the measured variables to the PLC
+			if (use_ads)
+			{
+				ads.write(xmeas);
+			}
 
 			// apply the sensors channel
 			if (per > 0.0)

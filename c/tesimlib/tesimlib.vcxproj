@@ -78,6 +78,7 @@
     <ClInclude Include="..\ControlLoops.h" />
     <ClInclude Include="..\PI.h" />
     <ClInclude Include="..\PlantInterface.h" />
+    <ClInclude Include="..\TEADSInterface.h" />
     <ClInclude Include="..\TEController.h" />
     <ClInclude Include="..\TEErrorChannel.h" />
     <ClInclude Include="..\TEGEErrorChannel.h" />
@@ -92,6 +93,7 @@
   <ItemGroup>
     <ClCompile Include="..\ControlLoops.cpp" />
     <ClCompile Include="..\PI.cpp" />
+    <ClCompile Include="..\TEADSInterface.cpp" />
     <ClCompile Include="..\TEController.cpp" />
     <ClCompile Include="..\TEGEErrorChannel.cpp" />
     <ClCompile Include="..\TEIIDErrorChannel.cpp" />
