@@ -101,10 +101,11 @@ int main(int argc, char* argv[])
 			shared_memory_object xmeas_shm(open_only, SIM_SHMEM_NAME, read_write);
 			mapped_region reg_proc_vars(xmeas_shm, read_write);
 			double *mem = static_cast<double*>(reg_proc_vars.get_address());
-			for (unsigned ii = 0; ii < (reg_proc_vars.get_size() / sizeof(double)); ii++)
+			for (unsigned ii = 0; ii < (reg_proc_vars.get_size() / sizeof(double)) - 1; ii++)
 			{
-				std::cout << mem[ii] << std::endl;
+				std::cout << mem[ii] << ", ";
 			}
+			std::cout << mem[(reg_proc_vars.get_size() / sizeof(double))-1] << std::endl;
 		}
 
 	}
