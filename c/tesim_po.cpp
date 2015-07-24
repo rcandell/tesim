@@ -23,7 +23,9 @@
 #include "TETimeSync.h"
 #include "TEPlant.h"
 #include "TEController.h"
+#ifdef USE_ADS_IF
 #include "TEADSInterface.h"
+#endif
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -102,12 +104,9 @@ int main(int argc, char* argv[])
 		("xmv-pq", po::value<pq_pair>(), "xmv burst link status probabilities, (Perror:Precover)")
 		("logfile-prefix,p", po::value<std::string>(), "prefix for all of the log files")
 		("append-data,a", "append plant data to output file")
-<<<<<<< HEAD
 		("shared-memory", "xmv and idv variables")
-=======
 		("enable-ads", "turns on the ADS interface to PLC")
 		("ads-remote", "enables remote connection.  remote connection is current hard-coded to 5.20.215.224.1.1")
->>>>>>> b11015787517468732ff444a8092e429fd9f150a
 		;
 
 	po::variables_map vm;
@@ -272,6 +271,7 @@ int main(int argc, char* argv[])
 		xmv_chan_log.open(log_file_prefix + "_xmv_chan.log");
 	}
 
+#ifdef USE_ADS_IF
 	// setup the ads interface
 	TEADSInterface ads;
 	if (use_ads)
@@ -293,6 +293,7 @@ int main(int argc, char* argv[])
 			ads.connect("MAIN.XMEAS", 851);
 		}
 	}
+#endif 
 
 	// plant shutdown indicator
 	int shutdown = 0;
@@ -368,10 +369,12 @@ int main(int argc, char* argv[])
 			xmeas = teplant->increment(t, tstep, xmv, &shutdown);
 
 			// send the measured variables to the PLC
+#ifdef USE_ADS_IF
 			if (use_ads)
 			{
 				ads.write(xmeas);
 			}
+#endif
 
 			// apply the sensors channel
 			if (per > 0.0)
