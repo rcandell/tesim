@@ -89,7 +89,7 @@ public:
 	// set disturbance
 	// 20 different disturbance types as defined by Downs
 	// Set value in array to activate disturbance
-	void idv(unsigned idx) { m_idv[idx] = 1;  }
+	void idv(unsigned idx, int v = 1) { m_idv[idx] = v;  }
 	const int* get_idv() const { return m_idv; }
 	const int get_idv(unsigned idx) const { return m_idv[idx]; }
 
