@@ -70,11 +70,15 @@ int main(int argc, char* argv[])
 	bool idv_on = false;
 	bool shdmem_on = false;
 	double simtime = 0.0;
-	double t, tstep, tscan;
-	unsigned ksave = 1;
+	double t, tstep = 0.0005, tscan = 0.0005;
+	unsigned ksave = 20;
 	unsigned idv_idx = 0;
 	double *xmeas, *xmv;
 	t = 0;
+
+	//set point values
+	double prod_rate_sp = 22.89, reactor_pressure_sp = 2800.0, reactor_level_sp = 65.0, reactor_temp_sp = 122.9,
+		pctg_sp = 53.8, sep_level_sp = 50.0, stripper_level_sp = 50.0;
 
 	shm_remove remover;
 
@@ -92,21 +96,36 @@ int main(int argc, char* argv[])
 	po::options_description desc("Allowed options");
 	desc.add_options()
 		("help,h", "print the help message")
-		("simtime,s", po::value<double>()->required(), "set the simulation time in hours")
-		("tstep,t", po::value<double>(), "set the base time step in hours")
-		("tscan,c", po::value<double>(), "set the scan interval in hours")
-		("ksave,k", po::value<unsigned>(), "decimation factor for saving trace data")
-		("setidv,i", po::value<unsigned>(), "set the idv at index provided (1 - 20)")
-		("real-time,r", "run the simulation in real time")
+		("simtime,s", po::value<double>(&simtime)->required(), "set the simulation time in hours")
+		("tstep,t", po::value<double>(&tstep), "set the base time step in hours")
+		("tscan,c", po::value<double>(&tscan), "set the scan interval in hours")
+		("ksave,k", po::value<unsigned>(&ksave), "decimation factor for saving trace data")
+		("setidv,i", po::value<unsigned>(&idv_idx), "set the idv at index provided (1 - 20)")
+		("real-time,r", po::bool_switch(&RT)->default_value(false), "run the simulation in real time")
+		("logfile-prefix,p", po::value<std::string>(&log_file_prefix), "prefix for all of the log files")
+		("append-data,a", po::bool_switch(&append_flag)->default_value(false), "append plant data to output file")
+		
+		// shared memory
+		("shared-memory", po::bool_switch(&shdmem_on)->default_value(false), "xmv and idv variables")
+
+		// ADS interface
+		("enable-ads", po::bool_switch(&use_ads)->default_value(false), "turns on the ADS interface to PLC")
+		("ads-remote", po::bool_switch(&ads_remote)->default_value(false), "enables remote connection.  remote connection is currently hard-coded to 5.20.215.224.1.1")
+
+		// packet error rate parameters
 		("per", po::value<double>(&per), "enable iid packet error rate between 0.0 and 1.0.")
-		("enable-ge-channel,g", "enable the Gilbert Elliot channel model.  Specify pq parameter with later options.")
-		("xmeas-pq", po::value<pq_pair>(), "xmeas burst link status probabilities, (Perror:Precover)")
-		("xmv-pq", po::value<pq_pair>(), "xmv burst link status probabilities, (Perror:Precover)")
-		("logfile-prefix,p", po::value<std::string>(), "prefix for all of the log files")
-		("append-data,a", "append plant data to output file")
-		("shared-memory", "xmv and idv variables")
-		("enable-ads", "turns on the ADS interface to PLC")
-		("ads-remote", "enables remote connection.  remote connection is current hard-coded to 5.20.215.224.1.1")
+		("enable-ge-channel,g", po::bool_switch(&gechan_on)->default_value(false), "enable the Gilbert Elliot channel model.  Specify pq parameter with later options.")
+		("xmeas-pq", po::value<pq_pair>(&xmeas_pq), "xmeas burst link status probabilities, (Perror:Precover)")
+		("xmv-pq", po::value<pq_pair>(&xmv_pq), "xmv burst link status probabilities, (Perror:Precover)")
+
+		// set point overrides
+		("sp-prod-rate", po::value<double>(&prod_rate_sp),					"enables change to setpoint at time t=0, (sp_name:sp_value")
+		("sp-reactor-pressure", po::value<double>(&reactor_pressure_sp),	"enables change to setpoint at time t=0, (sp_name:sp_value")
+		("sp-reactor-level", po::value<double>(&reactor_level_sp),			"enables change to setpoint at time t=0, (sp_name:sp_value")
+		("sp-reactor-temp", po::value<double>(&reactor_temp_sp),			"enables change to setpoint at time t=0, (sp_name:sp_value")
+		("sp-pctg", po::value<double>(&pctg_sp),							"enables change to setpoint at time t=0, (sp_name:sp_value")
+		("sp-separator-level", po::value<double>(&sep_level_sp),			"enables change to setpoint at time t=0, (sp_name:sp_value")
+		("sp-stripper-level", po::value<double>(&stripper_level_sp),		"enables change to setpoint at time t=0, (sp_name:sp_value")		
 		;
 
 	po::variables_map vm;
@@ -129,6 +148,9 @@ int main(int argc, char* argv[])
 
 	try {
 
+		if (vm.count("setidv"))		{ idv_on = true; idv_idx = vm["setidv"].as<unsigned>(); }
+
+#if 0
 		if (vm.count("real-time"))
 		{
 			RT = true;
@@ -138,75 +160,70 @@ int main(int argc, char* argv[])
 			}
 		}
 
-		if (vm.count("simtime"))
-		{
-			simtime = vm["simtime"].as<double>();
-		}
+		if (vm.count("simtime"))	{ simtime = vm["simtime"].as<double>(); }
 
-		if (vm.count("tstep"))
-		{
-			tstep = vm["tstep"].as<double>();
-		}
+		if (vm.count("tstep"))		{ tstep = vm["tstep"].as<double>(); }
 
-		if (vm.count("tscan"))
-		{
-			tscan = vm["tscan"].as<double>();
-		}
-		else
-		{
-			tscan = tstep;
-		}
+		if (vm.count("tscan"))		{ tscan = vm["tscan"].as<double>(); }
+		else						{ tscan = tstep; }
 
-		if (vm.count("ksave"))
-		{
-			ksave = vm["ksave"].as<unsigned>();
-		}
+		if (vm.count("ksave"))		{ ksave = vm["ksave"].as<unsigned>(); }
 
-		if (vm.count("setidv"))
-		{
-			idv_on = true;
-			idv_idx = vm["setidv"].as<unsigned>();
-		}
+		if (vm.count("setidv"))		{ idv_on = true; idv_idx = vm["setidv"].as<unsigned>(); }
 
-		if (vm.count("enable-ads"))
-		{
-			use_ads = true;
-		}
+		if (vm.count("enable-ads"))	{ use_ads = true; }
 
-		if (vm.count("ads-remote"))
-		{
-			ads_remote = true;
-		}
+		if (vm.count("ads-remote"))	{ ads_remote = true; }
 
 		if (vm.count("enable-ge-channel"))
 		{
 			gechan_on = true;
-			if (vm.count("xmeas-pq"))
-			{
-				xmeas_pq = vm["xmeas-pq"].as<pq_pair>();
-			}
+			if (vm.count("xmeas-pq")) xmeas_pq = vm["xmeas-pq"].as<pq_pair>();
 
-			if (vm.count("xmv-pq"))
-			{
-				xmv_pq = vm["xmv-pq"].as<pq_pair>();
-			}
+			if (vm.count("xmv-pq")) xmv_pq = vm["xmv-pq"].as<pq_pair>();
 		}
 
-		if (vm.count("logfile-prefix"))
-		{
-			log_file_prefix = vm["logfile-prefix"].as<std::string>();
-		}
+		if (vm.count("logfile-prefix")) log_file_prefix = vm["logfile-prefix"].as<std::string>();
 
-		if (vm.count("append-data"))
-		{
-			append_flag = true;
-		}
+		if (vm.count("append-data")) append_flag = true;
+#endif // 0
+
 	}
 	catch (po::error& e) {
 		std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
 		std::cerr << desc << std::endl;
 		return 0;
 	}
+
+	// disable shared memory interface in fast mode
+	if (!RT) shdmem_on = false;
+
+	// print the simulation parameters
+	std::cout << "TESIM Parameters: " << std::endl
+		<< "Simulation time:             " << simtime << std::endl
+		<< "Tstep:                       " << tstep << std::endl
+		<< "Tscan:                       " << tscan << std::endl
+		<< "Ksave:                       " << ksave << std::endl
+		<< "log file prefix:             " << log_file_prefix << std::endl
+		<< "Append:                      " << append_flag << std::endl
+		<< "Run RT:                      " << RT << std::endl
+		<< "Use ADS:                     " << use_ads << std::endl
+		<< "Use remote ADS:              " << ads_remote << std::endl
+		<< "IID chan per:                " << per << std::endl
+		<< "Enabled GE chan:             " << gechan_on << std::endl
+		<< "GE chan xmeas:               " << xmeas_pq << std::endl
+		<< "GE chan xmv:                 " << xmv_pq << std::endl
+		<< "Enable IDV:                  " << idv_on << std::endl
+		<< "IDV index:                   " << idv_idx << std::endl
+		<< "Enable shdmem:               " << shdmem_on << std::endl
+		<< "Prod Rate:                   " << prod_rate_sp << std::endl
+		<< "Reactor pressure:            " << reactor_pressure_sp << std::endl
+		<< "Reactor level:               " << reactor_level_sp << std::endl
+		<< "Reactor temp:                " << reactor_temp_sp << std::endl
+		<< "Pct G:                       " << pctg_sp << std::endl
+		<< "Sep level:                   " << sep_level_sp << std::endl
+		<< "Strip level:                 " << stripper_level_sp << std::endl
+		<< std::endl;
 
 	TEPlant* teplant = TEPlant::getInstance();
 	TEController* tectlr = TEController::getInstance();
@@ -302,7 +319,7 @@ int main(int argc, char* argv[])
 	// derived simulation parameters
 	int nsteps = int(simtime/tstep) + 1;
 	int steps_per_scan = (int)round(tscan / tstep);
-	print_sim_params(tstep, tscan, simtime, RT, xmeas_pq, xmv_pq);
+	//print_sim_params(tstep, tscan, simtime, RT, xmeas_pq, xmv_pq);
 
 	// auto timer used as a performance profiler
 	boost::timer::auto_cpu_timer t_wall_auto;
@@ -314,6 +331,15 @@ int main(int argc, char* argv[])
 	// init the controller
 	tectlr->initialize(tscan);
 	xmv = (double*)(tectlr->get_xmv());
+
+	// apply the overrides to the set-points
+	if (vm.count("sp-prod-rate"))			{ tectlr->prod_rate_sp(prod_rate_sp); }
+	if (vm.count("sp-reactor-pressure"))	{ tectlr->reactor_pressure_sp(reactor_pressure_sp); }
+	if (vm.count("sp-reactor-level"))		{ tectlr->reactor_level_sp(reactor_level_sp); }
+	if (vm.count("sp-reactor-temp"))		{ tectlr->reactor_temp_sp(reactor_temp_sp); }
+	if (vm.count("sp-pctg"))				{ tectlr->pctg_sp(pctg_sp); }
+	if (vm.count("sp-separator-level"))		{ tectlr->sep_level_sp(sep_level_sp); }
+	if (vm.count("sp-stripper-level"))		{ tectlr->strip_level_sp(stripper_level_sp); }
 
 	// init the plant
 	teplant->initialize();
@@ -346,11 +372,13 @@ int main(int argc, char* argv[])
 				mapped_region reg_idv(*idv_shm, read_write);
 				idv_pair *mem1 = static_cast<idv_pair*>(reg_idv.get_address());
 				teplant->idv(mem1->index, mem1->value);
+#if 0
 				for (int ii = 0; ii < TEPlant::NIDV; ii++)
 				{
 					std::cout << (teplant->get_idv())[ii] << ",";
 				}
 				std::cout << std::endl;
+#endif // 0
 
 				// apply new control/setpoint updates
 				mapped_region reg_xmv(*xmv_shm, read_write);
@@ -462,11 +490,11 @@ void log_time_console(unsigned RT, double t)
 void print_sim_params(double tstep, double tscan, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq)
 {
 	BOOST_LOG_TRIVIAL(info) << std::endl << "TE simulation" << std::endl
-	  << "simulation time: " << simtime << " hrs" << std::endl
-	  << "plant dt: " << tstep << " hrs" << std::endl
-	  << "ctlr dt: " << tscan << " hrs" << std::endl
-	  << "Real-time: " << rt << std::endl
-	  << "PER (xmeas): " << xmeas_pq << std::endl
-	  << "PER (xmv): " << xmv_pq << std::endl;
+		<< "simulation time: " << simtime << " hrs" << std::endl
+		<< "plant dt: " << tstep << " hrs" << std::endl
+		<< "ctlr dt: " << tscan << " hrs" << std::endl
+		<< "Real-time: " << rt << std::endl
+		<< "PER (xmeas): " << xmeas_pq << std::endl
+		<< "PER (xmv): " << xmv_pq << std::endl;
 }
 
