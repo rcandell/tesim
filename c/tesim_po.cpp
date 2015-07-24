@@ -34,6 +34,7 @@
 
 #define XMV_SHMEM_NAME ("xmv_shmem")
 #define IDV_SHMEM_NAME ("idv_shmem")
+#define SIM_SHMEM_NAME ("sim_shmem")
 
 // function prototypes
 void print_sim_params(double tstep, double tscan, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq);
@@ -48,11 +49,13 @@ struct shm_remove
 {
 	shm_remove()
 	{
+		shared_memory_object::remove(SIM_SHMEM_NAME);
 		shared_memory_object::remove(XMV_SHMEM_NAME);
 		shared_memory_object::remove(IDV_SHMEM_NAME);
 	}
 	~shm_remove()
 	{
+		shared_memory_object::remove(SIM_SHMEM_NAME);
 		shared_memory_object::remove(XMV_SHMEM_NAME);
 		shared_memory_object::remove(IDV_SHMEM_NAME);
 	}
@@ -67,8 +70,9 @@ int main(int argc, char* argv[])
 	bool use_ads = false;
 	bool ads_remote = false;
 	bool gechan_on = false;
-	bool idv_on = false;
+	bool enable_idv = false;
 	bool shdmem_on = false;
+	bool ext_control = false;
 	double simtime = 0.0;
 	double t, tstep = 0.0005, tscan = 0.0005;
 	unsigned ksave = 20;
@@ -81,6 +85,13 @@ int main(int argc, char* argv[])
 		pctg_sp = 53.8, sep_level_sp = 50.0, stripper_level_sp = 50.0;
 
 	shm_remove remover;
+
+	// print the simulation parameters
+	std::cout << "TE Simulator C++" << std::endl
+		<< "  developed by Rick Candell and Tim Zimmerman" << std::endl
+		<< "  National Institure of Standards and Technology (USA)" << std::endl
+		<< "  Software is Public Domain" << std::endl
+		<< "******************************************************" << std::endl << std::endl;
 
 	// important time steps used by the simulation
 	tstep = (10.0E-3) / 3600;		// Plant update time in hours (10 milliseconds)
@@ -100,13 +111,16 @@ int main(int argc, char* argv[])
 		("tstep,t", po::value<double>(&tstep), "set the base time step in hours")
 		("tscan,c", po::value<double>(&tscan), "set the scan interval in hours")
 		("ksave,k", po::value<unsigned>(&ksave), "decimation factor for saving trace data")
-		("setidv,i", po::value<unsigned>(&idv_idx), "set the idv at index provided (1 - 20)")
 		("real-time,r", po::bool_switch(&RT)->default_value(false), "run the simulation in real time")
 		("logfile-prefix,p", po::value<std::string>(&log_file_prefix), "prefix for all of the log files")
 		("append-data,a", po::bool_switch(&append_flag)->default_value(false), "append plant data to output file")
-		
+
+		// disturbances
+		("setidv,i", po::value<unsigned>(&idv_idx), "set the idv at index provided (1 - 20)")
+
 		// shared memory
 		("shared-memory", po::bool_switch(&shdmem_on)->default_value(false), "xmv and idv variables")
+		("external-ctrl", po::bool_switch(&ext_control)->default_value(false), "read xmv from shared memory (i.e. external controller)")
 
 		// ADS interface
 		("enable-ads", po::bool_switch(&use_ads)->default_value(false), "turns on the ADS interface to PLC")
@@ -146,48 +160,9 @@ int main(int argc, char* argv[])
 	}
 	po::notify(vm);
 
-	try {
-
-		if (vm.count("setidv"))		{ idv_on = true; idv_idx = vm["setidv"].as<unsigned>(); }
-
-#if 0
-		if (vm.count("real-time"))
-		{
-			RT = true;
-			if (vm.count("shared-memory"))
-			{
-				shdmem_on = true;
-			}
-		}
-
-		if (vm.count("simtime"))	{ simtime = vm["simtime"].as<double>(); }
-
-		if (vm.count("tstep"))		{ tstep = vm["tstep"].as<double>(); }
-
-		if (vm.count("tscan"))		{ tscan = vm["tscan"].as<double>(); }
-		else						{ tscan = tstep; }
-
-		if (vm.count("ksave"))		{ ksave = vm["ksave"].as<unsigned>(); }
-
-		if (vm.count("setidv"))		{ idv_on = true; idv_idx = vm["setidv"].as<unsigned>(); }
-
-		if (vm.count("enable-ads"))	{ use_ads = true; }
-
-		if (vm.count("ads-remote"))	{ ads_remote = true; }
-
-		if (vm.count("enable-ge-channel"))
-		{
-			gechan_on = true;
-			if (vm.count("xmeas-pq")) xmeas_pq = vm["xmeas-pq"].as<pq_pair>();
-
-			if (vm.count("xmv-pq")) xmv_pq = vm["xmv-pq"].as<pq_pair>();
-		}
-
-		if (vm.count("logfile-prefix")) log_file_prefix = vm["logfile-prefix"].as<std::string>();
-
-		if (vm.count("append-data")) append_flag = true;
-#endif // 0
-
+	try 
+	{
+		if (vm.count("setidv"))		{ enable_idv = true; }
 	}
 	catch (po::error& e) {
 		std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
@@ -196,10 +171,20 @@ int main(int argc, char* argv[])
 	}
 
 	// disable shared memory interface in fast mode
+	if (!RT && shdmem_on)
+	{
+		std::cout << "shared memory mode requires real-time mode" << std::endl;
+		return(1);
+	}
+	if ( !(shdmem_on && RT) && ext_control )
+	{
+		std::cout << "enabling real-time mode and shared memory for external control" << std::endl;
+		shdmem_on = true;
+		RT = true;
+	}
 	if (!RT) shdmem_on = false;
 
-	// print the simulation parameters
-	std::cout << "TESIM Parameters: " << std::endl
+	std::cout 
 		<< "Simulation time:             " << simtime << std::endl
 		<< "Tstep:                       " << tstep << std::endl
 		<< "Tscan:                       " << tscan << std::endl
@@ -213,9 +198,10 @@ int main(int argc, char* argv[])
 		<< "Enabled GE chan:             " << gechan_on << std::endl
 		<< "GE chan xmeas:               " << xmeas_pq << std::endl
 		<< "GE chan xmv:                 " << xmv_pq << std::endl
-		<< "Enable IDV:                  " << idv_on << std::endl
+		<< "Enable IDV:                  " << enable_idv << std::endl
 		<< "IDV index:                   " << idv_idx << std::endl
 		<< "Enable shdmem:               " << shdmem_on << std::endl
+		<< "Use ext. controller:         " << ext_control << std::endl
 		<< "Prod Rate:                   " << prod_rate_sp << std::endl
 		<< "Reactor pressure:            " << reactor_pressure_sp << std::endl
 		<< "Reactor level:               " << reactor_level_sp << std::endl
@@ -237,19 +223,22 @@ int main(int argc, char* argv[])
 
 	// create shared memory for control of the plant
 	using namespace boost::interprocess;
-	shared_memory_object * xmv_shm = 0;
-	shared_memory_object * idv_shm = 0;
+	shared_memory_object * xmv_shm = 0, * idv_shm = 0, * sim_shm = 0;
 	if (shdmem_on && RT)
 	{
 		try
 		{
-			xmv_shm = new shared_memory_object(open_or_create, XMV_SHMEM_NAME, read_write);
-			xmv_shm->truncate(sizeof(xmv_pair));
-			std::cout << "xmv shared memory object created" << std::endl;
-
 			idv_shm = new shared_memory_object(open_or_create, IDV_SHMEM_NAME, read_write);
 			idv_shm->truncate(sizeof(idv_pair));
 			std::cout << "idv shared memory object created" << std::endl;
+
+			xmv_shm = new shared_memory_object(open_or_create, XMV_SHMEM_NAME, read_write);
+			xmv_shm->truncate(sizeof(double)*TEPlant::NU);
+			std::cout << "xmv shared memory object created" << std::endl;
+
+			sim_shm = new shared_memory_object(open_or_create, SIM_SHMEM_NAME, read_write);
+			sim_shm->truncate(sizeof(double)*TEPlant::NY + sizeof(double)*TEPlant::NU);
+			std::cout << "xmeas shared memory object created" << std::endl;
 		}
 		catch (interprocess_exception & ex)
 		{
@@ -365,30 +354,17 @@ int main(int argc, char* argv[])
 		// increment the plant and controller
 		try
 		{
-			// examine shared memory
+			// examine shared memory for disturbances
 			if (shdmem_on && RT)
 			{
 				// first update the disturbance vector
 				mapped_region reg_idv(*idv_shm, read_write);
-				idv_pair *mem1 = static_cast<idv_pair*>(reg_idv.get_address());
-				teplant->idv(mem1->index, mem1->value);
-#if 0
-				for (int ii = 0; ii < TEPlant::NIDV; ii++)
-				{
-					std::cout << (teplant->get_idv())[ii] << ",";
-				}
-				std::cout << std::endl;
-#endif // 0
-
-				// apply new control/setpoint updates
-				mapped_region reg_xmv(*xmv_shm, read_write);
-				xmv_pair * mem2 = static_cast<xmv_pair*>(reg_xmv.get_address());
-				tectlr->set_xmv(mem2->index, mem2->value);
-				std::cout << "xmv " << mem2->index << "set to " << tectlr->get_xmv(mem2->index) << std::endl;
+				idv_pair *mem = static_cast<idv_pair*>(reg_idv.get_address());
+				teplant->idv(mem->index, mem->value);
 			}
 
-			// set the disturbance
-			if (idv_on)
+			// set the disturbance to hold on from command line
+			if (enable_idv)
 			{
 				teplant->idv(idv_idx-1);
 			}
@@ -396,12 +372,18 @@ int main(int argc, char* argv[])
 			// increment the plant
 			xmeas = teplant->increment(t, tstep, xmv, &shutdown);
 
+			if (shdmem_on && RT)
+			{
+				// copy the xmeas values to shared memory
+				mapped_region reg_sim(*sim_shm, read_write);
+				double *shm_sim = static_cast<double*>(reg_sim.get_address());
+				memcpy(shm_sim, xmeas, sizeof(double)*TEPlant::NY);
+				memcpy(shm_sim + TEPlant::NY, xmv, sizeof(double)*TEPlant::NU);
+			}
+
 			// send the measured variables to the PLC
 #ifdef USE_ADS_IF
-			if (use_ads)
-			{
-				ads.write(xmeas);
-			}
+			if (use_ads) { ads.write(xmeas); }
 #endif
 
 			// apply the sensors channel
@@ -428,7 +410,17 @@ int main(int argc, char* argv[])
 		// run the controller if time is at a scan boundary
 		if (!(ii%steps_per_scan))
 		{
-			xmv = tectlr->increment(t, tscan, xmeas);
+			if (! (ext_control  && shdmem_on && RT) )
+			{
+				xmv = tectlr->increment(t, tscan, xmeas);
+			}
+			else
+			{
+				// apply new manipulation updates from external controller
+				mapped_region reg_xmv(*xmv_shm, read_write);
+				double * mem = static_cast<double*>(reg_xmv.get_address());
+				memcpy(xmv, mem, sizeof(double)*TEPlant::NU);
+			}
 
 			// apply the control channel
 			if (per > 0.0)
@@ -469,6 +461,11 @@ int main(int argc, char* argv[])
 		// every iteration using a method that truncates the floating point error.
 		t = (double)(ii + 1) * tstep;
 	}
+
+	// destroy the shared memory objects
+	if (xmv_shm) delete xmv_shm;
+	if (sim_shm) delete sim_shm;
+	if (idv_shm) delete idv_shm;
 
 	std::cout << std::endl;
 	return 0;
