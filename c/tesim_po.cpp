@@ -353,7 +353,7 @@ int main(int argc, char* argv[])
 				std::cout << std::endl;
 
 				// apply new control/setpoint updates
-				mapped_region reg_xmv(*idv_shm, read_write);
+				mapped_region reg_xmv(*xmv_shm, read_write);
 				xmv_pair * mem2 = static_cast<xmv_pair*>(reg_xmv.get_address());
 				tectlr->set_xmv(mem2->index, mem2->value);
 				std::cout << "xmv " << mem2->index << "set to " << tectlr->get_xmv(mem2->index) << std::endl;
