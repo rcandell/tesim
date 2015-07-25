@@ -23,6 +23,17 @@ class TEController
 
 public:
 
+	enum Setpoints
+	{
+		PROD_RATE,
+		REACTOR_PRESS,
+		REACTOR_LEVEL,
+		REACTOR_TEMP,
+		PCTG,
+		SEP_LEVEL,
+		STRIP_LEVEL
+	};
+
 	static TEController* getInstance();
 	virtual ~TEController();
 

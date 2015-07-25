@@ -30,7 +30,7 @@ TEController::~TEController()
 
 void TEController::initialize(double tscan)
 {
-	// setpoints 
+	// default setpoints 
 	_prod_rate_sp = 22.89;
 	_reactor_pressure_sp = 2800.0;
 	_reactor_level_sp = 65.0;
@@ -102,7 +102,7 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	std::memcpy(m_xmeas, new_xmeas, TEPlant::NY*sizeof(double));
 
 	//
-	double prodSP = 0, E_Adj, loop14 = 0, loop15 = 0;
+	double E_Adj, loop14 = 0, loop15 = 0;
 
 	// Update the % G in product
 	E_Adj = pctG_inProduct->increment(_pctg_sp, new_xmeas[39], t, dt);
@@ -115,6 +115,8 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	double tMod = fmod(t, 0.1);
 	if ((tMod < 0.00005) || (0.1 - tMod) < 0.00005 || t == 0) {
 
+		// TODO: Verify how these constants are determined and 
+		//       how changing other setpoints may affect them
 		loop14 = yA_ControlLoop->increment(63.1372, yA, t, dt);
 		loop15 = yAC_ControlLoop->increment(51., yAC, t, dt);
 
