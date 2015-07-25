@@ -39,23 +39,23 @@ namespace std {
 		return lhs;
 	}
 
-	// string double pair
-	std::istream& operator>>(std::istream& in, sp_strdbl_pair& ss) {
+	// int double pair for setpoints
+	std::istream& operator>>(std::istream& in, sp_pair& ss) {
 		std::string s;
 		in >> s;
 		const size_t sep = s.find(':');
 		if (sep == std::string::npos) {
-			ss.first = "";
+			ss.first = -1;
 			ss.second = std::stod(s);
 		}
 		else {
-			ss.first = s.substr(0, sep);
+			ss.first = std::stoi(s.substr(0, sep));
 			ss.second = std::stod(s.substr(sep + 1));
 		}
 		return in;
 	}
 
-	std::ostream& operator<<(std::ostream& lhs, const sp_strdbl_pair& rhs)
+	std::ostream& operator<<(std::ostream& lhs, const sp_pair& rhs)
 	{
 		lhs << rhs.first << "\t" << rhs.second;
 		return lhs;
