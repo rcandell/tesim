@@ -16,14 +16,15 @@
 #include <utility>
 
 typedef std::pair<double, double> pq_pair;
-typedef std::pair<std::string, double> sp_strdbl_pair;
+typedef std::pair<int, double> sp_pair;
+typedef std::pair<bool, sp_pair> sp_override_pair;
 
 namespace std {
 	std::istream& operator>>(std::istream& in, pq_pair& ss);
 	std::ostream& operator<<(std::ostream& in, const pq_pair& ss);
 
-	std::istream& operator>>(std::istream& in, sp_strdbl_pair& ss);
-	std::ostream& operator<<(std::ostream& in, const sp_strdbl_pair& ss);
+	std::istream& operator>>(std::istream& in, sp_pair& ss);
+	std::ostream& operator<<(std::ostream& in, const sp_pair& ss);
 }
 
 #endif 

@@ -129,7 +129,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ADS Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="tesim_po.cpp" />
+    <ClCompile Include="tesim_main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="tesimlib\tesimlib.vcxproj">

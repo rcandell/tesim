@@ -14,10 +14,12 @@
 #include <boost/program_options.hpp>
 #include <boost/interprocess/shared_memory_object.hpp>
 #include <boost/interprocess/mapped_region.hpp>
+#include "TEController.h"
 
 #define XMV_SHMEM_NAME ("xmv_shmem")
 #define IDV_SHMEM_NAME ("idv_shmem")
 #define SIM_SHMEM_NAME ("sim_shmem")
+#define SP_SHMEM_NAME  ("sp_shmem")
 
 #include <fstream>
 #include <iostream>
@@ -38,6 +40,11 @@ int main(int argc, char* argv[])
 	double xmv_value = 0.0;
 	bool print_all = false;
 
+	bool apply_sp_override = false;
+	double prod_rate_sp, reactor_pressure_sp, reactor_level_sp, reactor_temp_sp,
+		pctg_sp, sep_level_sp, stripper_level_sp;
+
+
 	// program options
 	namespace po = boost::program_options;
 	po::options_description desc("Allowed options");
@@ -48,6 +55,15 @@ int main(int argc, char* argv[])
 		("xmv-index,x",		po::value<unsigned>(&xmv_index),		"index (1-based) of the new xmv/setpoint")
 		("xmv-value,v",		po::value<double>(&xmv_value),			"value for the new xmv/setpoint")
 		("print-all-vars,p", po::bool_switch(&print_all)->default_value(false), "list the measured values")
+
+		// set point overrides
+		("sp-prod-rate", po::value<double>(&prod_rate_sp), "enables change to setpoint")
+		("sp-reactor-pressure", po::value<double>(&reactor_pressure_sp), "enables change to setpoint")
+		("sp-reactor-level", po::value<double>(&reactor_level_sp), "enables change to setpoint")
+		("sp-reactor-temp", po::value<double>(&reactor_temp_sp), "enables change to setpoint")
+		("sp-pctg", po::value<double>(&pctg_sp), "enables change to setpoint")
+		("sp-separator-level", po::value<double>(&sep_level_sp), "enables change to setpoint")
+		("sp-stripper-level", po::value<double>(&stripper_level_sp), "enables change to setpoint")
 		;
 
 	po::variables_map vm;
@@ -60,6 +76,14 @@ int main(int argc, char* argv[])
 		}
 
 		po::notify(vm);
+
+		if (vm.count("sp-prod-rate")) { apply_sp_override = true; }
+		else if (vm.count("sp-reactor-pressure")) { apply_sp_override = true; }
+		else if (vm.count("sp-reactor-level")) { apply_sp_override = true; }
+		else if (vm.count("sp-reactor-temp")) { apply_sp_override = true; }
+		else if (vm.count("sp-pctg")) { apply_sp_override = true; }
+		else if (vm.count("sp-separator-level")) { apply_sp_override = true; }
+		else if (vm.count("sp-stripper-level")) { apply_sp_override = true; }
 	}
 	catch (po::error& e) {
 		std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
@@ -106,6 +130,56 @@ int main(int argc, char* argv[])
 				std::cout << mem[ii] << ", ";
 			}
 			std::cout << mem[(reg_proc_vars.get_size() / sizeof(double))-1] << std::endl;
+		}
+
+		if (apply_sp_override)
+		{
+			shared_memory_object sp_shm(open_only, SP_SHMEM_NAME, read_write);
+			mapped_region reg_sp(sp_shm, read_write);
+			sp_override_pair *mem = static_cast<sp_override_pair*>(reg_sp.get_address());
+
+			if (vm.count("sp-prod-rate")) 
+			{
+				mem->first = true;
+				mem->second.first = TEController::PROD_RATE;
+				mem->second.second = prod_rate_sp;
+			}
+			else if (vm.count("sp-reactor-pressure")) 
+			{
+				mem->first = true;
+				mem->second.first = TEController::REACTOR_PRESS;
+				mem->second.second = reactor_pressure_sp;
+			}
+			else if (vm.count("sp-reactor-level"))
+			{
+				mem->first = true;
+				mem->second.first = TEController::REACTOR_LEVEL;
+				mem->second.second = reactor_level_sp;
+			}
+			else if (vm.count("sp-reactor-temp"))
+			{
+				mem->first = true;
+				mem->second.first = TEController::REACTOR_TEMP;
+				mem->second.second = reactor_temp_sp;
+			}
+			else if (vm.count("sp-pctg"))
+			{
+				mem->first = true;
+				mem->second.first = TEController::PCTG;
+				mem->second.second = pctg_sp;
+			}
+			else if (vm.count("sp-separator-level"))
+			{
+				mem->first = true;
+				mem->second.first = TEController::SEP_LEVEL;
+				mem->second.second = sep_level_sp;
+			}
+			else if (vm.count("sp-stripper-level"))
+			{
+				mem->first = true;
+				mem->second.first = TEController::STRIP_LEVEL;
+				mem->second.second = stripper_level_sp;
+			}
 		}
 
 	}
