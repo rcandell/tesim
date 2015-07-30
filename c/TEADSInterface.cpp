@@ -8,6 +8,8 @@
 
 */
 
+#ifdef USE_ADS_IF
+
 #include "TEPlant.h"
 #include "TEADSInterface.h"
 #include <string>
@@ -103,3 +105,5 @@ void
 TEADSInterface::read(double* x)
 {
 }
+
+#endif //USE_ADS_IF

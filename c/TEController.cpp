@@ -30,6 +30,15 @@ TEController::~TEController()
 
 void TEController::initialize(double tscan)
 {
+	// default setpoints 
+	_prod_rate_sp = 22.89;
+	_reactor_pressure_sp = 2800.0;
+	_reactor_level_sp = 65.0;
+	_reactor_temp_sp = 122.9;
+	_pctg_sp = 53.8;
+	_sep_level_sp = 50.0;
+	_stripper_level_sp = 50.0;
+
 	// measured variables
 	m_xmeas = new double[TEPlant::NY]();
 	get_curr_xmeas(m_xmeas);
@@ -93,10 +102,10 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	std::memcpy(m_xmeas, new_xmeas, TEPlant::NY*sizeof(double));
 
 	//
-	double prodSP = 0, E_Adj, loop14 = 0, loop15 = 0;
+	double E_Adj, loop14 = 0, loop15 = 0;
 
 	// Update the % G in product
-	E_Adj = pctG_inProduct->increment(53.8, new_xmeas[39], t, dt);
+	E_Adj = pctG_inProduct->increment(_pctg_sp, new_xmeas[39], t, dt);
 
 	// Update the A and C Measurements
 	yAC = new_xmeas[22] + new_xmeas[24];
@@ -106,6 +115,8 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	double tMod = fmod(t, 0.1);
 	if ((tMod < 0.00005) || (0.1 - tMod) < 0.00005 || t == 0) {
 
+		// TODO: Verify how these constants are determined and 
+		//       how changing other setpoints may affect them
 		loop14 = yA_ControlLoop->increment(63.1372, yA, t, dt);
 		loop15 = yAC_ControlLoop->increment(51., yAC, t, dt);
 
@@ -127,7 +138,7 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	last_tMod = tMod;
 
 	// Update the production rate
-	Fp = productionRate->increment(22.89, new_xmeas[16], t, dt);
+	Fp = productionRate->increment(_prod_rate_sp, new_xmeas[16], t, dt);
 
 	// Update the feedforward
 	mP_G_SP = pctG_inProduct->getPctGsp();
@@ -141,23 +152,18 @@ double* TEController::increment(double t, double dt, double* new_xmeas)
 	m_xmv[1] = E_FeedRateLoop->increment((r[2] * Fp), new_xmeas[2], t, dt);
 	m_xmv[3] = C_FeedRateLoop->increment((r[3] * Fp), new_xmeas[3], t, dt);
 
-	r[4] = ReactorPressureLoop->increment(2800., new_xmeas[6], t, dt);
+	r[4] = ReactorPressureLoop->increment(_reactor_pressure_sp, new_xmeas[6], t, dt);
 	m_xmv[5] = PurgeRateLoop->increment((r[4] * Fp), new_xmeas[9], t, dt);
-	double sepTempSP = ReactorLevelLoop->increment(65., new_xmeas[7], t, dt);
-	m_xmv[9] = ReactorTemperatureLoop->increment(122.9, new_xmeas[8], t, dt);
+	double sepTempSP = ReactorLevelLoop->increment(_reactor_level_sp, new_xmeas[7], t, dt);
+	m_xmv[9] = ReactorTemperatureLoop->increment(_reactor_temp_sp, new_xmeas[8], t, dt);
 
-	r[5] = SeparatorLevelLoop->increment(50., new_xmeas[11], t, dt);
+	r[5] = SeparatorLevelLoop->increment(_sep_level_sp, new_xmeas[11], t, dt);
 	m_xmv[6] = SeparatorFlowLoop->increment((r[5] * Fp), new_xmeas[13], t, dt);
 	m_xmv[10] = SeparatorTemperatureLoop->increment(sepTempSP, new_xmeas[10], t, dt);
 
-	r[6] = StripperLevelLoop->increment(50., new_xmeas[14], t, dt);
+	r[6] = StripperLevelLoop->increment(_stripper_level_sp, new_xmeas[14], t, dt);
 	m_xmv[7] = StripperFlowLoop->increment((r[6] * Fp), new_xmeas[16], t, dt);
 
-	return m_xmv;
-}
-
-const double* TEController::get_xmv() const
-{
 	return m_xmv;
 }
 
