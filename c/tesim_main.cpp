@@ -90,10 +90,6 @@ int main(int argc, char* argv[])
 		<< "  Software is Public Domain" << std::endl
 		<< "******************************************************" << std::endl << std::endl;
 
-	// important time steps used by the simulation
-	tstep = (10.0E-3) / 3600;		// Plant update time in hours (10 milliseconds)
-	tscan = tstep;					// PLC scan time in hours (1.8 seconds, same as Ricker)
-
 	// error channel parameters
 	double per = 0.0;
 	pq_pair xmeas_pq = std::make_pair(0.0, 1.0);
@@ -219,7 +215,7 @@ int main(int argc, char* argv[])
 
 	// create shared memory for control of the plant
 	using namespace boost::interprocess;
-	shared_memory_object * xmv_shm = 0, *idv_shm = 0, *sim_shm = 0, *sp_shm;
+	shared_memory_object * xmv_shm = 0, *idv_shm = 0, *sim_shm = 0, *sp_shm = 0;
 	shm_remove remover;
 	if (shdmem_on && RT)
 	{
