@@ -20,7 +20,8 @@ TEGEErrorChannel::TEGEErrorChannel(pq_pair error_rate, unsigned dlen, const doub
 {
 	m_previous = new double[m_dlen]();
 	m_chan_state = new bool[m_dlen]();
-	std::fill_n(m_chan_state, dlen, true); // init to good state
+	for (unsigned ii = 0; ii < dlen; ii++) m_chan_state[ii] = true;  // init to good state
+	// std::fill_n(m_chan_state, dlen, true); // init to good state
 
 	// copy the initial values into state memory
 	for (unsigned ii = 0; ii < m_dlen; ii++)
