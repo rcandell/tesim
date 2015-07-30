@@ -23,6 +23,17 @@ class TEController
 
 public:
 
+	enum Setpoints
+	{
+		PROD_RATE,
+		REACTOR_PRESS,
+		REACTOR_LEVEL,
+		REACTOR_TEMP,
+		PCTG,
+		SEP_LEVEL,
+		STRIP_LEVEL
+	};
+
 	static TEController* getInstance();
 	virtual ~TEController();
 
@@ -33,11 +44,21 @@ public:
 	double* increment(double t, double dt, double* xmeas);
 
 	// set and get for xmv
-	const double* get_xmv() const;
-	const double get_xmv(unsigned idx) const { return m_xmv[idx]; }
+	const double* get_xmv() const { return m_xmv; }
+	const double  get_xmv(unsigned idx) const { return m_xmv[idx]; }
+	void set_xmv(const unsigned idx, const double xmv) { m_xmv[idx] = xmv; }
 
 	// overloaded output stream for the controller
 	friend std::ostream& operator<< (std::ostream&, const TEController&);
+
+	// setpoint accessors
+	void prod_rate_sp(double prod_rate_sp)		{ _prod_rate_sp = prod_rate_sp; }
+	void reactor_pressure_sp(double sp)			{ _reactor_pressure_sp = sp; }
+	void reactor_level_sp(double sp)			{ _reactor_level_sp = sp; }
+	void reactor_temp_sp(double sp)				{ _reactor_temp_sp = sp;  }
+	void sep_level_sp(double sp)				{ _sep_level_sp = sp; }
+	void strip_level_sp(double sp)				{ _stripper_level_sp = sp; }
+	void pctg_sp(double sp)						{ _pctg_sp = sp; }
 
 private:
 
@@ -61,6 +82,10 @@ private:
 	double *m_xmv;
 	double *r;
 	double Fp;
+
+	//set points
+	double _prod_rate_sp, _reactor_pressure_sp, _reactor_level_sp, _reactor_temp_sp,
+		_pctg_sp, _sep_level_sp, _stripper_level_sp;
 
 	// Loop Pointers
 	SimpleDiscretePILoop* A_FeedRateLoop;
