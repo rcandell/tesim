@@ -276,7 +276,7 @@ int main(int argc, char* argv[])
 
 #ifdef USE_ADS_IF
 	// setup the ads interface
-	TEADSInterface ads;
+	TEADSInterface ads, ads_mbs;
 	if (use_ads)
 	{
 		if (ads_remote)
@@ -290,10 +290,12 @@ int main(int argc, char* argv[])
 			plc_addr.netId.b[5] = 1;
 			plc_addr.port = 851;
 			ads.connect("G_IO.XMEAS", &plc_addr);
+			ads_mbs.connect("G_IO.MBS_XMEAS", &plc_addr);
 		}
 		else
 		{
 			ads.connect("MAIN.XMEAS", 851);
+			ads_mbs.connect("G_IO.MBS_XMEAS", 851);
 		}
 	}
 #endif 
@@ -381,7 +383,10 @@ int main(int argc, char* argv[])
 
 			// send the measured variables to the PLC
 #ifdef USE_ADS_IF
-			if (use_ads) { ads.write(xmeas); }
+			if (use_ads) 
+			{ 
+				ads.write(xmeas);
+			}
 #endif
 
 			// apply the sensors channel
@@ -408,6 +413,19 @@ int main(int argc, char* argv[])
 		// run the controller if time is at a scan boundary
 		if (!(ii%steps_per_scan))
 		{
+			// query the modbus server
+#ifdef USE_ADS_IF
+			if (use_ads)
+			{
+				float mbs_xmeas[2];
+				ads_mbs.read(mbs_xmeas);
+				xmeas[6] = mbs_xmeas[0];
+				xmeas[7] = mbs_xmeas[1];
+				std::cout << "override xmeas 6,7 to " << xmeas[6] << ", " << xmeas[7] << std::endl;
+			}
+#endif
+
+			// increment the controller
 			if (! (ext_control  && shdmem_on && RT) )
 			{
 				xmv = tectlr->increment(t, tscan, xmeas);
