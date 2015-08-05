@@ -125,10 +125,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="tesim_orig.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ADS Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="tesim_main.cpp" />
   </ItemGroup>
   <ItemGroup>

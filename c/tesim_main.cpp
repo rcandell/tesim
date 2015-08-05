@@ -421,7 +421,7 @@ int main(int argc, char* argv[])
 				ads_mbs.read(mbs_xmeas);
 				xmeas[6] = mbs_xmeas[0];
 				xmeas[7] = mbs_xmeas[1];
-				std::cout << "override xmeas 6,7 to " << xmeas[6] << ", " << xmeas[7] << std::endl;
+				//std::cout << "override xmeas 6,7 to " << xmeas[6] << ", " << xmeas[7] << std::endl;
 			}
 #endif
 
