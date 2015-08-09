@@ -15,6 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
+=======
+    <ClCompile Include="tesim_orig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+>>>>>>> d9aba68d9e352eb8fc9adf84f5c0f0a2454f4f10
     <ClCompile Include="tesim_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

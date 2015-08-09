@@ -59,7 +59,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>USE_ADS_IF;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\local\boost_1_57_0_32</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -105,7 +105,6 @@
     <ClInclude Include="..\ControlLoops.h" />
     <ClInclude Include="..\PI.h" />
     <ClInclude Include="..\PlantInterface.h" />
-    <ClInclude Include="..\TEADSInterface.h" />
     <ClInclude Include="..\TEController.h" />
     <ClInclude Include="..\TEErrorChannel.h" />
     <ClInclude Include="..\TEGEErrorChannel.h" />
@@ -120,7 +119,6 @@
   <ItemGroup>
     <ClCompile Include="..\ControlLoops.cpp" />
     <ClCompile Include="..\PI.cpp" />
-    <ClCompile Include="..\TEADSInterface.cpp" />
     <ClCompile Include="..\TEController.cpp" />
     <ClCompile Include="..\TEGEErrorChannel.cpp" />
     <ClCompile Include="..\TEIIDErrorChannel.cpp" />

@@ -39,7 +39,6 @@
 
 // function prototypes
 void print_sim_params(double tstep, double tscan, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq);
-void log_time_console(unsigned RT, double t);
 
 using namespace boost::interprocess;
 
@@ -383,10 +382,7 @@ int main(int argc, char* argv[])
 
 			// send the measured variables to the PLC
 #ifdef USE_ADS_IF
-			if (use_ads) 
-			{ 
-				ads.write(xmeas);
-			}
+			if (use_ads) { ads.write(xmeas); }
 #endif
 
 			// apply the sensors channel
@@ -421,7 +417,6 @@ int main(int argc, char* argv[])
 				ads_mbs.read(mbs_xmeas);
 				xmeas[6] = mbs_xmeas[0];
 				xmeas[7] = mbs_xmeas[1];
-				//std::cout << "override xmeas 6,7 to " << xmeas[6] << ", " << xmeas[7] << std::endl;
 			}
 #endif
 
@@ -495,9 +490,6 @@ int main(int argc, char* argv[])
 					mem->first = false;
 				}
 			}
-
-			// log current time to console
-			log_time_console(RT, t);
 		}
 
 		// log plant and controller data
@@ -517,6 +509,9 @@ int main(int argc, char* argv[])
 			tesync.sync(sim_time_dur, time_log);
 		}
 
+		// log current time to console
+		std::cout << "\r" << "time: " << std::setprecision(8) << std::setfill('0') << t << " hours            ";
+
 		// Increment to the next time step
 		// Approximation of tstep because of limited memory causes errors to 
 		// integrate over time (round-off error), so we must recalculate t on 
@@ -532,19 +527,6 @@ int main(int argc, char* argv[])
 
 	std::cout << std::endl;
 	return 0;
-}
-
-void log_time_console(unsigned RT, double t)
-{
-	if (!RT)
-	{
-		std::cout << "\r" << "time: " << std::setprecision(8) << std::setfill('0') << t << " hours            ";
-	}
-	else
-	{
-		// todo: fixed precision problem when logging
-		std::cout << "\r" << "time: " << std::setprecision(8) << std::setfill('0') << t << " hours            ";
-	}
 }
 
 void print_sim_params(double tstep, double tscan, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq)

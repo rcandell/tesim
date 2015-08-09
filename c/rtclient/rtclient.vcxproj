@@ -120,11 +120,6 @@
   <ItemGroup>
     <ClCompile Include="rtclient.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\tesimlib\tesimlib.vcxproj">
-      <Project>{b61029c4-dd9a-48c4-8a41-17ca1b535dfe}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

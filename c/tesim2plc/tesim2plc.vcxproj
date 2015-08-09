@@ -43,7 +43,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>C:\local\boost_1_57_0_32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>USE_ADS_IF;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
@@ -68,12 +68,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\TEADSInterface.cpp" />
+    <ClCompile Include="..\tesim_main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\TEADSInterface.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\tesimlib\tesimlib.vcxproj">
       <Project>{b61029c4-dd9a-48c4-8a41-17ca1b535dfe}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\tesim_main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
