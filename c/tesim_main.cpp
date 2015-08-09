@@ -126,13 +126,13 @@ int main(int argc, char* argv[])
 		("xmv-pq", po::value<pq_pair>(&xmv_pq), "xmv burst link status probabilities, (Perror:Precover)")
 
 		// set point overrides
-		("sp-prod-rate", po::value<double>(&prod_rate_sp),					"enables change to setpoint at time t=0, (sp_name:sp_value")
-		("sp-reactor-pressure", po::value<double>(&reactor_pressure_sp),	"enables change to setpoint at time t=0, (sp_name:sp_value")
-		("sp-reactor-level", po::value<double>(&reactor_level_sp),			"enables change to setpoint at time t=0, (sp_name:sp_value")
-		("sp-reactor-temp", po::value<double>(&reactor_temp_sp),			"enables change to setpoint at time t=0, (sp_name:sp_value")
-		("sp-pctg", po::value<double>(&pctg_sp),							"enables change to setpoint at time t=0, (sp_name:sp_value")
-		("sp-separator-level", po::value<double>(&sep_level_sp),			"enables change to setpoint at time t=0, (sp_name:sp_value")
-		("sp-stripper-level", po::value<double>(&stripper_level_sp),		"enables change to setpoint at time t=0, (sp_name:sp_value")		
+		("sp-prod-rate", po::value<double>(&prod_rate_sp),					"change setpoint at Tstart (double: 0-100)")
+		("sp-reactor-pressure", po::value<double>(&reactor_pressure_sp),	"change setpoint at Tstart (double)")
+		("sp-reactor-level", po::value<double>(&reactor_level_sp),			"change setpoint at Tstart (double: 0-100)")
+		("sp-reactor-temp", po::value<double>(&reactor_temp_sp),			"change setpoint at Tstart (double)")
+		("sp-pctg", po::value<double>(&pctg_sp),							"change setpoint at Tstart (double: 0-100)")
+		("sp-separator-level", po::value<double>(&sep_level_sp),			"change setpoint at Tstart (double: 0-100)")
+		("sp-stripper-level", po::value<double>(&stripper_level_sp),		"change setpoint at Tstart (double: 0-100)")		
 		;
 
 	po::variables_map vm;
@@ -543,7 +543,7 @@ void log_time_console(unsigned RT, double t)
 	else
 	{
 		// todo: fixed precision problem when logging
-		std::cout << "\r" << "time: " << std::setprecision(8) << std::setfill('0') << (t * 3600.0) << " secs            ";
+		std::cout << "\r" << "time: " << std::setprecision(8) << std::setfill('0') << t << " hours            ";
 	}
 }
 
