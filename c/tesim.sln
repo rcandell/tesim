@@ -8,11 +8,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tesim", "tesimcpp.vcxproj",
 		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE} = {B61029C4-DD9A-48C4-8A41-17CA1B535DFE}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "run_tesims", "run_tesims\run_tesims.vcxproj", "{D1F92417-9FCE-45FC-A510-10776A998A31}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE} = {B61029C4-DD9A-48C4-8A41-17CA1B535DFE}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rtclient", "rtclient\rtclient.vcxproj", "{250A4C20-4722-4E74-857C-20E1B1D0A486}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tesim2plc", "tesim2plc\tesim2plc.vcxproj", "{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}"
@@ -21,11 +16,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tesimlib", "tesimlib\tesiml
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		ADS Debug|Mixed Platforms = ADS Debug|Mixed Platforms
-		ADS Debug|TwinCAT CE7 (ARMV7) = ADS Debug|TwinCAT CE7 (ARMV7)
-		ADS Debug|TwinCAT RT (x64) = ADS Debug|TwinCAT RT (x64)
-		ADS Debug|TwinCAT RT (x86) = ADS Debug|TwinCAT RT (x86)
-		ADS Debug|Win32 = ADS Debug|Win32
 		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|TwinCAT CE7 (ARMV7) = Debug|TwinCAT CE7 (ARMV7)
 		Debug|TwinCAT RT (x64) = Debug|TwinCAT RT (x64)
@@ -38,13 +28,6 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.ADS Debug|Mixed Platforms.ActiveCfg = ADS Debug|Win32
-		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.ADS Debug|Mixed Platforms.Build.0 = ADS Debug|Win32
-		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.ADS Debug|TwinCAT CE7 (ARMV7).ActiveCfg = Debug|Win32
-		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.ADS Debug|TwinCAT RT (x64).ActiveCfg = Debug|Win32
-		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.ADS Debug|TwinCAT RT (x86).ActiveCfg = Debug|Win32
-		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.ADS Debug|Win32.ActiveCfg = Debug|Win32
-		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.ADS Debug|Win32.Build.0 = Debug|Win32
 		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.Debug|TwinCAT CE7 (ARMV7).ActiveCfg = Debug|Win32
@@ -59,34 +42,6 @@ Global
 		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.Release|TwinCAT RT (x86).ActiveCfg = Release|Win32
 		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.Release|Win32.ActiveCfg = Release|Win32
 		{8E5921D3-ED40-4E39-B5BA-E3EC2020BD82}.Release|Win32.Build.0 = Release|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.ADS Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.ADS Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.ADS Debug|TwinCAT CE7 (ARMV7).ActiveCfg = ADS Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.ADS Debug|TwinCAT RT (x64).ActiveCfg = ADS Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.ADS Debug|TwinCAT RT (x86).ActiveCfg = ADS Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.ADS Debug|Win32.ActiveCfg = ADS Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.ADS Debug|Win32.Build.0 = ADS Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Debug|TwinCAT CE7 (ARMV7).ActiveCfg = Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Debug|TwinCAT RT (x64).ActiveCfg = Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Debug|TwinCAT RT (x86).ActiveCfg = Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Debug|Win32.ActiveCfg = Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Debug|Win32.Build.0 = Debug|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Release|TwinCAT CE7 (ARMV7).ActiveCfg = Release|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Release|TwinCAT RT (x64).ActiveCfg = Release|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Release|TwinCAT RT (x86).ActiveCfg = Release|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Release|Win32.ActiveCfg = Release|Win32
-		{D1F92417-9FCE-45FC-A510-10776A998A31}.Release|Win32.Build.0 = Release|Win32
-		{250A4C20-4722-4E74-857C-20E1B1D0A486}.ADS Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{250A4C20-4722-4E74-857C-20E1B1D0A486}.ADS Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{250A4C20-4722-4E74-857C-20E1B1D0A486}.ADS Debug|TwinCAT CE7 (ARMV7).ActiveCfg = ADS Debug|Win32
-		{250A4C20-4722-4E74-857C-20E1B1D0A486}.ADS Debug|TwinCAT RT (x64).ActiveCfg = ADS Debug|Win32
-		{250A4C20-4722-4E74-857C-20E1B1D0A486}.ADS Debug|TwinCAT RT (x86).ActiveCfg = ADS Debug|Win32
-		{250A4C20-4722-4E74-857C-20E1B1D0A486}.ADS Debug|Win32.ActiveCfg = ADS Debug|Win32
-		{250A4C20-4722-4E74-857C-20E1B1D0A486}.ADS Debug|Win32.Build.0 = ADS Debug|Win32
 		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Debug|TwinCAT CE7 (ARMV7).ActiveCfg = Debug|Win32
 		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Debug|TwinCAT RT (x64).ActiveCfg = Debug|Win32
@@ -99,13 +54,6 @@ Global
 		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Release|TwinCAT RT (x86).ActiveCfg = Release|Win32
 		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Release|Win32.ActiveCfg = Release|Win32
 		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Release|Win32.Build.0 = Release|Win32
-		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.ADS Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.ADS Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.ADS Debug|TwinCAT CE7 (ARMV7).ActiveCfg = Debug|Win32
-		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.ADS Debug|TwinCAT RT (x64).ActiveCfg = Debug|Win32
-		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.ADS Debug|TwinCAT RT (x86).ActiveCfg = Debug|Win32
-		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.ADS Debug|Win32.ActiveCfg = Debug|Win32
-		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.ADS Debug|Win32.Build.0 = Debug|Win32
 		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.Debug|TwinCAT CE7 (ARMV7).ActiveCfg = Debug|Win32
@@ -120,13 +68,6 @@ Global
 		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.Release|TwinCAT RT (x86).ActiveCfg = Release|Win32
 		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.Release|Win32.ActiveCfg = Release|Win32
 		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.Release|Win32.Build.0 = Release|Win32
-		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE}.ADS Debug|Mixed Platforms.ActiveCfg = ADS Debug|Win32
-		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE}.ADS Debug|Mixed Platforms.Build.0 = ADS Debug|Win32
-		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE}.ADS Debug|TwinCAT CE7 (ARMV7).ActiveCfg = ADS Debug|Win32
-		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE}.ADS Debug|TwinCAT RT (x64).ActiveCfg = ADS Debug|Win32
-		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE}.ADS Debug|TwinCAT RT (x86).ActiveCfg = ADS Debug|Win32
-		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE}.ADS Debug|Win32.ActiveCfg = ADS Debug|Win32
-		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE}.ADS Debug|Win32.Build.0 = ADS Debug|Win32
 		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{B61029C4-DD9A-48C4-8A41-17CA1B535DFE}.Debug|TwinCAT CE7 (ARMV7).ActiveCfg = Debug|Win32
