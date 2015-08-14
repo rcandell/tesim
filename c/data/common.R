@@ -11,3 +11,11 @@ xmeas_labels <- c("P-reactor",
                   "Production m3/hr",
                   "Quality % G mol",
                   "Hourly Cost")
+
+xmeas_melt_vars <- c(
+  "Reactor.Pressure.kPa","Reactor.Level.Pct","Reactor.Temp.C",
+  "Sep.Level.Pct",
+  "Stripper.Level.Pct",
+  "Sep.Underflow.m3.hr",
+  "Product.G.mole.Pct",
+  "Hourly.Cost")

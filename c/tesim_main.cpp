@@ -10,7 +10,7 @@
 // tesim.cpp : Defines the main() entry point for the console application.
 //
 
-#include <boost/system/config.hpp>
+//#include <boost/system/config.hpp>
 #include <boost/timer/timer.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/program_options.hpp>
@@ -39,7 +39,6 @@
 
 // function prototypes
 void print_sim_params(double tstep, double tscan, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq);
-void log_time_console(unsigned RT, double t);
 
 using namespace boost::interprocess;
 
@@ -113,26 +112,28 @@ int main(int argc, char* argv[])
 
 		// shared memory
 		("shared-memory", po::bool_switch(&shdmem_on)->default_value(false), "xmv and idv variables")
-		("external-ctrl", po::bool_switch(&ext_control)->default_value(false), "read xmv from shared memory (i.e. external controller)")
+		("external-ctrl", po::bool_switch(&ext_control)->default_value(false), "read xmv from shared memory")
 
+#ifdef USE_ADS_IF
 		// ADS interface
 		("enable-ads", po::bool_switch(&use_ads)->default_value(false), "turns on the ADS interface to PLC")
-		("ads-remote", po::bool_switch(&ads_remote)->default_value(false), "enables remote connection.  remote connection is currently hard-coded to 5.20.215.224.1.1")
+		("ads-remote", po::bool_switch(&ads_remote)->default_value(false), "enables remote connection to 5.20.215.224.1.1")
+#endif
 
 		// packet error rate parameters
-		("per", po::value<double>(&per), "enable iid packet error rate between 0.0 and 1.0.")
-		("enable-ge-channel,g", po::bool_switch(&gechan_on)->default_value(false), "enable the Gilbert Elliot channel model.  Specify pq parameter with later options.")
-		("xmeas-pq", po::value<pq_pair>(&xmeas_pq), "xmeas burst link status probabilities, (Perror:Precover)")
-		("xmv-pq", po::value<pq_pair>(&xmv_pq), "xmv burst link status probabilities, (Perror:Precover)")
+		("per", po::value<double>(&per), "Enable iid packet error rate between 0.0 and 1.0.")
+		("enable-ge-channel,g", po::bool_switch(&gechan_on)->default_value(false), "Enable the Gilbert Elliot channel model.")
+		("xmeas-pq", po::value<pq_pair>(&xmeas_pq), "xmeas GE probs as (Perror:Precover)")
+		("xmv-pq", po::value<pq_pair>(&xmv_pq), "xmv GE probs as (Perror:Precover)")
 
 		// set point overrides
-		("sp-prod-rate", po::value<double>(&prod_rate_sp),					"enables change to setpoint at time t=0, (sp_name:sp_value")
-		("sp-reactor-pressure", po::value<double>(&reactor_pressure_sp),	"enables change to setpoint at time t=0, (sp_name:sp_value")
-		("sp-reactor-level", po::value<double>(&reactor_level_sp),			"enables change to setpoint at time t=0, (sp_name:sp_value")
-		("sp-reactor-temp", po::value<double>(&reactor_temp_sp),			"enables change to setpoint at time t=0, (sp_name:sp_value")
-		("sp-pctg", po::value<double>(&pctg_sp),							"enables change to setpoint at time t=0, (sp_name:sp_value")
-		("sp-separator-level", po::value<double>(&sep_level_sp),			"enables change to setpoint at time t=0, (sp_name:sp_value")
-		("sp-stripper-level", po::value<double>(&stripper_level_sp),		"enables change to setpoint at time t=0, (sp_name:sp_value")		
+		("sp-prod-rate", po::value<double>(&prod_rate_sp),					"change setpoint at Tstart (default: 22.89)")
+		("sp-reactor-pressure", po::value<double>(&reactor_pressure_sp),	"change setpoint at Tstart (default: 2800.)")
+		("sp-reactor-level", po::value<double>(&reactor_level_sp),			"change setpoint at Tstart (default: 65.0 )")
+		("sp-reactor-temp", po::value<double>(&reactor_temp_sp),			"change setpoint at Tstart (default: 122.9)")
+		("sp-pctg", po::value<double>(&pctg_sp),							"change setpoint at Tstart (default: 53.8 )")
+		("sp-separator-level", po::value<double>(&sep_level_sp),			"change setpoint at Tstart (default: 50.0 )")
+		("sp-stripper-level", po::value<double>(&stripper_level_sp),		"change setpoint at Tstart (default: 50.0 )")		
 		;
 
 	po::variables_map vm;
@@ -276,7 +277,7 @@ int main(int argc, char* argv[])
 
 #ifdef USE_ADS_IF
 	// setup the ads interface
-	TEADSInterface ads;
+	TEADSInterface ads, ads_mbs;
 	if (use_ads)
 	{
 		if (ads_remote)
@@ -290,10 +291,12 @@ int main(int argc, char* argv[])
 			plc_addr.netId.b[5] = 1;
 			plc_addr.port = 851;
 			ads.connect("G_IO.XMEAS", &plc_addr);
+			ads_mbs.connect("G_IO.MBS_XMEAS", &plc_addr);
 		}
 		else
 		{
 			ads.connect("MAIN.XMEAS", 851);
+			ads_mbs.connect("G_IO.MBS_XMEAS", 851);
 		}
 	}
 #endif 
@@ -408,6 +411,19 @@ int main(int argc, char* argv[])
 		// run the controller if time is at a scan boundary
 		if (!(ii%steps_per_scan))
 		{
+			// query the modbus server
+#ifdef USE_ADS_IF
+			if (use_ads)
+			{
+				float mbs_xmeas[2];
+				ads_mbs.read(mbs_xmeas);
+				xmeas[6] = mbs_xmeas[0];
+				xmeas[7] = mbs_xmeas[1];
+				//std::cout << "mbs xmeas: " << xmeas[6] << " " << xmeas[7] << std::endl;
+			}
+#endif
+
+			// increment the controller
 			if (! (ext_control  && shdmem_on && RT) )
 			{
 				xmv = tectlr->increment(t, tscan, xmeas);
@@ -477,9 +493,6 @@ int main(int argc, char* argv[])
 					mem->first = false;
 				}
 			}
-
-			// log current time to console
-			log_time_console(RT, t);
 		}
 
 		// log plant and controller data
@@ -499,6 +512,9 @@ int main(int argc, char* argv[])
 			tesync.sync(sim_time_dur, time_log);
 		}
 
+		// log current time to console
+		std::cout << "\r" << "time: " << std::setprecision(8) << std::setfill('0') << t << " hours            ";
+
 		// Increment to the next time step
 		// Approximation of tstep because of limited memory causes errors to 
 		// integrate over time (round-off error), so we must recalculate t on 
@@ -514,19 +530,6 @@ int main(int argc, char* argv[])
 
 	std::cout << std::endl;
 	return 0;
-}
-
-void log_time_console(unsigned RT, double t)
-{
-	if (!RT)
-	{
-		std::cout << "\r" << "time: " << std::setprecision(8) << std::setfill('0') << t << " hours            ";
-	}
-	else
-	{
-		// todo: fixed precision problem when logging
-		std::cout << "\r" << "time: " << std::setprecision(8) << std::setfill('0') << (t * 3600.0) << " secs            ";
-	}
 }
 
 void print_sim_params(double tstep, double tscan, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq)
