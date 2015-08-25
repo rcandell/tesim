@@ -23,3 +23,13 @@ xmeas_melt_vars <- c(
   "React.Cool.Temp.C", 
   "Product.G.mole.Pct",
   "Hourly.Cost")
+
+xmeas_labels_abbr <- c("P-reac",
+                  "L-reac",
+                  "T-reac",
+                  "L-sep",
+                  "L-str",
+                  "Prod m3/hr",
+                  "Temp RCW",
+                  "% G mol",
+                  "Cost/Hr.")

@@ -23,7 +23,7 @@ ggplot() +
   ggtitle(plot_titles[plot_titles$n==i,]$l) +
   geom_density(data = idv.df, aes(x=Reactor.Pressure.kPa)) +
   facet_wrap(~IDV, ncol = 4, scales="free") +
-  ylab(" ") + xlab("time (hrs)")
+  ylab(" ") + xlab("")
 
 # add SS case to all hist plots if that might add value
 base_rp<-data.frame(Reactor.Pressure.kPa=base.df$Reactor.Pressure.kPa)
@@ -32,7 +32,7 @@ ggplot() +
   ggtitle(plot_titles[plot_titles$n==i,]$l) +
   geom_density(data = base_rp, aes(x=Reactor.Pressure.kPa)) +
   facet_wrap(~IDV, ncol = 4, scales="free") +
-  ylab(" ") + xlab("time (hrs)")
+  ylab(" ") + xlab("")
 
 # TODO: add comparison denisty plot for network versus nochan cases
 
@@ -51,26 +51,27 @@ ggplot(data = idv.df) +
 ###  BOXES PLOTS 
 ## plot box plots for reactor pressure versus idv
 ggplot(data = idv.df) +
-  geom_boxplot(aes(x=time, y=Reactor.Pressure.kPa))  +
+  geom_boxplot(aes(x=IDV, y=Reactor.Pressure.kPa))  +
   ggtitle(plot_titles[plot_titles$n==i,]$l) +
   facet_grid(~IDV, scales="free") 
 
 ## Stripper level
 i<-"Stripper.Underflow.m3.hr"
 ggplot(data = idv.df) +
-  geom_boxplot(aes(x=time, y=Stripper.Underflow.m3.hr))  +
+  geom_boxplot(aes(x=IDV, y=Stripper.Underflow.m3.hr))  +
   ggtitle(plot_titles[plot_titles$n==i,]$l) +
   facet_grid(~IDV, scales="free") 
 
 i<-"Purge.Rate.kscmh"
 ggplot(data = idv.df) +
-  geom_boxplot(aes(x=time, y=Purge.Rate.kscmh))  +
+  geom_boxplot(aes(x=IDV, y=Purge.Rate.kscmh))  +
   ggtitle("Purge Flow Rate") +
   facet_grid(~IDV, scales="free") 
 
 i<-"Hourly.Cost"
 ggplot(data = idv.df) +
-  geom_boxplot(aes(x=time, y=Hourly.Cost))  +
+  geom_boxplot(aes(x=IDV, y=Hourly.Cost))  +
   ggtitle("Hourly.Cost") +
-  facet_grid(~IDV, scales="free") 
+  facet_grid(~IDV, scales="free") + 
+  theme(axis.ticks = element_blank(), axis.text.x = element_blank())
 
