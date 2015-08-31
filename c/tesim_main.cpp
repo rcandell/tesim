@@ -208,11 +208,41 @@ int main(int argc, char* argv[])
 	TEController* tectlr = TEController::getInstance();
 
 	// Create the log files
+	std::ofstream metadata_log;
 	std::ofstream plant_log;
 	std::ofstream ctlr_log;
 	std::ofstream time_log;
 	std::ofstream xmeas_chan_log;
 	std::ofstream xmv_chan_log;
+
+	// store meta data
+	metadata_log.open(log_file_prefix + "_meta.dat");
+	metadata_log << "Simulation time : " << simtime << std::endl;
+	metadata_log << "Tstep:                       " << tstep << std::endl;
+	metadata_log << "Tscan:                       " << tscan << std::endl;
+	metadata_log << "Ksave:                       " << ksave << std::endl;
+	metadata_log << "log file prefix:             " << log_file_prefix << std::endl;
+	metadata_log << "Append:                      " << append_flag << std::endl;
+	metadata_log << "Run RT:                      " << RT << std::endl;
+	metadata_log << "Use ADS:                     " << use_ads << std::endl;
+	metadata_log << "Use remote ADS:              " << ads_remote << std::endl;
+	metadata_log << "IID chan per:                " << per << std::endl;
+	metadata_log << "Enabled GE chan:             " << gechan_on << std::endl;
+	metadata_log << "GE chan xmeas:               " << xmeas_pq << std::endl;
+	metadata_log << "GE chan xmv:                 " << xmv_pq << std::endl;
+	metadata_log << "Enable IDV:                  " << enable_idv << std::endl;
+	metadata_log << "IDV index:                   " << idv_idx << std::endl;
+	metadata_log << "Enable shdmem:               " << shdmem_on << std::endl;
+	metadata_log << "Use ext. controller:         " << ext_control << std::endl;
+	metadata_log << "Prod Rate:                   " << prod_rate_sp << (vm.count("sp-prod-rate") ? " override" : "  default") << std::endl;
+	metadata_log << "Reactor pressure:            " << reactor_pressure_sp << (vm.count("sp-reactor-pressure") ? " override" : "  default") << std::endl;
+	metadata_log << "Reactor level:               " << reactor_level_sp << (vm.count("sp-reactor-level") ? " override" : "  default") << std::endl;
+	metadata_log << "Reactor temp:                " << reactor_temp_sp << (vm.count("sp-reactor-temp") ? " override" : "  default") << std::endl;
+	metadata_log << "Pct G:                       " << pctg_sp << (vm.count("sp-pctg") ? " override" : "  default") << std::endl;
+	metadata_log << "Sep level:                   " << sep_level_sp << (vm.count("sp-separator-level") ? " override" : "  default") << std::endl;
+	metadata_log << "Strip level:                 " << stripper_level_sp << (vm.count("sp-stripper-level") ? " override" : "  default") << std::endl;
+	metadata_log << std::endl;
+	metadata_log.close();
 
 	// create shared memory for control of the plant
 	using namespace boost::interprocess;
