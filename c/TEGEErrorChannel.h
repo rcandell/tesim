@@ -17,9 +17,9 @@
 #include <iostream>
 
 #include "TETypes.h"
-#include "TEErrorChannel.h"
+#include "TEChannel.h"
 
-class TEGEErrorChannel : public TEErrorChannel
+class TEGEErrorChannel : public TEChannel
 {
 
 	typedef boost::uniform_real<> NumberDistribution;
@@ -46,10 +46,7 @@ public:
 	double operator()();
 
 	// accessors
-	unsigned dlen() const { return m_dlen; }
-	const double* previous() const { return m_previous; }
 	pq_pair error_rate() const { return m_error_rate; }
-	const bool* chan_state() const { return m_chan_state; }
 
 private:
 	TEGEErrorChannel();
@@ -58,9 +55,6 @@ private:
 
 	// state variables
 	pq_pair m_error_rate;	// global error rate
-	double* m_previous;		// previous elements
-	unsigned m_dlen;		// number of elements
-	bool* m_chan_state;		// channel state of last increment, true means channel is up
 
 	// random generator
 	TEGEErrorChannel::NumberDistribution m_distribution;

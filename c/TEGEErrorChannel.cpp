@@ -16,27 +16,15 @@
 #include "TEGEErrorChannel.h"
 
 TEGEErrorChannel::TEGEErrorChannel(pq_pair error_rate, unsigned dlen, const double* init_values, int seed)
-	: m_error_rate(error_rate), m_dlen(dlen), m_previous(0), m_chan_state(0), m_distribution(0.0, 1.0), m_numberGenerator(m_generator, m_distribution)
+	: TEChannel(dlen, init_values), m_error_rate(error_rate), m_distribution(0.0, 1.0), m_numberGenerator(m_generator, m_distribution)
 {
-	m_previous = new double[m_dlen]();
-	m_chan_state = new bool[m_dlen]();
-	for (unsigned ii = 0; ii < dlen; ii++) m_chan_state[ii] = true;  // init to good state
-	// std::fill_n(m_chan_state, dlen, true); // init to good state
-
-	// copy the initial values into state memory
-	for (unsigned ii = 0; ii < m_dlen; ii++)
-	{
-		m_previous[ii] = init_values[ii];
-	}
-
 	// refer to http://www.radmangames.com/programming/generating-random-numbers-in-c
 	// seed the generator
 	m_generator.seed(seed); // seed with the current time 
 }
 
 TEGEErrorChannel::~TEGEErrorChannel()
-{
-	delete m_previous;
+{	
 }
 
 double TEGEErrorChannel::operator()()
@@ -71,7 +59,7 @@ double* TEGEErrorChannel::operator+(double* data)
 		// retain the data for the next increment
 		m_previous[ii] = data[ii];
 	}
-	return data;
+	return m_previous;
 }
 
 // overloaded output stream for channel

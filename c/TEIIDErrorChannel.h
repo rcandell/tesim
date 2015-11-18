@@ -17,9 +17,9 @@
 #include <iostream>
 
 #include "TETypes.h"
-#include "TEErrorChannel.h"
+#include "TEChannel.h"
 
-class TEIIDErrorChannel : public TEErrorChannel
+class TEIIDErrorChannel : public TEChannel
 {
 
 	typedef boost::uniform_real<> NumberDistribution;
@@ -46,10 +46,7 @@ public:
 	double operator()();
 
 	// accessors
-	unsigned dlen() const { return m_dlen; }
-	const double* previous() const { return m_previous; }
 	double error_rate() const { return m_error_rate; }
-	const bool* chan_state() const { return m_chan_state; }
 
 private:
 	TEIIDErrorChannel();

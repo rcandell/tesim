@@ -54,7 +54,10 @@
     <ClInclude Include="..\TEIIDErrorChannel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\TEErrorChannel.h">
+    <ClInclude Include="..\TEErrorFreeChannel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TEChannel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -87,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\TEIIDErrorChannel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TEErrorFreeChannel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

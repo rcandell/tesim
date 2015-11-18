@@ -20,6 +20,7 @@
 #include "TENames.h"
 #include "TEIIDErrorChannel.h"
 #include "TEGEErrorChannel.h"
+#include "TEErrorFreeChannel.h"
 #include "TETimeSync.h"
 #include "TEPlant.h"
 #include "TEController.h"
@@ -367,22 +368,32 @@ int main(int argc, char* argv[])
 
 	// create the communications channels
 	int seed_rand = 17;
-	TEErrorChannel* xmeas_channel = 0;
-	TEErrorChannel* xmv_channel = 0;
-	if (per > 0.0)
+	double * xmeas_chan_ptr = 0, xmv_chan_ptr = 0;
+	TEChannel* xmeas_channel = 0;
+	TEChannel* xmv_channel = 0;
+	if (per > 0.0)  // IID channel
 	{
 		xmeas_channel = new TEIIDErrorChannel(per, TEPlant::NY, teplant->get_xmeas(), seed_rand);
 		xmv_channel = new TEIIDErrorChannel(per, TEPlant::NU, tectlr->get_xmv(), seed_rand);
 	}
-	else if (gechan_on)
+	else if (gechan_on)  // GE channel
 	{
 		xmeas_channel = new TEGEErrorChannel(xmeas_pq, TEPlant::NY, teplant->get_xmeas(), seed_rand);
 		xmv_channel = new TEGEErrorChannel(xmv_pq, TEPlant::NU, tectlr->get_xmv(), seed_rand);
 	}
+	else // error free channel
+	{
+		xmeas_channel = new TEErrorFreeChannel(TEPlant::NY, teplant->get_xmeas());
+		xmv_channel = new TEErrorFreeChannel(TEPlant::NU, tectlr->get_xmv());
+	}
 	
 	for (int ii = 0; ii < nsteps; ii++)
 	{
-		// increment the plant and controller
+		/***************************************************************************
+		*
+		* This is the plant section
+		*
+		****************************************************************************/
 		try
 		{
 			// examine shared memory for disturbances
@@ -401,7 +412,7 @@ int main(int argc, char* argv[])
 			}
 
 			// increment the plant
-			xmeas = teplant->increment(t, tstep, xmv, &shutdown);
+			xmeas = teplant->increment(t, tstep, xmv_channel->data(), &shutdown);
 
 			if (shdmem_on && RT)
 			{
@@ -420,13 +431,18 @@ int main(int argc, char* argv[])
 			// apply the sensors channel
 			if (per > 0.0)
 			{
-				xmeas = *static_cast<TEIIDErrorChannel*>(xmeas_channel)+xmeas;
+				xmeas_chan_ptr = *static_cast<TEIIDErrorChannel*>(xmeas_channel)+xmeas;
 				xmeas_chan_log << *static_cast<TEIIDErrorChannel*>(xmeas_channel) << std::endl;
 			}
 			else if (gechan_on)
 			{
-				xmeas = *static_cast<TEGEErrorChannel*>(xmeas_channel) + xmeas;
+				xmeas_chan_ptr = *static_cast<TEGEErrorChannel*>(xmeas_channel)+xmeas;
 				xmeas_chan_log << *static_cast<TEGEErrorChannel*>(xmeas_channel) << std::endl;
+			}
+			else
+			{
+				xmeas_chan_ptr = *static_cast<TEErrorFreeChannel*>(xmeas_channel)+xmeas;
+				xmeas_chan_log << *static_cast<TEErrorFreeChannel*>(xmeas_channel) << std::endl;
 			}
 		}
 		catch (TEPlant::ShutdownException& e)
@@ -438,6 +454,12 @@ int main(int argc, char* argv[])
 			return 0;
 		}
 
+
+		/***************************************************************************
+		*
+		* This is the controller section
+		*
+		****************************************************************************/
 		// run the controller if time is at a scan boundary
 		if (!(ii%steps_per_scan))
 		{
@@ -456,7 +478,7 @@ int main(int argc, char* argv[])
 			// increment the controller
 			if (! (ext_control  && shdmem_on && RT) )
 			{
-				xmv = tectlr->increment(t, tscan, xmeas);
+				xmv = tectlr->increment(t, tscan, xmeas_channel->data());
 			}
 			else
 			{
