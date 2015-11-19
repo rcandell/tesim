@@ -13,10 +13,13 @@
 #ifndef __TECHANNEL_H__
 #define __TECHANNEL_H__
 
+#include <iostream>     // std::cout, std::ostream, std::ios
+
 class TEChannel
 {
 public:
 	TEChannel(unsigned dlen, const double* init_values)
+		: m_dlen(dlen)
 	{
 		m_previous = new double[m_dlen]();
 		m_chan_state = new bool[m_dlen]();
@@ -35,7 +38,15 @@ public:
 		delete m_chan_state;
 	}
 
+	// apply the channel to a vector of values
+	virtual double* operator+(double* data) = 0;
+
+	// get the data
 	virtual double* data() const { return m_previous; }
+
+	// ostream printing
+	virtual std::ostream& print(std::ostream&) const;
+	friend std::ostream& operator<< (std::ostream&, const TEChannel&);
 
 	unsigned dlen() const { return m_dlen; }
 	const double* previous() const { return m_previous; }

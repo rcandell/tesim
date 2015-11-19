@@ -94,6 +94,7 @@
   <ItemGroup>
     <ClCompile Include="..\ControlLoops.cpp" />
     <ClCompile Include="..\PI.cpp" />
+    <ClCompile Include="..\TEChannel.cpp" />
     <ClCompile Include="..\TEController.cpp" />
     <ClCompile Include="..\TEErrorFreeChannel.cpp" />
     <ClCompile Include="..\TEGEErrorChannel.cpp" />

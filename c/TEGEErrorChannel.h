@@ -40,7 +40,8 @@ public:
 	double* operator+(double* data);
 
 	// overloaded output stream for channel
-	friend std::ostream& operator<< (std::ostream&, const TEGEErrorChannel&);
+	virtual std::ostream& print(std::ostream& os) const;
+	//friend std::ostream& operator<< (std::ostream&, const TEGEErrorChannel&);
 
 	// sample random value from distribution
 	double operator()();

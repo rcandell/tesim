@@ -95,6 +95,9 @@
     <ClCompile Include="..\TEErrorFreeChannel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\TEChannel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\f\tecommon.inc">

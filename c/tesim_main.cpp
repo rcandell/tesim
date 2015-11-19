@@ -300,11 +300,11 @@ int main(int argc, char* argv[])
 		time_log.fill('0');
 	}
 
-	if (gechan_on || per>0.0)
-	{
-		xmeas_chan_log.open(log_file_prefix + "_xmeas_chan.log");
-		xmv_chan_log.open(log_file_prefix + "_xmv_chan.log");
-	}
+
+	// open the channel log files
+	xmeas_chan_log.open(log_file_prefix + "_xmeas_chan.log");
+	xmv_chan_log.open(log_file_prefix + "_xmv_chan.log");
+
 
 #ifdef USE_ADS_IF
 	// setup the ads interface
@@ -368,7 +368,7 @@ int main(int argc, char* argv[])
 
 	// create the communications channels
 	int seed_rand = 17;
-	double * xmeas_chan_ptr = 0, xmv_chan_ptr = 0;
+	double * xmeas_chan_ptr = 0, * xmv_chan_ptr = 0;
 	TEChannel* xmeas_channel = 0;
 	TEChannel* xmv_channel = 0;
 	if (per > 0.0)  // IID channel
@@ -428,22 +428,10 @@ int main(int argc, char* argv[])
 			if (use_ads) { ads.write(xmeas); }
 #endif
 
-			// apply the sensors channel
-			if (per > 0.0)
-			{
-				xmeas_chan_ptr = *static_cast<TEIIDErrorChannel*>(xmeas_channel)+xmeas;
-				xmeas_chan_log << *static_cast<TEIIDErrorChannel*>(xmeas_channel) << std::endl;
-			}
-			else if (gechan_on)
-			{
-				xmeas_chan_ptr = *static_cast<TEGEErrorChannel*>(xmeas_channel)+xmeas;
-				xmeas_chan_log << *static_cast<TEGEErrorChannel*>(xmeas_channel) << std::endl;
-			}
-			else
-			{
-				xmeas_chan_ptr = *static_cast<TEErrorFreeChannel*>(xmeas_channel)+xmeas;
-				xmeas_chan_log << *static_cast<TEErrorFreeChannel*>(xmeas_channel) << std::endl;
-			}
+			// apply the sensors channel to plant readings
+			xmeas_chan_ptr = (*xmeas_channel) + xmeas;
+			xmeas_chan_log << *xmeas_channel << std::endl;
+
 		}
 		catch (TEPlant::ShutdownException& e)
 		{
@@ -463,8 +451,9 @@ int main(int argc, char* argv[])
 		// run the controller if time is at a scan boundary
 		if (!(ii%steps_per_scan))
 		{
-			// query the modbus server
 #ifdef USE_ADS_IF
+			// query the ADS interface.
+			// the ADS data overrides simulated channel
 			if (use_ads)
 			{
 				float mbs_xmeas[2];
@@ -489,16 +478,8 @@ int main(int argc, char* argv[])
 			}
 
 			// apply the control channel
-			if (per > 0.0)
-			{
-				xmv = *static_cast<TEIIDErrorChannel*>(xmv_channel)+xmv;
-				xmv_chan_log << *static_cast<TEIIDErrorChannel*>(xmv_channel) << std::endl;
-			}
-			else if (gechan_on)
-			{
-				xmv = *static_cast<TEGEErrorChannel*>(xmv_channel) + xmv;
-				xmv_chan_log << *static_cast<TEGEErrorChannel*>(xmv_channel) << std::endl;
-			}
+			xmv_chan_ptr = (*xmv_channel) + xmv;
+			xmv_chan_log << *xmv_channel << std::endl;
 
 			// check for any setpoint overrides to apply
 			if (shdmem_on && RT)

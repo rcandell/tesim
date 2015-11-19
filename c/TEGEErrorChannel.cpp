@@ -62,15 +62,23 @@ double* TEGEErrorChannel::operator+(double* data)
 	return m_previous;
 }
 
+std::ostream& TEGEErrorChannel::print(std::ostream& os) const
+{
+	return TEChannel::print(os);
+}
+
+#if 0
 // overloaded output stream for channel
 std::ostream& operator<< (std::ostream& lhs, const TEGEErrorChannel& rhs)
 {
 	unsigned dlen = rhs.dlen();
-	for (unsigned ii = 0; ii < dlen-1; ii++)
+	for (unsigned ii = 0; ii < dlen - 1; ii++)
 	{
 		lhs << rhs.chan_state()[ii] << "\t";
 	}
-	lhs << rhs.chan_state()[dlen-1];
+	lhs << rhs.chan_state()[dlen - 1];
 	return lhs;
 }
+#endif // 0
+
 

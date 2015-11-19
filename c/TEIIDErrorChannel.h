@@ -36,11 +36,12 @@ public:
 
 	// This method will apply the random channel to the input data
 	// and return the data with channel applied.  If packets are dropped,
-	// the last know value is returned.
-	double* operator+(double* data);
+	// the last known value is returned.
+	virtual double* operator+(double* data);
 
 	// overloaded output stream for channel
-	friend std::ostream& operator<< (std::ostream&, const TEIIDErrorChannel&);
+	virtual std::ostream& print(std::ostream& os) const;
+	//friend std::ostream& operator<< (std::ostream&, const TEIIDErrorChannel&);
 
 	// sample random value from distribution
 	double operator()();
@@ -55,9 +56,6 @@ private:
 
 	// state variables
 	double m_error_rate;	// global error rate
-	double* m_previous;		// previous elements
-	unsigned m_dlen;		// number of elements
-	bool* m_chan_state;		// channel state of last increment, true means channel is up
 
 	// random generator
 	TEIIDErrorChannel::NumberDistribution m_distribution;
