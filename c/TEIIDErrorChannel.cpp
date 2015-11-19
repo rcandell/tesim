@@ -41,16 +41,13 @@ double* TEIIDErrorChannel::operator+(double* data)
 		m_chan_state[ii] = (rnd <= m_error_rate) ? false : true;
 
 		// take action on the data based on link state
-		if (!m_chan_state[ii])
+		if (m_chan_state[ii])   // link is good, update the channel state with new data
 		{
-			// a packet error has occured.  apply previous value.
-			data[ii] = m_previous[ii];
+			// retain the data for the next increment
+			m_data[ii] = data[ii];
 		}
-
-		// retain the data for the next increment
-		m_previous[ii] = data[ii];
 	}
-	return m_previous;
+	return m_data;
 }
 
 std::ostream& TEIIDErrorChannel::print(std::ostream& os) const

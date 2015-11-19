@@ -210,8 +210,9 @@ int main(int argc, char* argv[])
 
 	// Create the log files
 	std::ofstream metadata_log;
-	std::ofstream plant_log;
-	std::ofstream ctlr_log;
+	std::ofstream sim_log;
+	//std::ofstream plant_log;
+	//std::ofstream ctlr_log;
 	std::ofstream time_log;
 	std::ofstream xmeas_chan_log;
 	std::ofstream xmv_chan_log;
@@ -276,21 +277,41 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	// open the simulation log files
+	if (append_flag)
+	{
+		sim_log.open(log_file_prefix + "_simlog.dat", std::fstream::out | std::fstream::app);
+		std::cout << "plant data file: " << log_file_prefix << "_simlog.dat" << std::endl;
+	}
+	else
+	{
+		sim_log.open(log_file_prefix + "_simlog.dat");
+		sim_log << TENames::simlog_all() << std::endl;
+	}
+	sim_log.precision(15);
+
 	// do we append or create a new log file?
+#if 0
 	if (append_flag)
 	{
 		plant_log.open(log_file_prefix + "_plant.dat", std::fstream::out | std::fstream::app);
 		std::cout << "plant data file: " << log_file_prefix << "_plant.dat" << std::endl;
+
+		ctlr_log.open(log_file_prefix + "_ctlr.dat", std::fstream::out | std::fstream::app);
+		std::cout << "plant data file: " << log_file_prefix << "_ctlr.dat" << std::endl;
 	}
 	else
 	{
 		plant_log.open(log_file_prefix + "_plant.dat");
 		plant_log << TENames::plant_all() << std::endl;
+
+		ctlr_log.open(log_file_prefix + "_ctlr.dat");
+		ctlr_log << TENames::controller_all() << std::endl;
 	}
 	plant_log.precision(15);
-
-	ctlr_log.open(log_file_prefix + "_tectlr.dat");
 	ctlr_log.precision(15);
+#endif // 0
+
 
 	// if we run in real-time, then create a time synch log
 	if (RT)
@@ -300,10 +321,9 @@ int main(int argc, char* argv[])
 		time_log.fill('0');
 	}
 
-
 	// open the channel log files
-	xmeas_chan_log.open(log_file_prefix + "_xmeas_chan.log");
-	xmv_chan_log.open(log_file_prefix + "_xmv_chan.log");
+	xmeas_chan_log.open(log_file_prefix + "_xmeas_chan.dat");
+	xmv_chan_log.open(log_file_prefix + "_xmv_chan.dat");
 
 
 #ifdef USE_ADS_IF
@@ -435,8 +455,19 @@ int main(int argc, char* argv[])
 		}
 		catch (TEPlant::ShutdownException& e)
 		{
-			plant_log << xmeas_pq << "\t" << xmv_pq << "\t" << t << "\t" << *teplant 
-				<< "\t" << e.m_sd_code << std::endl;
+			sim_log 
+				<< xmeas_pq << "\t" 
+				<< xmv_pq << "\t" 
+
+				<< t << "\t" 
+				<< *teplant << "\t" 
+				<< e.m_sd_code 
+
+				<< t << "\t"
+				<< *tectlr << "\t"
+
+				<< std::endl;
+
 			std::cerr << e << std::endl;
 			std::cerr << "ending simulation" << std::endl;
 			return 0;
@@ -532,10 +563,24 @@ int main(int argc, char* argv[])
 		if (!(ii%ksave))
 		{
 			//plant
-			plant_log << xmeas_pq << "\t" << xmv_pq << "\t" << t << "\t" << *teplant << "\t" << 0 << std::endl;
+			sim_log 
+				<< xmeas_pq << "\t" 
+				<< xmv_pq << "\t" 
 
+				<< t << "\t" 
+				<< *teplant << "\t" 
+				<< 0 << "\t" // shutdown 0
+
+				<< t << "\t"
+				<< *tectlr << "\t"
+
+				<< std::endl;
+
+#if 0
 			//controller
 			ctlr_log << t << "\t" << *tectlr << std::endl;
+#endif // 0
+
 		}
 
 		// try to sync sim time to match wall clock time

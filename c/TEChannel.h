@@ -21,7 +21,7 @@ public:
 	TEChannel(unsigned dlen, const double* init_values)
 		: m_dlen(dlen)
 	{
-		m_previous = new double[m_dlen]();
+		m_data = new double[m_dlen]();
 		m_chan_state = new bool[m_dlen]();
 		for (unsigned ii = 0; ii < dlen; ii++) m_chan_state[ii] = true;  // init to good state
 		// std::fill_n(m_chan_state, dlen, true); // init to good state
@@ -29,32 +29,30 @@ public:
 		// copy the initial values into state memory
 		for (unsigned ii = 0; ii < m_dlen; ii++)
 		{
-			m_previous[ii] = init_values[ii];
+			m_data[ii] = init_values[ii];
 		}
 	}
 	virtual ~TEChannel()
 	{
-		delete m_previous;
+		delete m_data;
 		delete m_chan_state;
 	}
 
 	// apply the channel to a vector of values
 	virtual double* operator+(double* data) = 0;
 
-	// get the data
-	virtual double* data() const { return m_previous; }
+	// accessors
+	virtual double* data() const { return m_data; }
+	unsigned dlen() const { return m_dlen; }
+	const bool* chan_state() const { return m_chan_state; }
 
 	// ostream printing
 	virtual std::ostream& print(std::ostream&) const;
 	friend std::ostream& operator<< (std::ostream&, const TEChannel&);
 
-	unsigned dlen() const { return m_dlen; }
-	const double* previous() const { return m_previous; }
-	const bool* chan_state() const { return m_chan_state; }
-
 protected:
 	
-	double* m_previous;		// previous elements
+	double* m_data;			// data in the channel
 	unsigned m_dlen;		// number of elements
 	bool* m_chan_state;		// channel state of last increment, true means channel is up
 

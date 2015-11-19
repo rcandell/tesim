@@ -216,8 +216,6 @@ char* TEPlant::shutdown_msg() const
 
 std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
 {
-	// TODO: It appears from the loop conditions that I am dropping a measured variable
-
 	// manipulated variables
 	for (int ii = 0; ii < TEPlant::NU-1; ii++)
 	{

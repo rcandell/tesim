@@ -18,6 +18,14 @@
 class TENames
 {
 public:
+
+	enum name_domain { PLANT, CONTROLLER};
+
+	static name_domain _domain;
+	static std::string _domain_str;
+	static void set_to_plant();
+	static void set_to_controller();
+
 	struct xmeas_pq
 	{
 		static const char * names[];
@@ -64,6 +72,26 @@ public:
 	struct plant_all
 	{
 		friend std::ostream& operator<< (std::ostream& lhs, const plant_all& rhs);
+	};
+
+	struct r_states
+	{
+		friend std::ostream& operator<< (std::ostream& lhs, const r_states& rhs);
+	};
+
+	struct 
+	{
+		friend std::ostream& operator<< (std::ostream& lhs, const r_states& rhs);
+	};
+
+	struct controller_all
+	{
+		friend std::ostream& operator<< (std::ostream& lhs, const controller_all& rhs);
+	};
+
+	struct simlog_all
+	{
+		friend std::ostream& operator<< (std::ostream& lhs, const simlog_all& rhs);
 	};
 };
 
