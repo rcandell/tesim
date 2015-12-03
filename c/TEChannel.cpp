@@ -11,7 +11,7 @@
 #include "TEChannel.h"
 
 TEChannel::TEChannel(unsigned dlen, const double* init_values)
-	: m_dlen(dlen)
+	: m_dlen(dlen), m_link_id(-1)
 {
 	m_data = new double[m_dlen]();
 	m_chan_state = new bool[m_dlen]();

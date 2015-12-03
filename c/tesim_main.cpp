@@ -85,14 +85,15 @@ int main(int argc, char* argv[])
 
 	// print the simulation parameters
 	std::cout << "TE Simulator C++" << std::endl
-		<< "  developed by Rick Candell and Tim Zimmerman" << std::endl
-		<< "  National Institure of Standards and Technology (USA)" << std::endl
-		<< "  Software is Public Domain" << std::endl
+		<< "  Authors: Rick Candell, Tim Zimmerman" << std::endl
+		<< "  National Institute of Standards and Technology (NIST)" << std::endl
+		<< "  License: Public Domain" << std::endl
 		<< "******************************************************" << std::endl << std::endl;
 
 	// error channel parameters
 	double per = 0.0;
 	pq_pair xmeas_pq = std::make_pair(0.0, 1.0);
+	unsigned xmeas_ge_link_id = 0, xmv_ge_link_id = 0, xmeas_iid_chan_id = 0, xmv_iid_chan_id = 0;
 	pq_pair xmv_pq = std::make_pair(0.0, 1.0);
 
 	// program options
@@ -123,9 +124,14 @@ int main(int argc, char* argv[])
 
 		// packet error rate parameters
 		("per", po::value<double>(&per), "Enable iid packet error rate between 0.0 and 1.0.")
+		("xmeas-iid-chan-id", po::value<unsigned>(&xmeas_iid_chan_id), "xmeas iid channel link number (1-41). Default is all channels (0).")
+		("xmv-iid-chan-id", po::value<unsigned>(&xmv_iid_chan_id), "xmv iid channel link number (1-41). Default is all channels (0).")
+
 		("enable-ge-channel,g", po::bool_switch(&gechan_on)->default_value(false), "Enable the Gilbert Elliot channel model.")
-		("xmeas-pq", po::value<pq_pair>(&xmeas_pq), "xmeas GE probs as (Perror:Precover)")
-		("xmv-pq", po::value<pq_pair>(&xmv_pq), "xmv GE probs as (Perror:Precover)")
+		("xmeas-pq", po::value<pq_pair>(&xmeas_pq), "xmeas GE probs as Perror:Precover")
+		("xmeas-ge-chan-id", po::value<unsigned>(&xmeas_ge_link_id), "xmeas GE channel link number (1-41). Default is all channels (0).")
+		("xmv-pq", po::value<pq_pair>(&xmv_pq), "xmv GE probs as Perror:Precover")
+		("xmv-ge-chan-id", po::value<unsigned>(&xmv_ge_link_id), "xmv GE channel link number (1-41). Default is all channels (0).")
 
 		// set point overrides
 		("sp-prod-rate", po::value<double>(&prod_rate_sp),					"change setpoint at Tstart (default: 22.89)")
@@ -157,7 +163,13 @@ int main(int argc, char* argv[])
 
 	try 
 	{
-		if (vm.count("setidv"))		{ enable_idv = true; }
+		if (vm.count("setidv"))		
+		{ 
+			if (idv_idx > 0)
+			{
+				enable_idv = true;
+			}
+		}
 	}
 	catch (po::error& e) {
 		std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
@@ -188,10 +200,21 @@ int main(int argc, char* argv[])
 	std::cout << "Run RT:                      " << RT << std::endl;
 	std::cout << "Use ADS:                     " << use_ads << std::endl;
 	std::cout << "Use remote ADS:              " << ads_remote << std::endl;
-	std::cout << "IID chan per:                " << per << std::endl;
+
+	std::cout << "IID chan PER:                " << per << std::endl;
+	if (xmeas_iid_chan_id > 0)
+	std::cout << "  apply to link:             " << xmeas_iid_chan_id << std::endl;
+	if (xmv_iid_chan_id > 0)
+	std::cout << "  apply to link:             " << xmv_iid_chan_id << std::endl;
+
 	std::cout << "Enabled GE chan:             " << gechan_on << std::endl;
 	std::cout << "GE chan xmeas:               " << xmeas_pq << std::endl;
+	if (xmeas_ge_link_id > 0)
+	std::cout << "  apply to link:             " << xmeas_ge_link_id << std::endl;
 	std::cout << "GE chan xmv:                 " << xmv_pq << std::endl;
+	if (xmv_ge_link_id > 0)
+	std::cout << "  apply to link:             " << xmv_ge_link_id << std::endl;
+
 	std::cout << "Enable IDV:                  " << enable_idv << std::endl;
 	std::cout << "IDV index:                   " << idv_idx << std::endl;
 	std::cout << "Enable shdmem:               " << shdmem_on << std::endl;
@@ -229,9 +252,19 @@ int main(int argc, char* argv[])
 	metadata_log << "Use ADS:                     " << use_ads << std::endl;
 	metadata_log << "Use remote ADS:              " << ads_remote << std::endl;
 	metadata_log << "IID chan per:                " << per << std::endl;
+	if (xmeas_iid_chan_id > 0)
+		metadata_log << "  apply to link:         " << xmeas_iid_chan_id << std::endl;
+	if (xmv_iid_chan_id > 0)
+		metadata_log << "  apply to link:         " << xmv_iid_chan_id << std::endl;
+
 	metadata_log << "Enabled GE chan:             " << gechan_on << std::endl;
 	metadata_log << "GE chan xmeas:               " << xmeas_pq << std::endl;
-	metadata_log << "GE chan xmv:                 " << xmv_pq << std::endl;
+	if (xmeas_ge_link_id > 0)
+		metadata_log << "  apply to link:         " << xmeas_ge_link_id << std::endl;
+	metadata_log << "GE chan xmv:                    " << xmv_pq << std::endl;
+	if (xmv_ge_link_id > 0)
+		metadata_log << "  apply to link:         " << xmv_ge_link_id << std::endl;
+
 	metadata_log << "Enable IDV:                  " << enable_idv << std::endl;
 	metadata_log << "IDV index:                   " << idv_idx << std::endl;
 	metadata_log << "Enable shdmem:               " << shdmem_on << std::endl;
@@ -406,7 +439,11 @@ int main(int argc, char* argv[])
 		xmeas_channel = new TEErrorFreeChannel(TEPlant::NY, teplant->get_xmeas());
 		xmv_channel = new TEErrorFreeChannel(TEPlant::NU, tectlr->get_xmv());
 	}
-	
+	if (xmeas_ge_link_id > 0)
+		xmeas_channel->link_id(xmeas_ge_link_id - 1);
+	if (xmv_ge_link_id > 0)
+		xmv_channel->link_id(xmv_ge_link_id - 1);
+
 	for (int ii = 0; ii < nsteps; ii++)
 	{
 		/***************************************************************************

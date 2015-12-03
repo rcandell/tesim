@@ -15,7 +15,7 @@
 
 #include "TEIIDErrorChannel.h"
 
-TEIIDErrorChannel::TEIIDErrorChannel(double error_rate, unsigned dlen, const double* init_values, int seed)
+TEIIDErrorChannel::TEIIDErrorChannel(double error_rate, unsigned dlen, const double* init_values, const unsigned link_id, int seed)
 	: TEChannel(dlen, init_values), m_error_rate(error_rate), m_distribution(0.0, 1.0), m_numberGenerator(m_generator, m_distribution)
 {
 	// refer to http://www.radmangames.com/programming/generating-random-numbers-in-c
@@ -36,14 +36,21 @@ double* TEIIDErrorChannel::operator+(double* data)
 {
 	for (unsigned ii = 0; ii < m_dlen; ii++)
 	{
-		// roll the dice to determine state fo this increment
-		double rnd = (*this)();
-		m_chan_state[ii] = (rnd <= m_error_rate) ? false : true;
-
-		// take action on the data based on link state
-		if (m_chan_state[ii])   // link is good, update the channel state with new data
+		if ((m_link_id>-1) && (ii == m_link_id))
 		{
-			// retain the data for the next increment
+			// roll the dice to determine state fo this increment
+			double rnd = (*this)();
+			m_chan_state[ii] = (rnd <= m_error_rate) ? false : true;
+
+			// take action on the data based on link state
+			if (m_chan_state[ii])   // link is good, update the channel state with new data
+			{
+				// retain the data for the next increment
+				m_data[ii] = data[ii];
+			}
+		}
+		else
+		{
 			m_data[ii] = data[ii];
 		}
 	}

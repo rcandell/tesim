@@ -15,7 +15,7 @@
 
 #include "TEGEErrorChannel.h"
 
-TEGEErrorChannel::TEGEErrorChannel(pq_pair error_rate, unsigned dlen, const double* init_values, int seed)
+TEGEErrorChannel::TEGEErrorChannel(pq_pair error_rate, unsigned dlen, const double* init_values, const unsigned link_id, int seed)
 	: TEChannel(dlen, init_values), m_error_rate(error_rate), m_distribution(0.0, 1.0), m_numberGenerator(m_generator, m_distribution)
 {
 	// refer to http://www.radmangames.com/programming/generating-random-numbers-in-c
@@ -36,23 +36,30 @@ double* TEGEErrorChannel::operator+(double* data)
 {
 	for (unsigned ii = 0; ii < m_dlen; ii++)
 	{
-		// roll the dice to determine state fo this increment
-		double rnd = (*this)();
-		if (m_chan_state[ii]) // channel is up
+		if ((m_link_id>-1) && (ii==m_link_id))
 		{
-			// test for transition to channel down/error state
-			m_chan_state[ii] = (rnd <= m_error_rate.first) ? false : true;
-		}
-		else // channel is currently down
-		{
-			// test for transition to channel up/good state
-			m_chan_state[ii] = (rnd <= m_error_rate.second) ? true : false;
-		}
+			// roll the dice to determine state fo this increment
+			double rnd = (*this)();
+			if (m_chan_state[ii]) // channel is up
+			{
+				// test for transition to channel down/error state
+				m_chan_state[ii] = (rnd <= m_error_rate.first) ? false : true;
+			}
+			else // channel is currently down
+			{
+				// test for transition to channel up/good state
+				m_chan_state[ii] = (rnd <= m_error_rate.second) ? true : false;
+			}
 
-		// take action on the data based on links state
-		if (m_chan_state[ii])  // link is good, update the channel state with new data
+			// take action on the data based on links state
+			if (m_chan_state[ii])  // link is good, update the channel state with new data
+			{
+				// retain the data for the next increment
+				m_data[ii] = data[ii];
+			}
+		}
+		else
 		{
-			// retain the data for the next increment
 			m_data[ii] = data[ii];
 		}
 	}

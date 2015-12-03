@@ -29,7 +29,7 @@ class TEIIDErrorChannel : public TEChannel
 public:
 	// Construct a channel object with global packet error rate, 
 	// length of the data, and initial values.
-	TEIIDErrorChannel(double error_rate, unsigned dlen, const double* init_values, int seed = 17);
+	TEIIDErrorChannel(double error_rate, unsigned dlen, const double* init_values, const unsigned link_id = -1, int seed = 17);
 
 	// destroys all memory associate with object and deletes object
 	virtual ~TEIIDErrorChannel();

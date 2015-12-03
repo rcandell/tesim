@@ -29,7 +29,7 @@ class TEGEErrorChannel : public TEChannel
 public:
 	// Construct a channel object with global packet error rate, 
 	// length of the data, and initial values.
-	TEGEErrorChannel(pq_pair error_rate, unsigned dlen, const double* init_values, int seed = 17);
+	TEGEErrorChannel(pq_pair error_rate, unsigned dlen, const double* init_values, const unsigned link_id = -1, int seed = 17);
 
 	// destroys all memory associate with object and deletes object
 	virtual ~TEGEErrorChannel();

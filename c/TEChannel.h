@@ -33,6 +33,8 @@ public:
 	virtual double* data() const { return m_data; }
 	unsigned dlen() const { return m_dlen; }
 	const bool* chan_state() const { return m_chan_state; }
+	void link_id(const int link_id) { m_link_id = link_id; }
+	const int link_id() const { return m_link_id;  }
 
 	// ostream printing
 	virtual std::ostream& print(std::ostream&) const;
@@ -40,6 +42,7 @@ public:
 
 protected:
 	
+	int m_link_id; 	// to what link to apply channel
 	double* m_data;			// data in the channel
 	unsigned m_dlen;		// number of elements
 	bool* m_chan_state;		// channel state of last increment, true means channel is up
