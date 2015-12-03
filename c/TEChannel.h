@@ -18,20 +18,8 @@
 class TEChannel
 {
 public:
-	TEChannel(unsigned dlen, const double* init_values)
-		: m_dlen(dlen)
-	{
-		m_data = new double[m_dlen]();
-		m_chan_state = new bool[m_dlen]();
-		for (unsigned ii = 0; ii < dlen; ii++) m_chan_state[ii] = true;  // init to good state
-		// std::fill_n(m_chan_state, dlen, true); // init to good state
+	TEChannel(unsigned dlen, const double* init_values);
 
-		// copy the initial values into state memory
-		for (unsigned ii = 0; ii < m_dlen; ii++)
-		{
-			m_data[ii] = init_values[ii];
-		}
-	}
 	virtual ~TEChannel()
 	{
 		delete m_data;

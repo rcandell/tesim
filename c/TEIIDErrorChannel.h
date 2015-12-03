@@ -41,7 +41,6 @@ public:
 
 	// overloaded output stream for channel
 	virtual std::ostream& print(std::ostream& os) const;
-	//friend std::ostream& operator<< (std::ostream&, const TEIIDErrorChannel&);
 
 	// sample random value from distribution
 	double operator()();

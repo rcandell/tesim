@@ -37,20 +37,10 @@ public:
 	// overloaded output stream for channel
 	friend std::ostream& operator<< (std::ostream&, const TEErrorFreeChannel&);
 
-	// accessors
-	unsigned dlen() const { return m_dlen; }
-	const double* previous() const { return m_previous; }
-	const bool* chan_state() const { return m_chan_state; }
-
 private:
 	TEErrorFreeChannel();
 	TEErrorFreeChannel(const TEErrorFreeChannel&);
 	TEErrorFreeChannel& operator=(const TEErrorFreeChannel&) {};
-
-	// state variables
-	double* m_previous;		// previous elements
-	unsigned m_dlen;		// number of elements
-	bool* m_chan_state;		// channel state of last increment, true means channel is up
 
 };
 
