@@ -55,6 +55,10 @@ def main():
                 p = subprocess.Popen(call_str, stdout = fh, stderr = fh)
                 P_list.append(p)
 
+        # wait for al lthe runs to complete
+        exit_codes = [pi.wait() for pi in P_list]
+        print(exit_codes)
+
     # reactor pressure sensor comms. link going bad
     for run in range(10):
         prefix_str = PREFIX + "_reactor_pressure_sensor_comms_failure" + "_run_" + str(run)
@@ -70,6 +74,8 @@ def main():
         print(call_str)
         p = subprocess.Popen(call_str, stdout=fh, stderr=fh)
         P_list.append(p)
+        exit_codes = [pi.wait() for pi in P_list]
+        print(exit_codes)
 
     # reactor cooling water sensor comms. link going bad
     for run in range(10):
@@ -86,6 +92,9 @@ def main():
         print(call_str)
         p = subprocess.Popen(call_str, stdout = fh, stderr = fh)
         P_list.append(p)
+
+    exit_codes = [pi.wait() for pi in P_list]
+    print(exit_codes)
 
     # purge valve actuator comms. link going bad
     for run in range(10):
