@@ -44,10 +44,7 @@ TETimeSync::sync(dbl_sec sim_secs)
 	{
 		std::cerr << "problem running in real-time" << std::endl;
 	}
-	else
-	{
-		std::cerr << "running in lock step with wall clock" << std::endl;
-	}
+	// do nothing if in lock-step
 }
 
 void 

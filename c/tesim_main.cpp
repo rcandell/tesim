@@ -445,7 +445,11 @@ int main(int argc, char* argv[])
 		xmv_channel->link_id(xmv_ge_link_id - 1);
 
 	tsave = tplant*double(ksave);
-	double tstep = 0.0001 / 3600;  // default time step for simulation is 0.1 ms
+	double tstep = 0.0;
+	if (!RT)
+		tstep = 0.001 / 3600;  // default time step for simulation is 1 ms for non-real-time performance
+	else
+		tstep = tplant/10;  // default time step for simulation is 1/10 plant for real-time performance
 	unsigned long epoch_sim = 0;
 	double tplant_next = 0.0, tctlr_next = 0.0, tsave_next = 0.0;
 	do
@@ -630,11 +634,6 @@ int main(int argc, char* argv[])
 				<< *tectlr << "\t"
 
 				<< std::endl;
-
-#if 0
-			//controller
-			ctlr_log << t << "\t" << *tectlr << std::endl;
-#endif // 0
 
 		}
 
