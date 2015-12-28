@@ -30,7 +30,7 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
-#include <math.h> 
+#include <cmath>
 #include <utility>
 
 #define XMV_SHMEM_NAME ("xmv_shmem")
@@ -39,7 +39,7 @@
 #define SP_SHMEM_NAME  ("sp_shmem")
 
 // function prototypes
-void print_sim_params(double tstep, double tscan, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq);
+void print_sim_params(double tplant, double tctlr, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq);
 
 using namespace boost::interprocess;
 
@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 	std::string log_file_prefix = "nochan";
 	bool append_flag = false, RT = false, use_ads = false, ads_remote = false, 
 		gechan_on = false, enable_idv = false, shdmem_on = false, ext_control = false;
-	double simtime = 0.0, t = 0.0, tstep = 0.0005, tscan = 0.0005;
+	double simtime = 0.0, t = 0.0, tplant = 0.0005, tctlr = 0.0005, tsave;
 	unsigned ksave = 20, idv_idx = 0;
 	double *xmeas, *xmv;
 
@@ -102,9 +102,9 @@ int main(int argc, char* argv[])
 	desc.add_options()
 		("help,h", "print the help message")
 		("simtime,s", po::value<double>(&simtime)->required(), "set the simulation time in hours")
-		("tstep,t", po::value<double>(&tstep), "set the base time step in hours")
-		("tscan,c", po::value<double>(&tscan), "set the scan interval in hours")
-		("ksave,k", po::value<unsigned>(&ksave), "decimation factor for saving trace data")
+		("tplant,t", po::value<double>(&tplant), "set the base time step in hours")
+		("tctlr,c", po::value<double>(&tctlr), "set the scan interval in hours")
+		("ksave,k", po::value<unsigned>(&ksave), "decimation factor for saving plant trace data")
 		("real-time,r", po::bool_switch(&RT)->default_value(false), "run the simulation in real time")
 		("logfile-prefix,p", po::value<std::string>(&log_file_prefix), "prefix for all of the log files")
 		("append-data,a", po::bool_switch(&append_flag)->default_value(false), "append plant data to output file")
@@ -192,8 +192,8 @@ int main(int argc, char* argv[])
 	if (!RT) shdmem_on = false;
 
 	std::cout << "Simulation time : " << simtime << std::endl;
-	std::cout << "Tstep:                       " << tstep << std::endl;
-	std::cout << "Tscan:                       " << tscan << std::endl;
+	std::cout << "Tplant:                       " << tplant << std::endl;
+	std::cout << "Tctlr:                       " << tctlr << std::endl;
 	std::cout << "Ksave:                       " << ksave << std::endl;
 	std::cout << "log file prefix:             " << log_file_prefix << std::endl;
 	std::cout << "Append:                      " << append_flag << std::endl;
@@ -243,8 +243,8 @@ int main(int argc, char* argv[])
 	// store meta data
 	metadata_log.open(log_file_prefix + "_meta.dat");
 	metadata_log << "Simulation time : " << simtime << std::endl;
-	metadata_log << "Tstep:                       " << tstep << std::endl;
-	metadata_log << "Tscan:                       " << tscan << std::endl;
+	metadata_log << "Tplant:                       " << tplant << std::endl;
+	metadata_log << "Tctlr:                       " << tctlr << std::endl;
 	metadata_log << "Ksave:                       " << ksave << std::endl;
 	metadata_log << "log file prefix:             " << log_file_prefix << std::endl;
 	metadata_log << "Append:                      " << append_flag << std::endl;
@@ -361,7 +361,7 @@ int main(int argc, char* argv[])
 
 #ifdef USE_ADS_IF
 	// setup the ads interface
-	TEADSInterface ads, ads_mbs;
+	TEADSInterface ads_xmeas_plant, ads_xmeas_gw;
 	if (use_ads)
 	{
 		if (ads_remote)
@@ -374,13 +374,13 @@ int main(int argc, char* argv[])
 			plc_addr.netId.b[4] = 1; 
 			plc_addr.netId.b[5] = 1;
 			plc_addr.port = 851;
-			ads.connect("G_IO.XMEAS", &plc_addr);
-			ads_mbs.connect("G_IO.MBS_XMEAS", &plc_addr);
+			ads_xmeas_plant.connect("G_IO.XMEAS", &plc_addr);
+			ads_xmeas_gw.connect("G_IO.MBS_XMEAS", &plc_addr);
 		}
 		else
 		{
-			ads.connect("MAIN.XMEAS", 851);
-			ads_mbs.connect("G_IO.MBS_XMEAS", 851);
+			ads_xmeas_plant.connect("G_IO.XMEAS", 851);
+			ads_xmeas_gw.connect("G_IO.MBS_XMEAS", 851);
 		}
 	}
 #endif 
@@ -390,9 +390,9 @@ int main(int argc, char* argv[])
 	char * plant_msg = NULL;
 
 	// derived simulation parameters
-	int nsteps = int(simtime/tstep) + 1;
-	int steps_per_scan = (int)round(tscan / tstep);
-	//print_sim_params(tstep, tscan, simtime, RT, xmeas_pq, xmv_pq);
+	int nsteps = int(simtime/tplant) + 1;
+	int steps_per_scan = (int)round(tctlr / tplant);
+	//print_sim_params(tplant, tctlr, simtime, RT, xmeas_pq, xmv_pq);
 
 	// auto timer used as a performance profiler
 	boost::timer::auto_cpu_timer t_wall_auto;
@@ -402,7 +402,7 @@ int main(int argc, char* argv[])
 	tesync.init();
 
 	// init the controller
-	tectlr->initialize(tscan);
+	tectlr->initialize(tctlr);
 	xmv = (double*)(tectlr->get_xmv());
 
 	// apply the overrides to the set-points
@@ -444,70 +444,80 @@ int main(int argc, char* argv[])
 	if (xmv_ge_link_id > 0)
 		xmv_channel->link_id(xmv_ge_link_id - 1);
 
-	for (int ii = 0; ii < nsteps; ii++)
+	tsave = tplant*double(ksave);
+	double tstep = 0.0001 / 3600;  // default time step for simulation is 0.1 ms
+	unsigned long epoch_sim = 0;
+	double tplant_next = 0.0, tctlr_next = 0.0, tsave_next = 0.0;
+	do
 	{
 		/***************************************************************************
 		*
 		* This is the plant section
 		*
 		****************************************************************************/
-		try
+		if (t >= tplant_next)
 		{
-			// examine shared memory for disturbances
-			if (shdmem_on && RT)
+			tplant_next += tplant;
+
+			try
 			{
-				// first update the disturbance vector
-				mapped_region reg_idv(*idv_shm, read_write);
-				idv_pair *mem = static_cast<idv_pair*>(reg_idv.get_address());
-				teplant->idv(mem->index, mem->value);
-			}
+				// examine shared memory for disturbances
+				if (shdmem_on && RT)
+				{
+					// first update the disturbance vector
+					mapped_region reg_idv(*idv_shm, read_write);
+					idv_pair *mem = static_cast<idv_pair*>(reg_idv.get_address());
+					teplant->idv(mem->index, mem->value);
+				}
 
-			// set the disturbance to hold on from command line
-			if (enable_idv)
-			{
-				teplant->idv(idv_idx-1);
-			}
+				// set the disturbance to hold on from command line
+				if (enable_idv)
+				{
+					teplant->idv(idv_idx - 1);
+				}
 
-			// increment the plant
-			xmeas = teplant->increment(t, tstep, xmv_channel->data(), &shutdown);
+				// increment the plant
+				xmeas = teplant->increment(t, tplant, xmv_channel->data(), &shutdown);
 
-			if (shdmem_on && RT)
-			{
-				// copy the xmeas values to shared memory
-				mapped_region reg_sim(*sim_shm, read_write);
-				double *shm_sim = static_cast<double*>(reg_sim.get_address());
-				memcpy(shm_sim, xmeas, sizeof(double)*TEPlant::NY);
-				memcpy(shm_sim + TEPlant::NY, xmv, sizeof(double)*TEPlant::NU);
-			}
+				if (shdmem_on && RT)
+				{
+					// copy the xmeas values to shared memory
+					mapped_region reg_sim(*sim_shm, read_write);
+					double *shm_sim = static_cast<double*>(reg_sim.get_address());
+					memcpy(shm_sim, xmeas, sizeof(double)*TEPlant::NY);
+					memcpy(shm_sim + TEPlant::NY, xmv, sizeof(double)*TEPlant::NU);
+				}
 
-			// send the measured variables to the PLC
+				// send the measured variables to the PLC
 #ifdef USE_ADS_IF
-			if (use_ads) { ads.write(xmeas); }
+				if (use_ads) { ads_xmeas_plant.write(xmeas); }
 #endif
 
-			// apply the sensors channel to plant readings
-			xmeas_chan_ptr = (*xmeas_channel) + xmeas;
-			xmeas_chan_log << *xmeas_channel << std::endl;
+				// apply the sensors channel to plant readings
+				xmeas_chan_ptr = (*xmeas_channel) + xmeas;
+				xmeas_chan_log << *xmeas_channel << std::endl;
 
-		}
-		catch (TEPlant::ShutdownException& e)
-		{
-			sim_log 
-				<< xmeas_pq << "\t" 
-				<< xmv_pq << "\t" 
+			}
+			catch (TEPlant::ShutdownException& e)
+			{
+				sim_log
+					<< xmeas_pq << "\t"
+					<< xmv_pq << "\t"
 
-				<< t << "\t" 
-				<< *teplant << "\t" 
-				<< e.m_sd_code 
+					<< t << "\t"
+					<< *teplant << "\t"
+					<< e.m_sd_code
 
-				<< t << "\t"
-				<< *tectlr << "\t"
+					<< t << "\t"
+					<< *tectlr << "\t"
 
-				<< std::endl;
+					<< std::endl;
 
-			std::cerr << e << std::endl;
-			std::cerr << "ending simulation" << std::endl;
-			return 0;
+				std::cerr << e << std::endl;
+				std::cerr << "ending simulation" << std::endl;
+				return 0;
+			}
+
 		}
 
 
@@ -517,17 +527,19 @@ int main(int argc, char* argv[])
 		*
 		****************************************************************************/
 		// run the controller if time is at a scan boundary
-		if (!(ii%steps_per_scan))
+		if (t >= tctlr_next)
 		{
+			tctlr_next += tctlr;
+
 #ifdef USE_ADS_IF
-			// query the ADS interface.
+			// query the ADS interface for xmeas values at the gateway.
 			// the ADS data overrides simulated channel
 			if (use_ads)
 			{
-				float mbs_xmeas[2];
-				ads_mbs.read(mbs_xmeas);
-				xmeas[6] = mbs_xmeas[0];
-				xmeas[7] = mbs_xmeas[1];
+				float mbs_xmeas_gw[2];
+				ads_xmeas_gw.read(mbs_xmeas_gw);
+				xmeas[6] = mbs_xmeas_gw[0];		// reactor pressure
+				xmeas[7] = mbs_xmeas_gw[1];		// reactor level
 				//std::cout << "mbs xmeas: " << xmeas[6] << " " << xmeas[7] << std::endl;
 			}
 #endif
@@ -535,7 +547,7 @@ int main(int argc, char* argv[])
 			// increment the controller
 			if (! (ext_control  && shdmem_on && RT) )
 			{
-				xmv = tectlr->increment(t, tscan, xmeas_channel->data());
+				xmv = tectlr->increment(t, tctlr, xmeas_channel->data());
 			}
 			else
 			{
@@ -594,11 +606,17 @@ int main(int argc, char* argv[])
 					mem->first = false;
 				}
 			}
+
+			// log current time to console
+			double t_print = floor(t*1000) / 1000;
+			std::cout << "\r" << "time: " << std::setprecision(5) << std::setfill('0') << t_print << " hours            ";
 		}
 
 		// log plant and controller data
-		if (!(ii%ksave))
+		if (t >= tsave_next)
 		{
+			tsave_next += tsave;
+
 			//plant
 			sim_log 
 				<< xmeas_pq << "\t" 
@@ -627,15 +645,14 @@ int main(int argc, char* argv[])
 			tesync.sync(sim_time_dur, time_log);
 		}
 
-		// log current time to console
-		std::cout << "\r" << "time: " << std::setprecision(8) << std::setfill('0') << t << " hours            ";
-
 		// Increment to the next time step
-		// Approximation of tstep because of limited memory causes errors to 
+		// Approximation of tplant because of limited memory causes errors to 
 		// integrate over time (round-off error), so we must recalculate t on 
 		// every iteration using a method that truncates the floating point error.
-		t = (double)(ii + 1) * tstep;
-	}
+		epoch_sim++;
+		t = (double)(epoch_sim) * tstep;
+
+	} while (t <= simtime);
 
 	// destroy the shared memory objects
 	if (xmv_shm) delete xmv_shm;
@@ -647,12 +664,12 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void print_sim_params(double tstep, double tscan, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq)
+void print_sim_params(double tplant, double tctlr, double simtime, bool rt, pq_pair xmeas_pq, pq_pair xmv_pq)
 {
 	BOOST_LOG_TRIVIAL(info) << std::endl << "TE simulation" << std::endl
 		<< "simulation time: " << simtime << " hrs" << std::endl
-		<< "plant dt: " << tstep << " hrs" << std::endl
-		<< "ctlr dt: " << tscan << " hrs" << std::endl
+		<< "plant dt: " << tplant << " hrs" << std::endl
+		<< "ctlr dt: " << tctlr << " hrs" << std::endl
 		<< "Real-time: " << rt << std::endl
 		<< "PER (xmeas): " << xmeas_pq << std::endl
 		<< "PER (xmv): " << xmv_pq << std::endl;
