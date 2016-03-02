@@ -182,10 +182,14 @@ void TEPlant::updateHourlyCost(double* xmeas, double* xmv)
 	static const double gain4 = 4.541;
 
 	m_hourlyCost =
+	
+		// cost to produce steam and deliver it to stripper
 		(gain0[0]*m_xmeas[18] + gain0[1]*m_xmeas[19]) +
 
+		// cost from purge of unused materials
 		gain1*m_xmeas[9] * (gain2[0]*m_xmeas[28] + gain2[1]*m_xmeas[30] + gain2[2]*m_xmeas[31] + gain2[3]*m_xmeas[32] + gain2[4]*m_xmeas[33] + gain2[5]*m_xmeas[34] + gain2[6]*m_xmeas[35]) +
 
+		// cost due to flow of desired product materials from the system
 		(gain3[0]*m_xmeas[36] + gain3[1]*m_xmeas[37] + gain3[2]*m_xmeas[38]) * gain4*m_xmv[7]; 
 }
 
@@ -216,8 +220,6 @@ char* TEPlant::shutdown_msg() const
 
 std::ostream& operator<< (std::ostream& lhs, const TEPlant& rhs)
 {
-	// TODO: It appears from the loop conditions that I am dropping a measured variable
-
 	// manipulated variables
 	for (int ii = 0; ii < TEPlant::NU-1; ii++)
 	{

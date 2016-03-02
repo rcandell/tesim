@@ -17,9 +17,9 @@
 #include <iostream>
 
 #include "TETypes.h"
-#include "TEErrorChannel.h"
+#include "TEChannel.h"
 
-class TEIIDErrorChannel : public TEErrorChannel
+class TEIIDErrorChannel : public TEChannel
 {
 
 	typedef boost::uniform_real<> NumberDistribution;
@@ -29,27 +29,24 @@ class TEIIDErrorChannel : public TEErrorChannel
 public:
 	// Construct a channel object with global packet error rate, 
 	// length of the data, and initial values.
-	TEIIDErrorChannel(double error_rate, unsigned dlen, const double* init_values, int seed = 17);
+	TEIIDErrorChannel(double error_rate, unsigned dlen, const double* init_values, const unsigned link_id = -1, int seed = 17);
 
 	// destroys all memory associate with object and deletes object
 	virtual ~TEIIDErrorChannel();
 
 	// This method will apply the random channel to the input data
 	// and return the data with channel applied.  If packets are dropped,
-	// the last know value is returned.
-	double* operator+(double* data);
+	// the last known value is returned.
+	virtual double* operator+(double* data);
 
 	// overloaded output stream for channel
-	friend std::ostream& operator<< (std::ostream&, const TEIIDErrorChannel&);
+	virtual std::ostream& print(std::ostream& os) const;
 
 	// sample random value from distribution
 	double operator()();
 
 	// accessors
-	unsigned dlen() const { return m_dlen; }
-	const double* previous() const { return m_previous; }
 	double error_rate() const { return m_error_rate; }
-	const bool* chan_state() const { return m_chan_state; }
 
 private:
 	TEIIDErrorChannel();
@@ -58,9 +55,6 @@ private:
 
 	// state variables
 	double m_error_rate;	// global error rate
-	double* m_previous;		// previous elements
-	unsigned m_dlen;		// number of elements
-	bool* m_chan_state;		// channel state of last increment, true means channel is up
 
 	// random generator
 	TEIIDErrorChannel::NumberDistribution m_distribution;

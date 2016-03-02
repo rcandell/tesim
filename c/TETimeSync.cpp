@@ -33,6 +33,8 @@ TETimeSync::init()
 void 
 TETimeSync::sync(dbl_sec sim_secs)
 {
+	if (sim_secs == boost::chrono::duration<double>::zero()) return;
+
 	// delay process to wait for wall clock
 	boost::chrono::duration<double> elapsed_wall_time = boost::chrono::system_clock::now() - m_wall_start;
 
@@ -44,10 +46,7 @@ TETimeSync::sync(dbl_sec sim_secs)
 	{
 		std::cerr << "problem running in real-time" << std::endl;
 	}
-	else
-	{
-		std::cerr << "running in lock step with wall clock" << std::endl;
-	}
+	// do nothing if in lock-step
 }
 
 void 

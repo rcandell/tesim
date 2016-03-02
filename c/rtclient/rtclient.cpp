@@ -125,11 +125,12 @@ int main(int argc, char* argv[])
 			shared_memory_object xmeas_shm(open_only, SIM_SHMEM_NAME, read_write);
 			mapped_region reg_proc_vars(xmeas_shm, read_write);
 			double *mem = static_cast<double*>(reg_proc_vars.get_address());
-			for (unsigned ii = 0; ii < (reg_proc_vars.get_size() / sizeof(double)) - 1; ii++)
+			unsigned sz_shm = reg_proc_vars.get_size() / sizeof(double);
+			std::cout << "size: " << sz_shm << std::endl;
+			for (unsigned ii = 0; ii < sz_shm; ii++)
 			{
-				std::cout << mem[ii] << ", ";
+				std::cout << std::setprecision(10) << ii << ": " << mem[ii] << "\n";
 			}
-			std::cout << mem[(reg_proc_vars.get_size() / sizeof(double))-1] << std::endl;
 		}
 
 		if (apply_sp_override)

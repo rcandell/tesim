@@ -24,3 +24,8 @@ octave-workspace
 
 
 Thumbs.db
+
+.RData
+.Rhistory
+
+*.png
