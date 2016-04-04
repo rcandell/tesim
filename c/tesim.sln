@@ -53,7 +53,6 @@ Global
 		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Release|TwinCAT RT (x64).ActiveCfg = Release|Win32
 		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Release|TwinCAT RT (x86).ActiveCfg = Release|Win32
 		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Release|Win32.ActiveCfg = Release|Win32
-		{250A4C20-4722-4E74-857C-20E1B1D0A486}.Release|Win32.Build.0 = Release|Win32
 		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{8062DC5F-8A2E-4DD8-B0DE-3C8DE61C37DD}.Debug|TwinCAT CE7 (ARMV7).ActiveCfg = Debug|Win32
