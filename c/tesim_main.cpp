@@ -33,6 +33,8 @@
 #include <cmath>
 #include <utility>
 
+#include <exception>
+
 #define XMV_SHMEM_NAME ("xmv_shmem")
 #define IDV_SHMEM_NAME ("idv_shmem")
 #define SIM_SHMEM_NAME ("sim_shmem")
@@ -361,13 +363,15 @@ int main(int argc, char* argv[])
 
 #ifdef USE_ADS_IF
 	// setup the ads interface
-	TEADSInterface ads_xmeas_plant, ads_xmeas_gw;
+	TEADSInterface ads_xmeas_plant, ads_xmeas_gw, ads_xmv_ctlr; 
+	TEADSInterface ads_prod_rate_sp, ads_preactor_sp, ads_lreactor_sp, ads_treactor_sp, ads_pctg_sp, ads_lseparator_sp, ads_lstripper_sp;
+	TEADSInterface ads_idv;
 	if (use_ads)
 	{
 		if (ads_remote)
 		{
 			AmsAddr plc_addr;
-			plc_addr.netId.b[0] = 5;
+			plc_addr.netId.b[0] = 5; 
 			plc_addr.netId.b[1] = 20; 
 			plc_addr.netId.b[2] = 215; 
 			plc_addr.netId.b[3] = 224;
@@ -376,11 +380,29 @@ int main(int argc, char* argv[])
 			plc_addr.port = 851;
 			ads_xmeas_plant.connect("G_IO.XMEAS", &plc_addr);
 			ads_xmeas_gw.connect("G_IO.MBS_XMEAS", &plc_addr);
+			ads_xmv_ctlr.connect("G_IO.XMV", &plc_addr);
+			ads_prod_rate_sp.connect("G_IO.PROD_RATE", &plc_addr);
+			ads_preactor_sp.connect("G_IO.P_REACTOR", &plc_addr);
+			ads_lreactor_sp.connect("G_IO.L_REACTOR", &plc_addr);
+			ads_treactor_sp.connect("G_IO.T_REACTOR", &plc_addr);
+			ads_pctg_sp.connect("G_IO.PCT_G", &plc_addr);
+			ads_lseparator_sp.connect("G_IO.L_SEPARATOR", &plc_addr);
+			ads_lstripper_sp.connect("G_IO.L_STRIPPER", &plc_addr);
+			ads_idv.connect("G_IO.IDV", &plc_addr);
 		}
 		else
 		{
 			ads_xmeas_plant.connect("G_IO.XMEAS", 851);
 			ads_xmeas_gw.connect("G_IO.MBS_XMEAS", 851);
+			ads_xmv_ctlr.connect("G_IO.XMV", 851);
+			ads_prod_rate_sp.connect("G_IO.PROD_RATE", 851);
+			ads_preactor_sp.connect("G_IO.P_REACTOR", 851);
+			ads_lreactor_sp.connect("G_IO.L_REACTOR", 851);
+			ads_treactor_sp.connect("G_IO.T_REACTOR", 851);
+			ads_pctg_sp.connect("G_IO.PCT_G", 851);
+			ads_lseparator_sp.connect("G_IO.L_SEPARATOR", 851);
+			ads_lstripper_sp.connect("G_IO.L_STRIPPER", 851);
+			ads_idv.connect("G_IO.IDV", 851);
 		}
 	}
 #endif 
@@ -492,9 +514,17 @@ int main(int argc, char* argv[])
 					memcpy(shm_sim + TEPlant::NY, xmv, sizeof(double)*TEPlant::NU);
 				}
 
-				// send the measured variables to the PLC
 #ifdef USE_ADS_IF
-				if (use_ads) { ads_xmeas_plant.write(xmeas); }
+				if (use_ads) 
+				{ 
+					// send the measured variables to the PLC
+					ads_xmeas_plant.write_lreal(xmeas, TEPlant::NY);
+
+					// disturbance vector
+					// ads_idv.write_int(teplant->get_idv(), TEPlant::NIDV);
+				}
+				
+
 #endif
 
 				// apply the sensors channel to plant readings
@@ -541,7 +571,7 @@ int main(int argc, char* argv[])
 			if (use_ads)
 			{
 				float mbs_xmeas_gw[2];
-				ads_xmeas_gw.read(mbs_xmeas_gw);
+				ads_xmeas_gw.read_real(mbs_xmeas_gw, 2);
 				xmeas[6] = mbs_xmeas_gw[0];		// reactor pressure
 				xmeas[7] = mbs_xmeas_gw[1];		// reactor level
 				//std::cout << "mbs xmeas: " << xmeas[6] << " " << xmeas[7] << std::endl;
@@ -610,6 +640,28 @@ int main(int argc, char* argv[])
 					mem->first = false;
 				}
 			}
+
+#ifdef USE_ADS_IF
+			try
+			{
+				if (use_ads) 
+				{ 
+					ads_xmv_ctlr.write_lreal(xmv, 12); 
+					ads_prod_rate_sp.write_lreal(tectlr->prod_rate_sp(), 1);
+					ads_preactor_sp.write_lreal(tectlr->reactor_pressure_sp(), 1);
+					ads_lreactor_sp.write_lreal(tectlr->reactor_level_sp(), 1);
+					ads_treactor_sp.write_lreal(tectlr->reactor_temp_sp(), 1);
+					ads_pctg_sp.write_lreal(tectlr->pctg_sp(), 1);
+					ads_lseparator_sp.write_lreal(tectlr->sep_level_sp(), 1);
+					ads_lstripper_sp.write_lreal(tectlr->strip_level_sp(), 1);
+				}
+			}
+			catch (TEADSInterface::ADSError& e)
+			{
+				std::cout << e.errStr << std::endl;
+			}
+
+#endif
 
 			// log current time to console
 			double t_print = floor(t*1000) / 1000;

@@ -36,8 +36,9 @@ public:
 
 	void connect(std::string varName, const short nRemotePort);			// local connections
 	void connect(std::string varName, const PAmsAddr remote_addr);	// explicit local/remote connections
-	void write(const double* x);
-	void read(float* x);
+	void write_lreal(const double* x, const long nel);
+	void read_real(float* x, const long nel);
+	void write_int(const int* b, const long nel);
 
 private:
 	

@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
 	using namespace boost::interprocess;
 	try
 	{
-		if (set_xmv)
+		if (vm.count("x"))
 		{
 			shared_memory_object xmv_shm(open_only, XMV_SHMEM_NAME, read_write);
 			mapped_region reg_xmv(xmv_shm, read_write);
