@@ -10,6 +10,8 @@
 
 #ifdef USE_ADS_IF
 
+#define DINT __int32
+
 #include "TEPlant.h"
 #include "TEADSInterface.h"
 #include <string>
@@ -118,15 +120,13 @@ TEADSInterface::read_real(float* x, const long nel)
 }
 
 void
-TEADSInterface::write_int(const int* x, const long nel)
+TEADSInterface::write_dint(const int* x, const long nel)
 {
 	// Reset the value of the PLC variable to 0 
 	long nErr = 0;
-	int *x_tmp = 0;
-	x_tmp = new int[nel];
+	int x_tmp[128];
 	memcpy(x_tmp, x, nel * sizeof(int));
-	nErr = AdsSyncWriteReq(m_pAmsAddr, ADSIGRP_SYM_VALBYHND, m_hVarHandle, nel*sizeof(int), &x_tmp);
-	if (x_tmp) delete x_tmp;
+	nErr = AdsSyncWriteReq(m_pAmsAddr, ADSIGRP_SYM_VALBYHND, m_hVarHandle, nel*sizeof(DINT), &x_tmp);
 	if (nErr)
 	{
 		TEADSInterface::ADSError err(nErr, "AdsSyncWriteReq");

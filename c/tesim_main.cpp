@@ -493,7 +493,12 @@ int main(int argc, char* argv[])
 					// first update the disturbance vector
 					mapped_region reg_idv(*idv_shm, read_write);
 					idv_pair *mem = static_cast<idv_pair*>(reg_idv.get_address());
-					teplant->idv(mem->index, mem->value);
+					if (mem->index > 0)
+					{
+						teplant->idv(mem->index - 1, mem->value);
+						std::cout << mem->index - 1 << "," << mem->value << std::endl;
+						mem->index = 0;
+					}
 				}
 
 				// set the disturbance to hold on from command line
@@ -521,7 +526,7 @@ int main(int argc, char* argv[])
 					ads_xmeas_plant.write_lreal(xmeas, TEPlant::NY);
 
 					// disturbance vector
-					// ads_idv.write_int(teplant->get_idv(), TEPlant::NIDV);
+					ads_idv.write_dint(teplant->get_idv(), TEPlant::NIDV);
 				}
 				
 
