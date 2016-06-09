@@ -77,6 +77,9 @@ int main(int argc, char* argv[])
 
 		po::notify(vm);
 
+		if (vm.count("setidv")) { set_idv = true;  }
+		if (vm.count("unsetidv")) { unset_idv = true; }
+
 		if (vm.count("sp-prod-rate")) { apply_sp_override = true; }
 		else if (vm.count("sp-reactor-pressure")) { apply_sp_override = true; }
 		else if (vm.count("sp-reactor-level")) { apply_sp_override = true; }
@@ -94,7 +97,7 @@ int main(int argc, char* argv[])
 	using namespace boost::interprocess;
 	try
 	{
-		if (set_xmv)
+		if (vm.count("x"))
 		{
 			shared_memory_object xmv_shm(open_only, XMV_SHMEM_NAME, read_write);
 			mapped_region reg_xmv(xmv_shm, read_write);

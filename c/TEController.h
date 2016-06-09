@@ -53,12 +53,25 @@ public:
 
 	// setpoint accessors
 	void prod_rate_sp(double prod_rate_sp)		{ _prod_rate_sp = prod_rate_sp; }
+	const double* prod_rate_sp() const					{ return &_prod_rate_sp; }
+	
 	void reactor_pressure_sp(double sp)			{ _reactor_pressure_sp = sp; }
+	const double* reactor_pressure_sp() const			{ return &_reactor_pressure_sp; }
+
 	void reactor_level_sp(double sp)			{ _reactor_level_sp = sp; }
+	const double* reactor_level_sp() const				{ return &_reactor_level_sp; }
+	
 	void reactor_temp_sp(double sp)				{ _reactor_temp_sp = sp;  }
+	const double* reactor_temp_sp() const				{ return &_reactor_temp_sp; }
+	
 	void sep_level_sp(double sp)				{ _sep_level_sp = sp; }
+	const double* sep_level_sp() const					{ return &_sep_level_sp; }
+	
 	void strip_level_sp(double sp)				{ _stripper_level_sp = sp; }
+	const double* strip_level_sp() const				{ return &_stripper_level_sp; }
+	
 	void pctg_sp(double sp)						{ _pctg_sp = sp; }
+	const double* pctg_sp() const						{ return &_pctg_sp; }
 
 private:
 
