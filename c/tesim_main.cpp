@@ -496,8 +496,8 @@ int main(int argc, char* argv[])
 					if (mem->index > 0)
 					{
 						teplant->idv(mem->index - 1, mem->value);
-						std::cout << mem->index - 1 << "," << mem->value << std::endl;
-						mem->index = 0;
+						std::cout << std:: endl << "IDV update: " << mem->index - 1 << "," << mem->value << std::endl;
+						mem->index = 0; 
 					}
 				}
 
