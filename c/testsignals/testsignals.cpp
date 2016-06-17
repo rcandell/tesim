@@ -60,8 +60,8 @@ int main(int argc, char* argv[])
 	std::string log_file_prefix = "nochan";
 	bool append_flag = false, RT = false, use_ads = false, ads_remote = false,
 		gechan_on = false, enable_idv = false, shdmem_on = false, ext_control = false;
-	double simtime = 0.0, t = 0.0, tplant = 0.0005, tctlr = 0.0005, tsave;
-	unsigned ksave = 20, idv_idx = 0;
+	double simtime = 0.0, t = 0.0, tplant = 1.0, tsave;
+	unsigned ksave = 1;
 	double *xmeas, *xmv;
 
 	// test signal parameters
@@ -87,9 +87,9 @@ int main(int argc, char* argv[])
 	po::options_description desc("Allowed options");
 	desc.add_options()
 		("help,h", "print the help message")
-		("simtime,s", po::value<double>(&simtime)->required(), "set the simulation time in seconds")
-		("tplant,t", po::value<double>(&tplant), "set the base time step in seconds")
-		("real-time,r", po::bool_switch(&RT)->default_value(false), "run the simulation in real time")
+		("simtime,s", po::value<double>(&simtime)->default_value(600.0), "set the simulation time in seconds")
+		("tplant,t", po::value<double>(&tplant)->default_value(1.0), "set the base time step in seconds")
+		("real-time,r", po::bool_switch(&RT), "run the simulation in real time")
 
 		// test parameters
 		("test-type", po::value<unsigned>(&test_type)->default_value(0), "test signal type, 0 = constant, 1 = ramp, 2 = pulse train")
@@ -159,7 +159,6 @@ int main(int argc, char* argv[])
 	metadata_log.open(log_file_prefix + "_meta.dat");
 	metadata_log << "Simulation time : " << simtime << std::endl;
 	metadata_log << "Tplant:                       " << tplant << std::endl;
-	metadata_log << "Tctlr:                       " << tctlr << std::endl;
 	metadata_log << "Ksave:                       " << ksave << std::endl;
 	metadata_log << "log file prefix:             " << log_file_prefix << std::endl;
 	metadata_log << "Append:                      " << append_flag << std::endl;
@@ -174,14 +173,14 @@ int main(int argc, char* argv[])
 
 	// create shared memory for control of the plant
 	using namespace boost::interprocess;
-	shared_memory_object * xmv_shm = 0, *idv_shm = 0, *sim_shm = 0, *sp_shm = 0;
+	shared_memory_object * xmv_shm = 0, *idv_shm = 0, *xmeas_shm = 0, *sp_shm = 0;
 	shm_remove remover;
 	if (shdmem_on && RT)
 	{
 		try
 		{
-			sim_shm = new shared_memory_object(open_or_create, SIM_SHMEM_NAME, read_write);
-			sim_shm->truncate(sizeof(double)*TEPlant::NY + sizeof(double)*TEPlant::NU);
+			xmeas_shm = new shared_memory_object(open_or_create, SIM_SHMEM_NAME, read_write);
+			xmeas_shm->truncate(sizeof(double)*TEPlant::NY + sizeof(double)*TEPlant::NU);
 			std::cout << "xmeas shared memory object created" << std::endl;
 		}
 		catch (interprocess_exception & ex)
@@ -191,18 +190,10 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	// open the simulation log files
-	if (append_flag)
-	{
-		sim_log.open(log_file_prefix + "_simlog.dat", std::fstream::out | std::fstream::app);
-		std::cout << "plant data file: " << log_file_prefix << "_simlog.dat" << std::endl;
-	}
-	else
-	{
-		sim_log.open(log_file_prefix + "_simlog.dat");
-		sim_log << TENames::simlog_all() << std::endl;
-	}
-	sim_log.precision(15);
+
+	sim_log.open(log_file_prefix + "_simlog.dat", std::fstream::out);
+	sim_log << std::setprecision(15);
+	sim_log << std::fixed;
 
 	// if we run in real-time, then create a time synch log
 	if (RT)
@@ -223,11 +214,7 @@ int main(int argc, char* argv[])
 	tesync.init();
 
 	tsave = tplant*double(ksave);
-	double tstep = 0.0;
-	if (!RT)
-		tstep = 0.001 / 3600;  // default time step for simulation is 1 ms for non-real-time performance
-	else
-		tstep = tplant / 10;  // default time step for simulation is 1/10 plant for real-time performance
+	double tstep = tplant / 10.0;
 
 	unsigned long epoch_sim = 0;
 	double tplant_next = 0.0, tctlr_next = 0.0, tsave_next = 0.0;
@@ -242,11 +229,13 @@ int main(int argc, char* argv[])
 		****************************************************************************/
 		if (t >= tplant_next)
 		{
+			tplant_next += tplant;
+
 			//
 			// Generate the test signal
 			//
 			ramp_out = ramp_slope*Tau + ramp_min;
-			if (ramp_out <= ramp_max)
+			if (ramp_out > ramp_max)
 			{
 				ramp_out = ramp_min;
 				Tau = 0.0;
@@ -255,7 +244,7 @@ int main(int argc, char* argv[])
 			{
 				Tau += tplant;
 			}
-			memcpy(xmeas, &ramp_out, TEPlant::NY);
+			for (int ii = 0; ii < TEPlant::NY; ii++) { xmeas[ii] = ramp_out; };
 
 			try
 			{
@@ -263,7 +252,7 @@ int main(int argc, char* argv[])
 				if (shdmem_on && RT)
 				{
 					// copy the xmeas values to shared memory
-					mapped_region reg_sim(*sim_shm, read_write);
+					mapped_region reg_sim(*xmeas_shm, read_write);
 					double *shm_sim = static_cast<double*>(reg_sim.get_address());
 					memcpy(shm_sim, xmeas, sizeof(double)*TEPlant::NY);
 					memcpy(shm_sim + TEPlant::NY, xmv, sizeof(double)*TEPlant::NU);
@@ -278,23 +267,16 @@ int main(int argc, char* argv[])
 				return 0;
 			}
 
+			// log the plant data
+			sim_log << "y = " << ramp_out << std::endl;
+
 		}
 
 		// log current time to console
 		double t_print = floor(t * 1000) / 1000;
-		std::cout << "\r" << "time: " << std::setprecision(5) << std::setfill('0') << t_print << " hours            ";
-
-		// log plant and controller data
-		if (t >= tsave_next)
-		{
-			tsave_next += tsave;
-
-			//plant
-			sim_log
-				<< "600D BEEF"
-				<< std::endl;
-
-		}
+		std::cout << std::setprecision(5);
+		std::cout << std::fixed;
+		std::cout << "\r" << "time: " << t_print << " seconds,    y=" << ramp_out;
 
 		// try to sync sim time to match wall clock time
 		if (RT)
@@ -310,10 +292,10 @@ int main(int argc, char* argv[])
 		epoch_sim++;
 		t = (double)(epoch_sim)* tstep;
 
-	} while (t <= simtime);
+	} while (t < simtime);
 
 	// destroy the shared memory objects
-	if (sim_shm) delete sim_shm;
+	if (xmeas_shm) delete xmeas_shm;
 	if (sp_shm) delete sp_shm;
 
 	std::cout << std::endl;
