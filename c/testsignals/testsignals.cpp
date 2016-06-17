@@ -26,12 +26,18 @@
 
 #include <exception>
 
+#include <math.h>
+
 #include "TETimeSync.h"
 #include "TENames.h"
 #include "TEPlant.h"
 
 #define SIM_SHMEM_NAME ("sim_shmem")
 #define SP_SHMEM_NAME  ("sp_shmem")
+
+#define TEST_TYPE_CONST (0)
+#define TEST_TYPE_RAMP (1)
+#define TEST_TYPE_PULSE (2)
 
 using namespace boost::interprocess;
 
@@ -60,16 +66,18 @@ int main(int argc, char* argv[])
 	std::string log_file_prefix = "nochan";
 	bool append_flag = false, RT = false, use_ads = false, ads_remote = false,
 		gechan_on = false, enable_idv = false, shdmem_on = false, ext_control = false;
-	double simtime = 0.0, t = 0.0, tplant = 1.0, tsave;
+	double simtime = 0.0, t = 0.0, tplant = 0.1;
 	unsigned ksave = 1;
 	double *xmeas, *xmv;
 
 	// test signal parameters
 	unsigned test_type = 1;  // 0 = constant, 1 = ramp, 2 = pulse train
 	double ramp_slope = 1.0;
-	double ramp_max = 100.0;
-	double ramp_min = 0.0;
-	double ramp_ic = 0.0;
+	double signal_max = 100.0;
+	double signal_min = 0.0;
+	double signal_ic = 0.0;
+	double signal_period_sec = 0.0;
+	double signal_duty_cycle = 0.0;
 
 	// initialize xmeas and xmv
 	xmeas = new double[TEPlant::NY];
@@ -91,16 +99,19 @@ int main(int argc, char* argv[])
 		("tplant,t", po::value<double>(&tplant)->default_value(1.0), "set the base time step in seconds")
 		("real-time,r", po::bool_switch(&RT), "run the simulation in real time")
 
-		// test parameters
+		// test type
 		("test-type", po::value<unsigned>(&test_type)->default_value(0), "test signal type, 0 = constant, 1 = ramp, 2 = pulse train")
-		("ramp-slope", po::value<double>(&ramp_slope)->default_value(1.0), "ramp slope, default (1.0)")
-		("ramp-max", po::value<double>(&ramp_max)->default_value(100.0), "ramp max, default (100.0)")
-		("ramp-min", po::value<double>(&ramp_min)->default_value(0.0), "ramp min, default (0.0)")
-		("ramp-ic", po::value<double>(&ramp_ic)->default_value(0.0), "ramp initial condition, default (0.0)")
+
+		// signal test parameters
+		("signal-slope", po::value<double>(&ramp_slope)->default_value(1.0), "ramp slope, default (1.0)")
+		("signal-max", po::value<double>(&signal_max)->default_value(100.0), "signal max, default (100.0)")
+		("signal-min", po::value<double>(&signal_min)->default_value(0.0), "signal min, default (0.0)")
+		("signal-ic", po::value<double>(&signal_ic)->default_value(0.0), "signal initial condition, default (0.0)")
+		("signal-period", po::value<double>(&signal_period_sec)->default_value(10.0), "period in seconds of each signal cycle, default (10.0)")
+		("signal-duty-cycle-pct", po::value<double>(&signal_duty_cycle)->default_value(50.0), "duty cycle, default (50.0%)")
 
 		// shared memory
 		("shared-memory", po::bool_switch(&shdmem_on)->default_value(false), "xmv and idv variables")
-		("external-ctrl", po::bool_switch(&ext_control)->default_value(false), "read xmv from shared memory")
 		;
 
 	po::variables_map vm;
@@ -127,26 +138,21 @@ int main(int argc, char* argv[])
 		std::cout << "shared memory mode requires real-time mode" << std::endl;
 		return(1);
 	}
-	if (!(shdmem_on && RT) && ext_control)
-	{
-		std::cout << "enabling real-time mode and shared memory for external control" << std::endl;
-		shdmem_on = true;
-		RT = true;
-	}
 	if (!RT) shdmem_on = false;
 
 	std::cout << "Simulation time : " << simtime << std::endl;
-	std::cout << "Tplant:                       " << tplant << std::endl;
+	std::cout << "Tplant:                      " << tplant << std::endl;
 	std::cout << "Ksave:                       " << ksave << std::endl;
 	std::cout << "log file prefix:             " << log_file_prefix << std::endl;
 	std::cout << "Append:                      " << append_flag << std::endl;
 	std::cout << "Run RT:                      " << RT << std::endl;
-	std::cout << "*****************************" << std::endl;
-	std::cout << "test type:                     " << test_type << std::endl;
-	std::cout << "Ramp slope:                    " << ramp_slope << std::endl;
-	std::cout << "Ramp max:                      " << ramp_max << std::endl;
-	std::cout << "Ramp min:                      " << ramp_min << std::endl;
-	std::cout << "Ramp I.C.:                     " << ramp_ic << std::endl;
+	std::cout << "test type:                   " << test_type << std::endl;
+	std::cout << "Signal slope:                " << ramp_slope << std::endl;
+	std::cout << "Signal max:                  " << signal_max << std::endl;
+	std::cout << "Signal min:                  " << signal_min << std::endl;
+	std::cout << "Signal I.C.:                 " << signal_ic << std::endl;
+	std::cout << "Signal period:               " << signal_period_sec << std::endl;
+	std::cout << "Duty cycle %:                " << signal_duty_cycle << std::endl;
 
 	std::cout << std::endl;
 
@@ -158,16 +164,18 @@ int main(int argc, char* argv[])
 	// store meta data
 	metadata_log.open(log_file_prefix + "_meta.dat");
 	metadata_log << "Simulation time : " << simtime << std::endl;
-	metadata_log << "Tplant:                       " << tplant << std::endl;
+	metadata_log << "Tplant:                      " << tplant << std::endl;
 	metadata_log << "Ksave:                       " << ksave << std::endl;
 	metadata_log << "log file prefix:             " << log_file_prefix << std::endl;
 	metadata_log << "Append:                      " << append_flag << std::endl;
 	metadata_log << "Run RT:                      " << RT << std::endl;
 	metadata_log << "test type:                   " << test_type << std::endl;
-	metadata_log << "Ramp slope:                  " << ramp_slope << std::endl;
-	metadata_log << "Ramp max:                    " << ramp_max << std::endl;
-	metadata_log << "Ramp min:                    " << ramp_min << std::endl;
-	metadata_log << "Ramp I.C.:                   " << ramp_ic << std::endl;
+	metadata_log << "Signal slope:                " << ramp_slope << std::endl;
+	metadata_log << "Signal max:                  " << signal_max << std::endl;
+	metadata_log << "Signal min:                  " << signal_min << std::endl;
+	metadata_log << "Signal I.C.:                 " << signal_ic << std::endl;
+	metadata_log << "Signal perdiod:              " << signal_period_sec << std::endl;
+	metadata_log << "Signal duty cycle %:         " << signal_duty_cycle << std::endl;
 	metadata_log << std::endl;
 	metadata_log.close();
 
@@ -194,6 +202,7 @@ int main(int argc, char* argv[])
 	sim_log.open(log_file_prefix + "_simlog.dat", std::fstream::out);
 	sim_log << std::setprecision(15);
 	sim_log << std::fixed;
+	sim_log << "time\ttau\tsout" << std::endl;
 
 	// if we run in real-time, then create a time synch log
 	if (RT)
@@ -213,13 +222,13 @@ int main(int argc, char* argv[])
 	TETimeSync tesync;
 	tesync.init();
 
-	tsave = tplant*double(ksave);
-	double tstep = tplant / 10.0;
-
 	unsigned long epoch_sim = 0;
 	double tplant_next = 0.0, tctlr_next = 0.0, tsave_next = 0.0;
-	double Tau = 0.0, dTau = 0.0;
-	double ramp_out = ramp_min;
+	double Tau = t, dTau = 0.0;
+	double signal_out = signal_ic;
+
+	double pulse_width_sec = signal_period_sec * signal_duty_cycle / 100.0;
+
 	do
 	{
 		/***************************************************************************
@@ -229,22 +238,33 @@ int main(int argc, char* argv[])
 		****************************************************************************/
 		if (t >= tplant_next)
 		{
-			tplant_next += tplant;
+			// update local sw clock
+			Tau = fmod(t, signal_period_sec);
 
-			//
-			// Generate the test signal
-			//
-			ramp_out = ramp_slope*Tau + ramp_min;
-			if (ramp_out > ramp_max)
+			switch (test_type)
 			{
-				ramp_out = ramp_min;
-				Tau = 0.0;
-			}
-			else
-			{
-				Tau += tplant;
-			}
-			for (int ii = 0; ii < TEPlant::NY; ii++) { xmeas[ii] = ramp_out; };
+			case TEST_TYPE_RAMP:
+
+				//
+				// Generate the ramp signal
+				//
+				signal_out = ramp_slope*Tau + signal_min;
+				break;
+
+			case TEST_TYPE_PULSE:
+
+				//
+				// Generate the pulse train signal
+				//
+				(Tau < pulse_width_sec) ? (signal_out = 1.0) : (signal_out = 0.0);
+				break;
+			
+			case TEST_TYPE_CONST:
+			default:
+				break;
+			} 
+
+			for (int ii = 0; ii < TEPlant::NY; ii++) { xmeas[ii] = signal_out; };
 
 			try
 			{
@@ -268,15 +288,12 @@ int main(int argc, char* argv[])
 			}
 
 			// log the plant data
-			sim_log << "y = " << ramp_out << std::endl;
+			sim_log << t << "\t" << Tau << "\t" << signal_out << std::endl;
+
+			// update the time information
+			tplant_next += tplant;
 
 		}
-
-		// log current time to console
-		double t_print = floor(t * 1000) / 1000;
-		std::cout << std::setprecision(5);
-		std::cout << std::fixed;
-		std::cout << "\r" << "time: " << t_print << " seconds,    y=" << ramp_out;
 
 		// try to sync sim time to match wall clock time
 		if (RT)
@@ -290,7 +307,7 @@ int main(int argc, char* argv[])
 		// integrate over time (round-off error), so we must recalculate t on 
 		// every iteration using a method that truncates the floating point error.
 		epoch_sim++;
-		t = (double)(epoch_sim)* tstep;
+		t = (double)(epoch_sim)* tplant;
 
 	} while (t < simtime);
 
