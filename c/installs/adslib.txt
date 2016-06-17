@@ -1,0 +1,1 @@
+TwinCAT ADS Protocol support must be installed for the PLC interface to compile.
