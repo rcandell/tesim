@@ -14,7 +14,6 @@
 #include <boost/program_options.hpp>
 #include <boost/interprocess/shared_memory_object.hpp>
 #include <boost/interprocess/mapped_region.hpp>
-#include "TEController.h"
 
 #define XMV_SHMEM_NAME ("xmv_shmem")
 #define IDV_SHMEM_NAME ("idv_shmem")
@@ -28,6 +27,7 @@
 #include <utility>
 
 #include "TEPlant.h"
+#include "TEController.h"
 
 typedef struct { int index; double value; } xmv_pair;
 typedef struct { int index; int value; } idv_pair;

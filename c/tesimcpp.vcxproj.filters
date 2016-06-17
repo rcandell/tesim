@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="tesim_main.cpp" />
-    <ClCompile Include="TETestSignals.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -13,10 +10,5 @@
     <Filter Include="Headers Files">
       <UniqueIdentifier>{7b2b5fac-3e32-4235-8c1f-1a91cbd5df8f}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="TETestSignals.h">
-      <Filter>Headers Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
