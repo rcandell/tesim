@@ -575,12 +575,14 @@ int main(int argc, char* argv[])
 			// the ADS data overrides simulated channel
 			if (use_ads)
 			{
-				float mbs_xmeas_gw[2];
-				ads_xmeas_gw.read_real(mbs_xmeas_gw, 2);
-				xmeas[6] = mbs_xmeas_gw[0];		// reactor pressure
-				xmeas[7] = mbs_xmeas_gw[1];		// reactor level
-				//std::cout << "mbs xmeas: " << xmeas[6] << " " << xmeas[7] << std::endl;
+				float mbs_xmeas_gw[4];
+				ads_xmeas_gw.read_real(mbs_xmeas_gw, 4);
+				xmeas[0] = mbs_xmeas_gw[0];		// Flow: Feed A
+				xmeas[1] = mbs_xmeas_gw[1];		// Flow: Feed D
+				xmeas[2] = mbs_xmeas_gw[2];		// Flow: Feed E
+				xmeas[6] = mbs_xmeas_gw[3];		// Reactor Pressure
 			}
+		
 #endif
 
 			// increment the controller

@@ -83,7 +83,8 @@ TEADSInterface::connect(std::string varName, const PAmsAddr remote_addr)
 	if (nErr)
 	{
 		TEADSInterface::ADSError err(nErr, "AdsSyncReadWriteReq");
-		throw(err);
+		std::cout << err.nErr << "\t" << err.errStr << std::endl;
+		exit(0);
 	}
 }
 
@@ -107,7 +108,7 @@ TEADSInterface::read_real(float* x, const long nel)
 {
 	// Reset the value of the PLC variable to 0 
 	long nErr = 0;
-	float x_tmp[2];  // NOTE this will need to be increased if more elements are requested
+	float x_tmp[41];  // NOTE this will need to be increased if more elements are requested
 	nErr = AdsSyncReadReq(m_pAmsAddr, ADSIGRP_SYM_VALBYHND, m_hVarHandle, nel*sizeof(float), &x_tmp);
 
 	if (nErr)

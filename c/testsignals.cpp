@@ -32,6 +32,10 @@
 #include "TENames.h"
 #include "TEPlant.h"
 
+#ifdef USE_ADS_IF
+#include "TEADSInterface.h"
+#endif
+
 #define SIM_SHMEM_NAME ("sim_shmem")
 #define SP_SHMEM_NAME  ("sp_shmem")
 
@@ -64,8 +68,7 @@ int main(int argc, char* argv[])
 	Declaration of variables for main line program
 	*/
 	std::string log_file_prefix = "nochan";
-	bool append_flag = false, RT = false, use_ads = false, ads_remote = false,
-		gechan_on = false, enable_idv = false, shdmem_on = false, ext_control = false;
+	bool append_flag = false, RT = false, use_ads = false, shdmem_on = false;
 	double simtime = 0.0, t = 0.0, tplant = 0.1;
 	unsigned ksave = 1;
 	double *xmeas, *xmv;
@@ -112,6 +115,11 @@ int main(int argc, char* argv[])
 
 		// shared memory
 		("shared-memory", po::bool_switch(&shdmem_on)->default_value(false), "xmv and idv variables")
+
+#ifdef USE_ADS_IF
+		// ADS interface
+		("enable-ads,b", po::bool_switch(&use_ads)->default_value(false), "turns on the ADS interface to PLC")
+#endif
 		;
 
 	po::variables_map vm;
@@ -153,6 +161,7 @@ int main(int argc, char* argv[])
 	std::cout << "Signal I.C.:                 " << signal_ic << std::endl;
 	std::cout << "Signal period:               " << signal_period_sec << std::endl;
 	std::cout << "Duty cycle %:                " << signal_duty_cycle << std::endl;
+	std::cout << "Use ADS:                     " << use_ads << std::endl;
 
 	std::cout << std::endl;
 
@@ -176,6 +185,7 @@ int main(int argc, char* argv[])
 	metadata_log << "Signal I.C.:                 " << signal_ic << std::endl;
 	metadata_log << "Signal perdiod:              " << signal_period_sec << std::endl;
 	metadata_log << "Signal duty cycle %:         " << signal_duty_cycle << std::endl;
+	metadata_log << "Use ADS:                     " << use_ads << std::endl;
 	metadata_log << std::endl;
 	metadata_log.close();
 
@@ -211,6 +221,24 @@ int main(int argc, char* argv[])
 		time_log.precision(15);
 		time_log.fill('0');
 	}
+
+#ifdef USE_ADS_IF
+	// setup the ads interface
+	TEADSInterface ads_xmeas_plant;
+	if (use_ads)
+	{
+		AmsAddr plc_addr;
+		plc_addr.netId.b[0] = 5;
+		plc_addr.netId.b[1] = 20;
+		plc_addr.netId.b[2] = 215;
+		plc_addr.netId.b[3] = 224;
+		plc_addr.netId.b[4] = 1;
+		plc_addr.netId.b[5] = 1;
+		plc_addr.port = 851;
+		ads_xmeas_plant.connect("G_IO.XMEAS", &plc_addr);
+	}
+#endif 
+
 
 	// derived simulation parameters
 	int nsteps = int(simtime / tplant) + 1;
@@ -266,6 +294,14 @@ int main(int argc, char* argv[])
 
 			for (int ii = 0; ii < TEPlant::NY; ii++) { xmeas[ii] = signal_out; };
 
+#ifdef USE_ADS_IF
+			if (use_ads)
+			{
+				// send the measured variables to the PLC
+				ads_xmeas_plant.write_lreal(xmeas, TEPlant::NY);
+			}
+#endif
+
 			try
 			{
 
@@ -289,6 +325,7 @@ int main(int argc, char* argv[])
 
 			// log the plant data
 			sim_log << t << "\t" << Tau << "\t" << signal_out << std::endl;
+			std::cout << t << "\t" << Tau << "\t" << signal_out << std::endl;
 
 			// update the time information
 			tplant_next += tplant;
