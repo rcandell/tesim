@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
 	bool append_flag = false, RT = false, use_ads = false, shdmem_on = false;
 	double simtime = 0.0, t = 0.0, tplant = 0.1;
 	unsigned ksave = 1;
-	double *xmeas, *xmv;
+	double *xmeas, *xmv, mbs_xmeas[4];
 
 	// test signal parameters
 	unsigned test_type = 1;  // 0 = constant, 1 = ramp, 2 = pulse train
@@ -101,6 +101,7 @@ int main(int argc, char* argv[])
 		("simtime,s", po::value<double>(&simtime)->default_value(600.0), "set the simulation time in seconds")
 		("tplant,t", po::value<double>(&tplant)->default_value(1.0), "set the base time step in seconds")
 		("real-time,r", po::bool_switch(&RT), "run the simulation in real time")
+		//("logfile-prefix,p", po::value<std::string>(&log_file_prefix), "prefix for all of the log files")
 
 		// test type
 		("test-type", po::value<unsigned>(&test_type)->default_value(0), "test signal type, 0 = constant, 1 = ramp, 2 = pulse train")
@@ -168,6 +169,7 @@ int main(int argc, char* argv[])
 	// Create the log files
 	std::ofstream metadata_log;
 	std::ofstream sim_log;
+	std::ofstream mbs_xmeas_log;
 	std::ofstream time_log;
 
 	// store meta data
@@ -210,9 +212,13 @@ int main(int argc, char* argv[])
 
 
 	sim_log.open(log_file_prefix + "_simlog.dat", std::fstream::out);
-	sim_log << std::setprecision(15);
+	sim_log << std::setprecision(3);
 	sim_log << std::fixed;
 	sim_log << "time\ttau\tsout" << std::endl;
+
+	mbs_xmeas_log.open(log_file_prefix + "_mbslog.dat", std::fstream::out);
+	mbs_xmeas_log << std::setprecision(3);
+	mbs_xmeas_log << std::fixed;
 
 	// if we run in real-time, then create a time synch log
 	if (RT)
@@ -224,10 +230,11 @@ int main(int argc, char* argv[])
 
 #ifdef USE_ADS_IF
 	// setup the ads interface
-	TEADSInterface ads_xmeas_plant;
+	TEADSInterface ads_xmeas_plant, ads_xmeas_gw;
 	if (use_ads)
 	{
 		AmsAddr plc_addr;
+		// 5.20.215.224.1.1
 		plc_addr.netId.b[0] = 5;
 		plc_addr.netId.b[1] = 20;
 		plc_addr.netId.b[2] = 215;
@@ -236,6 +243,7 @@ int main(int argc, char* argv[])
 		plc_addr.netId.b[5] = 1;
 		plc_addr.port = 851;
 		ads_xmeas_plant.connect("G_IO.XMEAS", &plc_addr);
+		ads_xmeas_gw.connect("G_IO.MBS_XMEAS", &plc_addr);
 	}
 #endif 
 
@@ -299,7 +307,18 @@ int main(int argc, char* argv[])
 			{
 				// send the measured variables to the PLC
 				ads_xmeas_plant.write_lreal(xmeas, TEPlant::NY);
+
+				// query the ADS interface for xmeas values at the gateway.
+				// the ADS data overrides simulated channel
+				float mbs_xmeas_gw[4];
+				mbs_xmeas_gw[0] = mbs_xmeas_gw[1] = mbs_xmeas_gw[2] = mbs_xmeas_gw[3] = 0;
+				ads_xmeas_gw.read_real(mbs_xmeas_gw, 4);
+				mbs_xmeas[0] = mbs_xmeas_gw[0];		// Flow: Feed A
+				mbs_xmeas[1] = mbs_xmeas_gw[1];		// Flow: Feed D
+				mbs_xmeas[2] = mbs_xmeas_gw[2];		// Flow: Feed E
+				mbs_xmeas[3] = mbs_xmeas_gw[3];		// Reactor Pressure
 			}
+
 #endif
 
 			try
@@ -326,6 +345,9 @@ int main(int argc, char* argv[])
 			// log the plant data
 			sim_log << t << "\t" << Tau << "\t" << signal_out << std::endl;
 			std::cout << t << "\t" << Tau << "\t" << signal_out << std::endl;
+
+			// log the modbus data
+			mbs_xmeas_log << t << "\t" << Tau << "\t" << mbs_xmeas[0] << "\t" << mbs_xmeas[1] << "\t" << mbs_xmeas[2] << "\t" << mbs_xmeas[3] << std::endl;
 
 			// update the time information
 			tplant_next += tplant;
