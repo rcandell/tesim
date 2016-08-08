@@ -570,25 +570,33 @@ int main(int argc, char* argv[])
 		{
 			tctlr_next += tctlr;
 
-#ifdef USE_ADS_IF
-			// query the ADS interface for xmeas values at the gateway.
-			// the ADS data overrides simulated channel
-			if (use_ads)
-			{
-				float mbs_xmeas_gw[4];
-				ads_xmeas_gw.read_real(mbs_xmeas_gw, 4);
-				xmeas[0] = mbs_xmeas_gw[0];		// Flow: Feed A
-				xmeas[1] = mbs_xmeas_gw[1];		// Flow: Feed D
-				xmeas[2] = mbs_xmeas_gw[2];		// Flow: Feed E
-				xmeas[6] = mbs_xmeas_gw[3];		// Reactor Pressure
-			}
-		
-#endif
-
 			// increment the controller
 			if (! (ext_control  && shdmem_on && RT) )
 			{
-				xmv = tectlr->increment(t, tctlr, xmeas_channel->data());
+
+				// query the ADS interface for xmeas values at the gateway.
+				// the ADS data overrides simulated channel
+				if (use_ads)
+				{
+#ifdef USE_ADS_IF
+					float mbs_xmeas_gw[4];
+					double xmeas_ads[41];
+					memcpy(xmeas_ads, xmeas, sizeof(double)*TEPlant::NY);
+					ads_xmeas_gw.read_real(mbs_xmeas_gw, 4);
+					xmeas_ads[0] = mbs_xmeas_gw[0];		// Flow: Feed A
+					xmeas_ads[1] = mbs_xmeas_gw[1];		// Flow: Feed D
+					xmeas_ads[2] = mbs_xmeas_gw[2];		// Flow: Feed E
+					xmeas_ads[6] = mbs_xmeas_gw[3];		// Reactor Pressure
+
+					xmv = tectlr->increment(t, tctlr, xmeas_ads);
+#endif
+				}
+				else
+				{
+					xmv = tectlr->increment(t, tctlr, xmeas_channel->data());
+				}
+
+				
 			}
 			else
 			{
