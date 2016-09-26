@@ -72,8 +72,9 @@ int main(int argc, char* argv[])
 	Declaration of variables for main line program
 	*/
 	std::string log_file_prefix = "nochan";
-	bool append_flag = false, RT = false, use_ads = false, ads_remote = false, 
+	bool append_flag = false, RT = false, use_ads_xmeas = false, use_ads_xmv = false, use_ads_sp = false,
 		gechan_on = false, enable_idv = false, shdmem_on = false, ext_control = false;
+	int net_type = 101;
 	double simtime = 0.0, t = 0.0, tplant = 0.0005, tctlr = 0.0005, tsave;
 	unsigned ksave = 20, idv_idx = 0;
 	double *xmeas, *xmv;
@@ -120,8 +121,10 @@ int main(int argc, char* argv[])
 
 #ifdef USE_ADS_IF
 		// ADS interface
-		("enable-ads", po::bool_switch(&use_ads)->default_value(false), "turns on the ADS interface to PLC")
-		("ads-remote", po::bool_switch(&ads_remote)->default_value(false), "enables remote connection to 5.20.215.224.1.1")
+		("ads-net-type,o", po::value<int>(&net_type), "specify network type code, 101 (iMesh XMEAS) is default")
+		("ads-xmeas", po::bool_switch(&use_ads_xmeas)->default_value(false), "turns on ADS interface for the selected XMEAS variables")
+		("ads-xmv", po::bool_switch(&use_ads_xmv)->default_value(false), "turns on ADS interface for the selected XMV variables")
+		("ads-sp", po::bool_switch(&use_ads_sp)->default_value(false), "turns on ADS interface for the selected Setpoint variables")
 #endif
 
 		// packet error rate parameters
@@ -200,8 +203,9 @@ int main(int argc, char* argv[])
 	std::cout << "log file prefix:             " << log_file_prefix << std::endl;
 	std::cout << "Append:                      " << append_flag << std::endl;
 	std::cout << "Run RT:                      " << RT << std::endl;
-	std::cout << "Use ADS:                     " << use_ads << std::endl;
-	std::cout << "Use remote ADS:              " << ads_remote << std::endl;
+	std::cout << "Network type:				   " << net_type << std::endl;
+	std::cout << "Use ADS xmeas:               " << use_ads_xmeas << std::endl;
+	std::cout << "Use ADS xmv:                 " << use_ads_xmv << std::endl;
 
 	std::cout << "IID chan PER:                " << per << std::endl;
 	if (xmeas_iid_chan_id > 0)
@@ -251,8 +255,9 @@ int main(int argc, char* argv[])
 	metadata_log << "log file prefix:             " << log_file_prefix << std::endl;
 	metadata_log << "Append:                      " << append_flag << std::endl;
 	metadata_log << "Run RT:                      " << RT << std::endl;
-	metadata_log << "Use ADS:                     " << use_ads << std::endl;
-	metadata_log << "Use remote ADS:              " << ads_remote << std::endl;
+	metadata_log << "Network type:				  " << net_type << std::endl;
+	metadata_log << "Use ADS xmeas:               " << use_ads_xmeas << std::endl;
+	metadata_log << "Use ADS xmv:                 " << use_ads_xmv << std::endl;
 	metadata_log << "IID chan per:                " << per << std::endl;
 	if (xmeas_iid_chan_id > 0)
 		metadata_log << "  apply to link:         " << xmeas_iid_chan_id << std::endl;
@@ -323,7 +328,7 @@ int main(int argc, char* argv[])
 		sim_log.open(log_file_prefix + "_simlog.dat");
 		sim_log << TENames::simlog_all() << std::endl;
 	}
-	sim_log.precision(15);
+	sim_log.precision(6);
 
 	// do we append or create a new log file?
 #if 0
@@ -363,47 +368,45 @@ int main(int argc, char* argv[])
 
 #ifdef USE_ADS_IF
 	// setup the ads interface
-	TEADSInterface ads_xmeas_plant, ads_xmeas_gw, ads_xmv_ctlr; 
+	TEADSInterface ads_net_type;
+	TEADSInterface ads_xmeas_tx, ads_xmeas_rx, ads_xmv_tx, ads_xmv_rx; 
 	TEADSInterface ads_prod_rate_sp, ads_preactor_sp, ads_lreactor_sp, ads_treactor_sp, ads_pctg_sp, ads_lseparator_sp, ads_lstripper_sp;
 	TEADSInterface ads_idv;
-	if (use_ads)
+	if (use_ads_xmeas || use_ads_xmv)
 	{
-		if (ads_remote)
-		{
-			AmsAddr plc_addr;
-			plc_addr.netId.b[0] = 5; 
-			plc_addr.netId.b[1] = 20; 
-			plc_addr.netId.b[2] = 215; 
-			plc_addr.netId.b[3] = 224;
-			plc_addr.netId.b[4] = 1; 
-			plc_addr.netId.b[5] = 1;
-			plc_addr.port = 851;
-			ads_xmeas_plant.connect("G_IO.XMEAS", &plc_addr);
-			ads_xmeas_gw.connect("G_IO.MBS_XMEAS", &plc_addr);
-			ads_xmv_ctlr.connect("G_IO.XMV", &plc_addr);
-			ads_prod_rate_sp.connect("G_IO.PROD_RATE", &plc_addr);
-			ads_preactor_sp.connect("G_IO.P_REACTOR", &plc_addr);
-			ads_lreactor_sp.connect("G_IO.L_REACTOR", &plc_addr);
-			ads_treactor_sp.connect("G_IO.T_REACTOR", &plc_addr);
-			ads_pctg_sp.connect("G_IO.PCT_G", &plc_addr);
-			ads_lseparator_sp.connect("G_IO.L_SEPARATOR", &plc_addr);
-			ads_lstripper_sp.connect("G_IO.L_STRIPPER", &plc_addr);
-			ads_idv.connect("G_IO.IDV", &plc_addr);
-		}
-		else
-		{
-			ads_xmeas_plant.connect("G_IO.XMEAS", 851);
-			ads_xmeas_gw.connect("G_IO.MBS_XMEAS", 851);
-			ads_xmv_ctlr.connect("G_IO.XMV", 851);
-			ads_prod_rate_sp.connect("G_IO.PROD_RATE", 851);
-			ads_preactor_sp.connect("G_IO.P_REACTOR", 851);
-			ads_lreactor_sp.connect("G_IO.L_REACTOR", 851);
-			ads_treactor_sp.connect("G_IO.T_REACTOR", 851);
-			ads_pctg_sp.connect("G_IO.PCT_G", 851);
-			ads_lseparator_sp.connect("G_IO.L_SEPARATOR", 851);
-			ads_lstripper_sp.connect("G_IO.L_STRIPPER", 851);
-			ads_idv.connect("G_IO.IDV", 851);
-		}
+		AmsAddr plc_addr;
+		plc_addr.netId.b[0] = 5; 
+		plc_addr.netId.b[1] = 20; 
+		plc_addr.netId.b[2] = 215; 
+		plc_addr.netId.b[3] = 224;
+		plc_addr.netId.b[4] = 1; 
+		plc_addr.netId.b[5] = 1;
+		plc_addr.port = 851;
+
+		// network type
+		ads_xmeas_tx.connect("G_IO.XMEAS", &plc_addr);
+		ads_net_type.connect("G_IO.NET_TYPE", &plc_addr);
+		ads_net_type.write_dint(&net_type, 1);
+
+		// measured variables
+		ads_xmeas_tx.connect("G_IO.XMEAS", &plc_addr);
+		ads_xmeas_rx.connect("G_IO.MBS_XMEAS", &plc_addr);
+
+		// manipulated variables
+		ads_xmv_tx.connect("G_IO.XMV", &plc_addr);
+		ads_xmv_rx.connect("G_IO.NET_XMV", &plc_addr);   // TODO match name to new convention (XMV_RX)
+
+		// set points
+		ads_prod_rate_sp.connect("G_IO.PROD_RATE", &plc_addr);
+		ads_preactor_sp.connect("G_IO.P_REACTOR", &plc_addr);
+		ads_lreactor_sp.connect("G_IO.L_REACTOR", &plc_addr);
+		ads_treactor_sp.connect("G_IO.T_REACTOR", &plc_addr);
+		ads_pctg_sp.connect("G_IO.PCT_G", &plc_addr);
+		ads_lseparator_sp.connect("G_IO.L_SEPARATOR", &plc_addr);
+		ads_lstripper_sp.connect("G_IO.L_STRIPPER", &plc_addr);
+
+		// disturbances
+		ads_idv.connect("G_IO.IDV", &plc_addr);
 	}
 #endif 
 
@@ -507,8 +510,29 @@ int main(int argc, char* argv[])
 					teplant->idv(idv_idx - 1);
 				}
 
-				// increment the plant
-				xmeas = teplant->increment(t, tplant, xmv_channel->data(), &shutdown);
+				// query the ADS interface for XMV values.
+				// the ADS data overrides simulated channel
+				if (use_ads_xmv)
+				{
+#ifdef USE_ADS_IF
+					float xmv_rx[4];
+					double xmv_ads[12];
+					memcpy(xmv_ads, xmv, sizeof(double)*TEPlant::NU);
+					ads_xmv_rx.read_real(xmv_rx, 4);
+					xmv_ads[0] = xmv_rx[0];		// Control valve: Feed A
+					xmv_ads[1] = xmv_rx[1];		// Control valve: Feed D
+					xmv_ads[2] = xmv_rx[2];		// Control valve: Feed E
+					xmv_ads[10] = xmv_rx[3];	// Control valve: Cooling water 
+
+					// increment the plant
+					xmeas = teplant->increment(t, tplant, xmv_ads, &shutdown);
+#endif
+				}
+				else
+				{
+					// increment the plant
+					xmeas = teplant->increment(t, tplant, xmv_channel->data(), &shutdown);
+				}
 
 				if (shdmem_on && RT)
 				{
@@ -520,16 +544,14 @@ int main(int argc, char* argv[])
 				}
 
 #ifdef USE_ADS_IF
-				if (use_ads) 
+				if (use_ads_xmeas) 
 				{ 
-					// send the measured variables to the PLC
-					ads_xmeas_plant.write_lreal(xmeas, TEPlant::NY);
+					// send the measured variables to the simulation PLC
+					ads_xmeas_tx.write_lreal(xmeas, TEPlant::NY);
 
-					// disturbance vector
+					// send disturbance vector to the simulation PLC
 					ads_idv.write_dint(teplant->get_idv(), TEPlant::NIDV);
 				}
-				
-
 #endif
 
 				// apply the sensors channel to plant readings
@@ -576,13 +598,13 @@ int main(int argc, char* argv[])
 
 				// query the ADS interface for xmeas values at the gateway.
 				// the ADS data overrides simulated channel
-				if (use_ads)
+				if (use_ads_xmeas)
 				{
 #ifdef USE_ADS_IF
 					float mbs_xmeas_gw[4];
 					double xmeas_ads[41];
 					memcpy(xmeas_ads, xmeas, sizeof(double)*TEPlant::NY);
-					ads_xmeas_gw.read_real(mbs_xmeas_gw, 4);
+					ads_xmeas_rx.read_real(mbs_xmeas_gw, 4);
 					xmeas_ads[0] = mbs_xmeas_gw[0];		// Flow: Feed A
 					xmeas_ads[1] = mbs_xmeas_gw[1];		// Flow: Feed D
 					xmeas_ads[2] = mbs_xmeas_gw[2];		// Flow: Feed E
@@ -659,9 +681,12 @@ int main(int argc, char* argv[])
 #ifdef USE_ADS_IF
 			try
 			{
-				if (use_ads) 
-				{ 
-					ads_xmv_ctlr.write_lreal(xmv, 12); 
+				if (use_ads_xmv)
+				{
+					ads_xmv_tx.write_lreal(xmv, 12);
+				}
+				if (use_ads_sp)
+				{
 					ads_prod_rate_sp.write_lreal(tectlr->prod_rate_sp(), 1);
 					ads_preactor_sp.write_lreal(tectlr->reactor_pressure_sp(), 1);
 					ads_lreactor_sp.write_lreal(tectlr->reactor_level_sp(), 1);
