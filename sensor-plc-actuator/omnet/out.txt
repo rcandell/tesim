@@ -1,3 +1,0 @@
-Severe:
-Error checking out license
-The program '[7852] C:\Program Files\MATLAB\R2013b\bin\win64\MATLAB.exe: Native' has exited with code 1 (0x1).
