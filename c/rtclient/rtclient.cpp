@@ -147,42 +147,49 @@ int main(int argc, char* argv[])
 				mem->first = true;
 				mem->second.first = TEController::PROD_RATE;
 				mem->second.second = prod_rate_sp;
+				std::cout << "setting prod rate to " << prod_rate_sp << std::endl;
 			}
 			else if (vm.count("sp-reactor-pressure")) 
 			{
 				mem->first = true;
 				mem->second.first = TEController::REACTOR_PRESS;
 				mem->second.second = reactor_pressure_sp;
+				std::cout << "setting reactor pressure to  " << reactor_pressure_sp << std::endl;
 			}
 			else if (vm.count("sp-reactor-level"))
 			{
 				mem->first = true;
 				mem->second.first = TEController::REACTOR_LEVEL;
 				mem->second.second = reactor_level_sp;
+				std::cout << "setting reactor level to " << reactor_level_sp << std::endl;
 			}
 			else if (vm.count("sp-reactor-temp"))
 			{
 				mem->first = true;
 				mem->second.first = TEController::REACTOR_TEMP;
 				mem->second.second = reactor_temp_sp;
+				std::cout << "setting reactor temp to " << reactor_temp_sp << std::endl;
 			}
 			else if (vm.count("sp-pctg"))
 			{
 				mem->first = true;
 				mem->second.first = TEController::PCTG;
 				mem->second.second = pctg_sp;
+				std::cout << "setting PCT G to " << pctg_sp << std::endl;
 			}
 			else if (vm.count("sp-separator-level"))
 			{
 				mem->first = true;
 				mem->second.first = TEController::SEP_LEVEL;
 				mem->second.second = sep_level_sp;
+				std::cout << "setting separator level to " << sep_level_sp << std::endl;
 			}
 			else if (vm.count("sp-stripper-level"))
 			{
 				mem->first = true;
 				mem->second.first = TEController::STRIP_LEVEL;
 				mem->second.second = stripper_level_sp;
+				std::cout << "setting stripper level to " << stripper_level_sp << std::endl;
 			}
 		}
 

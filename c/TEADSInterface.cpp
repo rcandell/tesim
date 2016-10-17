@@ -88,6 +88,53 @@ TEADSInterface::connect(std::string varName, const PAmsAddr remote_addr)
 	}
 }
 
+template<typename T>
+void
+TEADSInterface::read_value(T* x, const long nel)
+{
+	// Reset the value of the PLC variable to 0 
+	long nErr = 0;
+	T x_tmp[128];  // NOTE this will need to be increased if more elements are requested
+	nErr = AdsSyncReadReq(m_pAmsAddr, ADSIGRP_SYM_VALBYHND, m_hVarHandle, nel*sizeof(T), &x_tmp);
+
+	if (nErr)
+	{
+		TEADSInterface::ADSError err(nErr, "AdsSyncWriteReq");
+		throw(err);
+	}
+
+	memcpy(x, x_tmp, sizeof(float)*nel);
+}
+
+// satisfy linker problems
+template void TEADSInterface::read_value<float>(float*, const long);
+template void TEADSInterface::read_value<double>(double*, const long);
+template void TEADSInterface::read_value<int>(int*, const long);
+template void TEADSInterface::read_value<bool>(bool*, const long);
+
+template<typename T>
+void 
+TEADSInterface::write_value(const T* x, const long nel)
+{
+	// Reset the value of the PLC variable to 0 
+	long nErr = 0;
+	T x_tmp[128];
+	memcpy(x_tmp, x, nel * sizeof(T));
+	nErr = AdsSyncWriteReq(m_pAmsAddr, ADSIGRP_SYM_VALBYHND, m_hVarHandle, nel*sizeof(T), &x_tmp);
+	if (nErr)
+	{
+		TEADSInterface::ADSError err(nErr, "AdsSyncWriteReq");
+		throw(err);
+	}
+}
+
+// satisfy linker problems
+template void TEADSInterface::write_value<float>(const float*, const long);
+template void TEADSInterface::write_value<double>(const double*, const long);
+template void TEADSInterface::write_value<int>(const int*, const long);
+template void TEADSInterface::write_value<bool>(const bool*, const long);
+
+/*
 void 
 TEADSInterface::write_lreal(const double* x, const long nel)
 {
@@ -95,6 +142,21 @@ TEADSInterface::write_lreal(const double* x, const long nel)
 	long nErr = 0;
 	double x_tmp[128];
 	memcpy(x_tmp, x, nel * sizeof(double));
+	nErr = AdsSyncWriteReq(m_pAmsAddr, ADSIGRP_SYM_VALBYHND, m_hVarHandle, nel*sizeof(double), &x_tmp);
+	if (nErr)
+	{
+		TEADSInterface::ADSError err(nErr, "AdsSyncWriteReq");
+		throw(err);
+	}
+}
+
+void
+TEADSInterface::write_real(const float* x, const long nel)
+{
+	// Reset the value of the PLC variable to 0 
+	long nErr = 0;
+	float x_tmp[128];
+	memcpy(x_tmp, x, nel * sizeof(float));
 	nErr = AdsSyncWriteReq(m_pAmsAddr, ADSIGRP_SYM_VALBYHND, m_hVarHandle, nel*sizeof(double), &x_tmp);
 	if (nErr)
 	{
@@ -134,5 +196,6 @@ TEADSInterface::write_dint(const int* x, const long nel)
 		throw(err);
 	}
 }
+*/
 
 #endif //USE_ADS_IF

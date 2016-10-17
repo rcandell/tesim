@@ -306,13 +306,14 @@ int main(int argc, char* argv[])
 			if (use_ads)
 			{
 				// send the measured variables to the PLC
-				ads_xmeas_plant.write_lreal(xmeas, TEPlant::NY);
+				//ads_xmeas_plant.write_lreal(xmeas, TEPlant::NY);
+				ads_xmeas_plant.write_value<double>(xmeas, TEPlant::NY);
 
 				// query the ADS interface for xmeas values at the gateway.
 				// the ADS data overrides simulated channel
 				float mbs_xmeas_gw[4];
 				mbs_xmeas_gw[0] = mbs_xmeas_gw[1] = mbs_xmeas_gw[2] = mbs_xmeas_gw[3] = 0;
-				ads_xmeas_gw.read_real(mbs_xmeas_gw, 4);
+				ads_xmeas_gw.read_value<float>(mbs_xmeas_gw, 4);
 				mbs_xmeas[0] = mbs_xmeas_gw[0];		// Flow: Feed A
 				mbs_xmeas[1] = mbs_xmeas_gw[1];		// Flow: Feed D
 				mbs_xmeas[2] = mbs_xmeas_gw[2];		// Flow: Feed E

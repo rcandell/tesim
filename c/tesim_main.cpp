@@ -72,9 +72,10 @@ int main(int argc, char* argv[])
 	Declaration of variables for main line program
 	*/
 	std::string log_file_prefix = "nochan";
-	bool append_flag = false, RT = false, use_ads_xmeas = false, use_ads_xmv = false, use_ads_sp = false,
+	bool append_flag = false, RT = false, 
+		use_ads_all = false, use_ads_xmeas = false, use_ads_xmv = false, use_ads_sp = false, use_ads_any = false,
 		gechan_on = false, enable_idv = false, shdmem_on = false, ext_control = false;
-	int net_type = 101;
+	int net_type = 0;
 	double simtime = 0.0, t = 0.0, tplant = 0.0005, tctlr = 0.0005, tsave;
 	unsigned ksave = 20, idv_idx = 0;
 	double *xmeas, *xmv;
@@ -83,8 +84,14 @@ int main(int argc, char* argv[])
 	Set point values.  Default values for setpoints are assigned here.
 	tesim allows for override of these setpoints at time t=0 throgh the command line program options.
 	*/
-	double prod_rate_sp = 22.89, reactor_pressure_sp = 2800.0, reactor_level_sp = 65.0, reactor_temp_sp = 122.9,
-		pctg_sp = 53.8, sep_level_sp = 50.0, stripper_level_sp = 50.0;
+	double 
+		prod_rate_sp			= 22.89, 
+		reactor_pressure_sp		= 2800.0, 
+		reactor_level_sp		= 65.0, 
+		reactor_temp_sp			= 122.9,
+		pctg_sp					= 53.8, 
+		sep_level_sp			= 50.0, 
+		stripper_level_sp		= 50.0;
 
 	// print the simulation parameters
 	std::cout << "TE Simulator C++" << std::endl
@@ -121,7 +128,8 @@ int main(int argc, char* argv[])
 
 #ifdef USE_ADS_IF
 		// ADS interface
-		("ads-net-type,o", po::value<int>(&net_type), "specify network type code, 101 (iMesh XMEAS) is default")
+		("ads-net-type,o", po::value<int>(&net_type)->required(), "specify network type code")
+		("ads-all", po::bool_switch(&use_ads_all)->default_value(false), "turns on ADS interface for all variables")
 		("ads-xmeas", po::bool_switch(&use_ads_xmeas)->default_value(false), "turns on ADS interface for the selected XMEAS variables")
 		("ads-xmv", po::bool_switch(&use_ads_xmv)->default_value(false), "turns on ADS interface for the selected XMV variables")
 		("ads-sp", po::bool_switch(&use_ads_sp)->default_value(false), "turns on ADS interface for the selected Setpoint variables")
@@ -197,13 +205,13 @@ int main(int argc, char* argv[])
 	if (!RT) shdmem_on = false;
 
 	std::cout << "Simulation time : " << simtime << std::endl;
-	std::cout << "Tplant:                       " << tplant << std::endl;
-	std::cout << "Tctlr:                       " << tctlr << std::endl;
+	std::cout << "Tplant:                      " << tplant << " hrs (" << tplant*3600 << " secs)" << std::endl;
+	std::cout << "Tctlr:                       " << tctlr  << " hrs (" << tplant*3600 << " secs)" << std::endl;
 	std::cout << "Ksave:                       " << ksave << std::endl;
 	std::cout << "log file prefix:             " << log_file_prefix << std::endl;
 	std::cout << "Append:                      " << append_flag << std::endl;
 	std::cout << "Run RT:                      " << RT << std::endl;
-	std::cout << "Network type:				   " << net_type << std::endl;
+	std::cout << "Network type:                " << net_type << std::endl;
 	std::cout << "Use ADS xmeas:               " << use_ads_xmeas << std::endl;
 	std::cout << "Use ADS xmv:                 " << use_ads_xmv << std::endl;
 
@@ -233,6 +241,13 @@ int main(int argc, char* argv[])
 	std::cout << "Sep level:                   " << sep_level_sp << (vm.count("sp-separator-level") ? " override" : "  default") << std::endl;
 	std::cout << "Strip level:                 " << stripper_level_sp << (vm.count("sp-stripper-level") ? " override" : "  default") << std::endl;
 	std::cout << std::endl;
+
+	// are any ADS flags turned on?
+	use_ads_any = use_ads_sp | use_ads_xmeas | use_ads_xmv;
+
+	// enable all ADS interfaces if necessary
+	if (use_ads_all)
+		use_ads_sp = use_ads_xmeas = use_ads_xmv = true;
 
 	TEPlant* teplant = TEPlant::getInstance();
 	TEController* tectlr = TEController::getInstance();
@@ -365,51 +380,6 @@ int main(int argc, char* argv[])
 	xmeas_chan_log.open(log_file_prefix + "_xmeas_chan.dat");
 	xmv_chan_log.open(log_file_prefix + "_xmv_chan.dat");
 
-
-#ifdef USE_ADS_IF
-	// setup the ads interface
-	TEADSInterface ads_net_type;
-	TEADSInterface ads_xmeas_tx, ads_xmeas_rx, ads_xmv_tx, ads_xmv_rx; 
-	TEADSInterface ads_prod_rate_sp, ads_preactor_sp, ads_lreactor_sp, ads_treactor_sp, ads_pctg_sp, ads_lseparator_sp, ads_lstripper_sp;
-	TEADSInterface ads_idv;
-	if (use_ads_xmeas || use_ads_xmv)
-	{
-		AmsAddr plc_addr;
-		plc_addr.netId.b[0] = 5; 
-		plc_addr.netId.b[1] = 20; 
-		plc_addr.netId.b[2] = 215; 
-		plc_addr.netId.b[3] = 224;
-		plc_addr.netId.b[4] = 1; 
-		plc_addr.netId.b[5] = 1;
-		plc_addr.port = 851;
-
-		// network type
-		ads_xmeas_tx.connect("G_IO.XMEAS", &plc_addr);
-		ads_net_type.connect("G_IO.NET_TYPE", &plc_addr);
-		ads_net_type.write_dint(&net_type, 1);
-
-		// measured variables
-		ads_xmeas_tx.connect("G_IO.XMEAS", &plc_addr);
-		ads_xmeas_rx.connect("G_IO.MBS_XMEAS", &plc_addr);
-
-		// manipulated variables
-		ads_xmv_tx.connect("G_IO.XMV", &plc_addr);
-		ads_xmv_rx.connect("G_IO.NET_XMV", &plc_addr);   // TODO match name to new convention (XMV_RX)
-
-		// set points
-		ads_prod_rate_sp.connect("G_IO.PROD_RATE", &plc_addr);
-		ads_preactor_sp.connect("G_IO.P_REACTOR", &plc_addr);
-		ads_lreactor_sp.connect("G_IO.L_REACTOR", &plc_addr);
-		ads_treactor_sp.connect("G_IO.T_REACTOR", &plc_addr);
-		ads_pctg_sp.connect("G_IO.PCT_G", &plc_addr);
-		ads_lseparator_sp.connect("G_IO.L_SEPARATOR", &plc_addr);
-		ads_lstripper_sp.connect("G_IO.L_STRIPPER", &plc_addr);
-
-		// disturbances
-		ads_idv.connect("G_IO.IDV", &plc_addr);
-	}
-#endif 
-
 	// plant shutdown indicator
 	int shutdown = 0;
 	char * plant_msg = NULL;
@@ -443,6 +413,71 @@ int main(int argc, char* argv[])
 	// init the plant
 	teplant->initialize();
 	xmeas = (double*)(teplant->get_xmeas());
+
+#ifdef USE_ADS_IF
+	// setup the ads interface
+	TEADSInterface ads_net_type;
+	TEADSInterface ads_xmeas_tx, ads_xmeas_rx, ads_xmv_tx, ads_xmv_rx;
+	TEADSInterface ads_prod_rate_sp, ads_preactor_sp, ads_lreactor_sp, ads_treactor_sp, ads_pctg_sp, ads_lseparator_sp, ads_lstripper_sp;
+	TEADSInterface ads_idv, ads_sd_flag;
+	if (use_ads_xmeas || use_ads_xmv)
+	{
+		AmsAddr plc_addr;
+		plc_addr.netId.b[0] = 5;
+		plc_addr.netId.b[1] = 20;
+		plc_addr.netId.b[2] = 215;
+		plc_addr.netId.b[3] = 224;
+		plc_addr.netId.b[4] = 1;
+		plc_addr.netId.b[5] = 1;
+		plc_addr.port = 851;
+
+		// network type
+		ads_xmeas_tx.connect("G_IO.XMEAS", &plc_addr);
+		ads_net_type.connect("G_IO.NET_TYPE", &plc_addr);
+		ads_net_type.write_value<int>(&net_type, 1);
+
+		// measured variables
+		ads_xmeas_tx.connect("G_IO.XMEAS", &plc_addr);
+		ads_xmeas_rx.connect("G_IO.MBS_XMEAS", &plc_addr);
+
+		// initialize PLC with xmeas values
+		ads_xmeas_tx.write_value<double>(xmeas, 41);  // initialize the XMEAS in PLC
+		float xmeas0[4];
+		xmeas0[0] = (float)xmeas[0];
+		xmeas0[1] = (float)xmeas[1];
+		xmeas0[2] = (float)xmeas[2];
+		xmeas0[3] = (float)xmeas[6];
+		ads_xmeas_rx.write_value<float>(xmeas0, 4);
+
+		// manipulated variables
+		ads_xmv_tx.connect("G_IO.XMV", &plc_addr);
+		ads_xmv_rx.connect("G_IO.NET_XMV", &plc_addr);   // TODO match name to new convention (XMV_RX)
+
+		// initialize PLC with xmv values
+		ads_xmv_tx.write_value<double>(xmv, 12);  // initialize the XMV in PLC
+		float xmv0[4];
+		xmv0[0] = (float)xmv[0];
+		xmv0[1] = (float)xmv[1];
+		xmv0[2] = (float)xmv[2];
+		xmv0[3] = (float)xmv[9];
+		ads_xmv_rx.write_value<float>(xmv0, 4);
+
+		// set points
+		ads_prod_rate_sp.connect("G_IO.PROD_RATE", &plc_addr);
+		ads_preactor_sp.connect("G_IO.P_REACTOR", &plc_addr);
+		ads_lreactor_sp.connect("G_IO.L_REACTOR", &plc_addr);
+		ads_treactor_sp.connect("G_IO.T_REACTOR", &plc_addr);
+		ads_pctg_sp.connect("G_IO.PCT_G", &plc_addr);
+		ads_lseparator_sp.connect("G_IO.L_SEPARATOR", &plc_addr);
+		ads_lstripper_sp.connect("G_IO.L_STRIPPER", &plc_addr);
+
+		// disturbances
+		ads_idv.connect("G_IO.IDV", &plc_addr);
+
+		// shutdown flag
+		ads_sd_flag.connect("G_IO.SD_FLAG", &plc_addr);
+	}
+#endif 
 
 	// create the communications channels
 	int seed_rand = 17;
@@ -512,27 +547,23 @@ int main(int argc, char* argv[])
 
 				// query the ADS interface for XMV values.
 				// the ADS data overrides simulated channel
+#ifdef USE_ADS_IF
 				if (use_ads_xmv)
 				{
-#ifdef USE_ADS_IF
+
 					float xmv_rx[4];
 					double xmv_ads[12];
 					memcpy(xmv_ads, xmv, sizeof(double)*TEPlant::NU);
-					ads_xmv_rx.read_real(xmv_rx, 4);
-					xmv_ads[0] = xmv_rx[0];		// Control valve: Feed A
-					xmv_ads[1] = xmv_rx[1];		// Control valve: Feed D
-					xmv_ads[2] = xmv_rx[2];		// Control valve: Feed E
-					xmv_ads[10] = xmv_rx[3];	// Control valve: Cooling water 
-
-					// increment the plant
-					xmeas = teplant->increment(t, tplant, xmv_ads, &shutdown);
+					ads_xmv_rx.read_value<float>(xmv_rx, 4);
+					xmv_ads[0] = xmv_rx[0];		// Control valve: Feed D
+					xmv_ads[1] = xmv_rx[1];		// Control valve: Feed E
+					xmv_ads[2] = xmv_rx[2];		// Control valve: Feed A
+					xmv_ads[9] = xmv_rx[3];		// Control valve: Cooling water 
+					xmv_chan_ptr = (*xmv_channel) + xmv_ads;
+				}
 #endif
-				}
-				else
-				{
-					// increment the plant
-					xmeas = teplant->increment(t, tplant, xmv_channel->data(), &shutdown);
-				}
+				// increment the plant
+				xmeas = teplant->increment(t, tplant, xmv_channel->data(), &shutdown);
 
 				if (shdmem_on && RT)
 				{
@@ -547,10 +578,10 @@ int main(int argc, char* argv[])
 				if (use_ads_xmeas) 
 				{ 
 					// send the measured variables to the simulation PLC
-					ads_xmeas_tx.write_lreal(xmeas, TEPlant::NY);
+					ads_xmeas_tx.write_value<double>(xmeas, TEPlant::NY);
 
 					// send disturbance vector to the simulation PLC
-					ads_idv.write_dint(teplant->get_idv(), TEPlant::NIDV);
+					ads_idv.write_value<int>(teplant->get_idv(), TEPlant::NIDV);
 				}
 #endif
 
@@ -576,6 +607,16 @@ int main(int argc, char* argv[])
 
 				std::cerr << e << std::endl;
 				std::cerr << "ending simulation" << std::endl;
+
+				// inform the PLC of shutdown
+#ifdef USE_ADS_IF
+				if (use_ads_any)
+				{
+					bool sd_flag = true;
+					ads_sd_flag.write_value<bool>(&sd_flag, 1);
+				}
+#endif
+				
 				return 0;
 			}
 
@@ -598,27 +639,21 @@ int main(int argc, char* argv[])
 
 				// query the ADS interface for xmeas values at the gateway.
 				// the ADS data overrides simulated channel
+#ifdef USE_ADS_IF
 				if (use_ads_xmeas)
 				{
-#ifdef USE_ADS_IF
 					float mbs_xmeas_gw[4];
 					double xmeas_ads[41];
 					memcpy(xmeas_ads, xmeas, sizeof(double)*TEPlant::NY);
-					ads_xmeas_rx.read_real(mbs_xmeas_gw, 4);
+					ads_xmeas_rx.read_value<float>(mbs_xmeas_gw, 4);
 					xmeas_ads[0] = mbs_xmeas_gw[0];		// Flow: Feed A
 					xmeas_ads[1] = mbs_xmeas_gw[1];		// Flow: Feed D
 					xmeas_ads[2] = mbs_xmeas_gw[2];		// Flow: Feed E
 					xmeas_ads[6] = mbs_xmeas_gw[3];		// Reactor Pressure
-
-					xmv = tectlr->increment(t, tctlr, xmeas_ads);
+					xmeas_chan_ptr = (*xmeas_channel) + xmeas_ads;
+				}
 #endif
-				}
-				else
-				{
-					xmv = tectlr->increment(t, tctlr, xmeas_channel->data());
-				}
-
-				
+				xmv = tectlr->increment(t, tctlr, xmeas_channel->data());
 			}
 			else
 			{
@@ -683,17 +718,17 @@ int main(int argc, char* argv[])
 			{
 				if (use_ads_xmv)
 				{
-					ads_xmv_tx.write_lreal(xmv, 12);
+					ads_xmv_tx.write_value<double>(xmv, 12);
 				}
 				if (use_ads_sp)
 				{
-					ads_prod_rate_sp.write_lreal(tectlr->prod_rate_sp(), 1);
-					ads_preactor_sp.write_lreal(tectlr->reactor_pressure_sp(), 1);
-					ads_lreactor_sp.write_lreal(tectlr->reactor_level_sp(), 1);
-					ads_treactor_sp.write_lreal(tectlr->reactor_temp_sp(), 1);
-					ads_pctg_sp.write_lreal(tectlr->pctg_sp(), 1);
-					ads_lseparator_sp.write_lreal(tectlr->sep_level_sp(), 1);
-					ads_lstripper_sp.write_lreal(tectlr->strip_level_sp(), 1);
+					ads_prod_rate_sp.write_value<double>(tectlr->prod_rate_sp(), 1);
+					ads_preactor_sp.write_value<double>(tectlr->reactor_pressure_sp(), 1);
+					ads_lreactor_sp.write_value<double>(tectlr->reactor_level_sp(), 1);
+					ads_treactor_sp.write_value<double>(tectlr->reactor_temp_sp(), 1);
+					ads_pctg_sp.write_value<double>(tectlr->pctg_sp(), 1);
+					ads_lseparator_sp.write_value<double>(tectlr->sep_level_sp(), 1);
+					ads_lstripper_sp.write_value<double>(tectlr->strip_level_sp(), 1);
 				}
 			}
 			catch (TEADSInterface::ADSError& e)
