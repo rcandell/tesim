@@ -42,3 +42,7 @@ factory performance using ISA100.11a sensors.  IEEE 802.11 integration is underw
 
 ![HIL Integration with Channel Emulator](cad/emulator.png)
 
+# Contact Information
+Main author: Rick Candell, NIST <br>
+https://www.nist.gov/programs-projects/wireless-systems-industrial-environments
+
