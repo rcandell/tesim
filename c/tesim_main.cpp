@@ -214,6 +214,7 @@ int main(int argc, char* argv[])
 	std::cout << "Network type:                " << net_type << std::endl;
 	std::cout << "Use ADS xmeas:               " << use_ads_xmeas << std::endl;
 	std::cout << "Use ADS xmv:                 " << use_ads_xmv << std::endl;
+	std::cout << "Use ADS sp:                  " << use_ads_sp << std::endl;
 
 	std::cout << "IID chan PER:                " << per << std::endl;
 	if (xmeas_iid_chan_id > 0)
@@ -273,6 +274,7 @@ int main(int argc, char* argv[])
 	metadata_log << "Network type:				  " << net_type << std::endl;
 	metadata_log << "Use ADS xmeas:               " << use_ads_xmeas << std::endl;
 	metadata_log << "Use ADS xmv:                 " << use_ads_xmv << std::endl;
+	metadata_log << "Use ADS sp:                  " << use_ads_sp << std::endl;
 	metadata_log << "IID chan per:                " << per << std::endl;
 	if (xmeas_iid_chan_id > 0)
 		metadata_log << "  apply to link:         " << xmeas_iid_chan_id << std::endl;
@@ -344,30 +346,7 @@ int main(int argc, char* argv[])
 		sim_log << TENames::simlog_all() << std::endl;
 	}
 	sim_log.precision(6);
-
-	// do we append or create a new log file?
-#if 0
-	if (append_flag)
-	{
-		plant_log.open(log_file_prefix + "_plant.dat", std::fstream::out | std::fstream::app);
-		std::cout << "plant data file: " << log_file_prefix << "_plant.dat" << std::endl;
-
-		ctlr_log.open(log_file_prefix + "_ctlr.dat", std::fstream::out | std::fstream::app);
-		std::cout << "plant data file: " << log_file_prefix << "_ctlr.dat" << std::endl;
-	}
-	else
-	{
-		plant_log.open(log_file_prefix + "_plant.dat");
-		plant_log << TENames::plant_all() << std::endl;
-
-		ctlr_log.open(log_file_prefix + "_ctlr.dat");
-		ctlr_log << TENames::controller_all() << std::endl;
-	}
-	plant_log.precision(15);
-	ctlr_log.precision(15);
-#endif // 0
-
-
+	
 	// if we run in real-time, then create a time synch log
 	if (RT)
 	{
@@ -443,10 +422,10 @@ int main(int argc, char* argv[])
 		// initialize PLC with xmeas values
 		ads_xmeas_tx.write_value<double>(xmeas, 41);  // initialize the XMEAS in PLC
 		float xmeas0[4];
-		xmeas0[0] = (float)xmeas[0];
-		xmeas0[1] = (float)xmeas[1];
-		xmeas0[2] = (float)xmeas[2];
-		xmeas0[3] = (float)xmeas[6];
+		xmeas0[0] = (float)xmeas[0]; // A feed
+		xmeas0[1] = (float)xmeas[1]; // D feed
+		xmeas0[2] = (float)xmeas[2]; // E feed
+		xmeas0[3] = (float)xmeas[3]; // A+C feed
 		ads_xmeas_rx.write_value<float>(xmeas0, 4);
 
 		// manipulated variables
@@ -456,10 +435,10 @@ int main(int argc, char* argv[])
 		// initialize PLC with xmv values
 		ads_xmv_tx.write_value<double>(xmv, 12);  // initialize the XMV in PLC
 		float xmv0[4];
-		xmv0[0] = (float)xmv[0];
-		xmv0[1] = (float)xmv[1];
-		xmv0[2] = (float)xmv[2];
-		xmv0[3] = (float)xmv[9];
+		xmv0[0] = (float)xmv[0]; // D valve
+		xmv0[1] = (float)xmv[1]; // E valve
+		xmv0[2] = (float)xmv[2]; // A valve
+		xmv0[3] = (float)xmv[4]; // A+C valve
 		ads_xmv_rx.write_value<float>(xmv0, 4);
 
 		// set points
@@ -558,7 +537,7 @@ int main(int argc, char* argv[])
 					xmv_ads[0] = xmv_rx[0];		// Control valve: Feed D
 					xmv_ads[1] = xmv_rx[1];		// Control valve: Feed E
 					xmv_ads[2] = xmv_rx[2];		// Control valve: Feed A
-					xmv_ads[9] = xmv_rx[3];		// Control valve: Cooling water 
+					xmv_ads[3] = xmv_rx[3];		// Control valve: Feed A+C 
 					xmv_chan_ptr = (*xmv_channel) + xmv_ads;
 				}
 #endif
@@ -649,7 +628,7 @@ int main(int argc, char* argv[])
 					xmeas_ads[0] = mbs_xmeas_gw[0];		// Flow: Feed A
 					xmeas_ads[1] = mbs_xmeas_gw[1];		// Flow: Feed D
 					xmeas_ads[2] = mbs_xmeas_gw[2];		// Flow: Feed E
-					xmeas_ads[6] = mbs_xmeas_gw[3];		// Reactor Pressure
+					xmeas_ads[3] = mbs_xmeas_gw[3];		// Flow: Feed A+C
 					xmeas_chan_ptr = (*xmeas_channel) + xmeas_ads;
 				}
 #endif

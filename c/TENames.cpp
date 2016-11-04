@@ -73,18 +73,18 @@ const char * TENames::xmeas::names[] = {
 };
 
 const char * TENames::xmv::names[] = {
-	"D.Feed",
-	"E.Feed",
-	"A.Feed",
-	"A+C.Feed",
+	"D.Feed.Setting",
+	"E.Feed.Setting",
+	"A.Feed.Setting",
+	"A+C.Feed.Setting",
 	"Recycle.Valve",
 	"Purge.Valve",
-	"Separator.Valve",
+	"Separator.Flow.Setting",
 	"Stripper.Valve",
-	"Steam.valve",
-	"Reactor.Coolant",
-	"Condenser.Coolant",
-	"Agitator.Speed"
+	"Steam.Valve",
+	"Reactor.Cooling.Flow.Setting",
+	"Condenser.Cooling.Flow.Setting",
+	"Agitator.Speed.Setting"
 };
 
 std::ostream& operator<< (std::ostream& lhs, const TENames::xmeas& rhs)
