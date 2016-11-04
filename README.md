@@ -3,12 +3,17 @@ This repository contains code that allows the Tennesse Eastman (TESIM)
 chemical process model to be simulated using hardware-based simulator 
 architectures.  Using the code within this repository will allow for 
 integration with external sensor and actuator equipment.  The TESIM simulator 
-is intended for research purposes.
+is intended for wireless and cybersecurity research purposes.  The code is optimized
+for wireless system integration as a part of the NIST Industrial Wireless project; 
+however, the original purpose was for use with the NIST industrial cybersecurity project.
+
+![TESIM Factory](cad/TE Layout.PNG)
 
 ## Repository Structure
 * c:        Includes the C++ simulator code
 * cad:      Includes related CAD diagrams 
 * analysis: Includes scripts used for analysis of simulator output
+* lib:      Includes submodule (tesim_ads_comms) for Beckhoff CX2020 integration
 
 ## C++ Code
 The C++ code is written for execution on a Windows platform.  Installation of 
@@ -21,7 +26,14 @@ The C++ Solution is structured as follows:
 * testsignals:      Executable to inject ramp and pulse train test signals
 * testsignals2plc:  Executable to inject ramp and pulse train test signals with ADS Comms (Beckhoff) integration
 
+## Analysis Code
+No contributions as of yet.  We are considering MATLAB, Python, and Origin
 
+## HIL Integration
+The TESIM simulator integrates with analog sensors using the Beckhoff ADS Protocol.  By integrating with
+sensors, we are able to employ an RF channel emulator to recreate the factory RF environment as shown in 
+the following figure.  This allows us to examine the impacts of the wireless network on factory 
+operational performance.
 
-
+![HIL Integration with Channel Emulator](cad/emulator.png)
 
