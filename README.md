@@ -2,7 +2,9 @@
 This repository contains code that allows the Tennesse Eastman (TESIM) 
 chemical process model to be simulated using hardware-based simulator 
 architectures.  Using the code within this repository will allow for 
-integration with external sensor and actuator equipment.  The TESIM simulator 
+integration with external sensor and actuator equipment.  
+
+The TESIM simulator 
 is intended for wireless and cybersecurity research purposes.  The code is optimized
 for wireless system integration as a part of the NIST Industrial Wireless project; 
 however, the original purpose was for use with the NIST industrial cybersecurity project.
@@ -27,7 +29,7 @@ The C++ Solution is structured as follows:
 * testsignals2plc:  Executable to inject ramp and pulse train test signals with ADS Comms (Beckhoff) integration
 
 ## Analysis Code
-No contributions as of yet.  We are considering MATLAB, Python, and Origin
+No contributions as of yet.  
 
 ## HIL Integration
 The TESIM simulator integrates with analog sensors using the Beckhoff ADS Protocol.  By integrating with
