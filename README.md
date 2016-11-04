@@ -33,7 +33,8 @@ No contributions as of yet.  We are considering MATLAB, Python, and Origin
 The TESIM simulator integrates with analog sensors using the Beckhoff ADS Protocol.  By integrating with
 sensors, we are able to employ an RF channel emulator to recreate the factory RF environment as shown in 
 the following figure.  This allows us to examine the impacts of the wireless network on factory 
-operational performance.
+operational performance.  Shown in the diagram is an example of how our system is used to evaluate TESIM
+factory performance using ISA100.11a sensors.  IEEE 802.11 integration is underway.
 
 ![HIL Integration with Channel Emulator](cad/emulator.png)
 
