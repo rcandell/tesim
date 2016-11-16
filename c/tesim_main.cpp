@@ -399,7 +399,7 @@ int main(int argc, char* argv[])
 	TEADSInterface ads_xmeas_tx, ads_xmeas_rx, ads_xmv_tx, ads_xmv_rx;
 	TEADSInterface ads_prod_rate_sp, ads_preactor_sp, ads_lreactor_sp, ads_treactor_sp, ads_pctg_sp, ads_lseparator_sp, ads_lstripper_sp;
 	TEADSInterface ads_idv, ads_sd_flag;
-	if (use_ads_xmeas || use_ads_xmv)
+	if (use_ads_any)
 	{
 		AmsAddr plc_addr;
 		plc_addr.netId.b[0] = 5;
