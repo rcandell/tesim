@@ -13,6 +13,10 @@ however, the original purpose was for use with the NIST industrial cybersecurity
 
 ![TESIM Factory](cad/TE Layout.PNG)
 
+## System Requirements
+* boost: Install boost 1.61.0 to the directory C:\local\boost_1_61_0_32bit, or chose a different distribution and location (Requires a change to the build configuration).
+* Compiler: Tested using MS Visual Studio Community Edition V120 - V140
+
 ## Repository Structure
 * c:        Includes the C++ simulator code
 * cad:      Includes related CAD diagrams 
