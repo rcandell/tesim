@@ -500,7 +500,7 @@ int main(int argc, char* argv[])
 		****************************************************************************/
 		if (t >= tplant_next)
 		{
-			if RT { t = tplant_next; }  // get rid of rouding error for RT mode
+			if (RT) { t = tplant_next; }  // get rid of rouding error for RT mode
 			tplant_next += tplant;
 
 			try
@@ -611,7 +611,7 @@ int main(int argc, char* argv[])
 		// run the controller if time is at a scan boundary
 		if (t >= tctlr_next)
 		{
-			if RT { t = tctlr_next; }  // get rid of rouding error for RT mode
+			if (RT) { t = tctlr_next; }  // get rid of rouding error for RT mode
 			tctlr_next += tctlr;
 
 			// increment the controller
