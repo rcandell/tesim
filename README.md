@@ -1,8 +1,5 @@
 # Tennessee Eastman HIL Simulator
-This repository contains code that allows the Tennesse Eastman (TESIM) 
-chemical process model to be simulated using hardware-based simulator 
-architectures.  Using the code within this repository will allow for 
-integration with external sensor and actuator equipment.  
+This computer code contains the Tennessee Eastman (TESIM) chemical process model to be simulated using hardware-based simulation approaches. The code is optimized for wireless system integration as a part of the NIST Industrial Wireless project.  This code allows for integration with external sensor and actuator equipment and the evaluation of operational performance under different wireless scenarios.  
 
 The TESIM simulator 
 is intended for wireless and cybersecurity research purposes.  The code is optimized
