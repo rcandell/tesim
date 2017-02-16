@@ -1,4 +1,4 @@
-# Tennessee Eastman HIL Simulator
+# Tennessee Eastman Chemical Reactor Process HIL Simulator
 This computer code contains the Tennessee Eastman (TESIM) chemical process model to be simulated using hardware-based simulation approaches. The code is optimized for wireless system integration as a part of the NIST Industrial Wireless project.  This code allows for integration with external sensor and actuator equipment and the evaluation of operational performance under different wireless scenarios.  
 
 The TESIM simulator 
@@ -30,9 +30,6 @@ The C++ Solution is structured as follows:
 * rtclient:         Executable allowing run-time modification of set-points and control parameters
 * testsignals:      Executable to inject ramp and pulse train test signals
 * testsignals2plc:  Executable to inject ramp and pulse train test signals with ADS Comms (Beckhoff) integration
-
-## Analysis Code 
-No contributions as of yet.  
 
 ## HIL Integration
 The TESIM simulator integrates with analog sensors using the Beckhoff ADS Protocol.  By integrating with
