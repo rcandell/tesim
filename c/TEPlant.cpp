@@ -10,6 +10,7 @@
 
 #include <iostream>     // std::cout, std::ostream, std::ios
 #include <cstring>
+#include <cmath>
 
 #include "teprob.h"
 #include "TEPlant.h"

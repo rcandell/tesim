@@ -12,6 +12,7 @@
 #include <utility>
 #include <iomanip>
 #include <string>
+#include <iostream>
 
 #include "TETypes.h"
 

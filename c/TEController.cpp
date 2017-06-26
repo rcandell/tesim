@@ -10,6 +10,7 @@
 
 #include "TEController.h"
 #include "teprob.h"
+#include <cstring>
 
 TEController* TEController::instance = 0;
 
