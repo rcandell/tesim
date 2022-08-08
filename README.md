@@ -8,7 +8,7 @@ however, the original purpose was for use with the NIST industrial cybersecurity
 
 **DISCLAIMER**: Certain tools, commercial equipment, instruments, or materials are identified in this repository in order to specify the experimental procedure adequately.  Such identification is not intended to imply recommendation or endorsement by NIST, nor is it intended to imply that the materials or equipment identified are necessarily the best available for the purpose.
 
-![TESIM Factory](cad/TELayout.PNG)
+![TESIM Factory](cad/TELayout.jpg)
 
 ## System Requirements
 * boost: Install boost 1.61.0 to the directory C:\local\boost_1_61_0_32bit, or chose a different distribution and location (Requires a change to the build configuration).
