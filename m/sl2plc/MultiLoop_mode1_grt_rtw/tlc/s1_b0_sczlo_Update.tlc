@@ -1,0 +1,119 @@
+%implements s1_b0_sczlo_Update "C"
+
+%function Update(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%openfile localVarDecl
+
+real_T LastMajorTime_tmp;
+%closefile localVarDecl
+%assign tlcUpdateFcnOfS1B10 = OpaqueTLCBlockFcn("Update", 1, 10, 0, 3)
+%assign tlcUpdateFcnOfS1B19 = OpaqueTLCBlockFcn("Update", 1, 19, 0, 3)
+if (%<(SLibCGIRIsSampleHit(1, 1))>) {
+    /* {S!d742}Update for UnitDelay: '<S31>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE = MultiLoop_mode1_B.Saturation_m;
+    /* {S!d744}Update for UnitDelay: '<S33>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_g = MultiLoop_mode1_B.Saturation_i;
+    /* {S!d746}Update for UnitDelay: '<S27>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_o = MultiLoop_mode1_B.Saturation_k;
+    /* {S!d748}Update for UnitDelay: '<S29>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_oq = MultiLoop_mode1_B.Saturation_p;
+    /* {S!d750}Update for UnitDelay: '<S36>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_gn = MultiLoop_mode1_B.Saturation_d;
+    /* {S!d752}Update for UnitDelay: '<S41>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_l = MultiLoop_mode1_B.Saturation_f;
+    /* {S!d754}Update for UnitDelay: '<S45>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_gl = MultiLoop_mode1_B.Saturation_lf;
+    /* {S!d756}Update for UnitDelay: '<S18>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_d = MultiLoop_mode1_B.Saturation_i0;
+    /* {S!d758}Update for UnitDelay: '<S21>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_h = MultiLoop_mode1_B.Saturation_mi;
+}
+/* {S!d760}Update for RateLimiter: '<S5>/Rate Limiter' incorporates:
+ *  RateLimiter: '<S5>/Rate Limiter1'
+ */
+MultiLoop_mode1_DW.PrevY = MultiLoop_mode1_B.RateLimiter;
+LastMajorTime_tmp = %<(SLibCG_SE(LibGetTaskTime(0)))>;
+MultiLoop_mode1_DW.LastMajorTime = LastMajorTime_tmp;
+/* {S!d762}Update for RateLimiter: '<S5>/Rate Limiter1' */
+MultiLoop_mode1_DW.PrevY_m = MultiLoop_mode1_B.RateLimiter1;
+MultiLoop_mode1_DW.LastMajorTime_j = LastMajorTime_tmp;
+if (%<(SLibCGIRIsSampleHit(2, 1))>) {
+%if !WHITE_SPACE(tlcUpdateFcnOfS1B10)
+    /* {S!d764}Update for S-Function (TcSfunAdsInterface): '<S5>/TC ADS Symbol Interface4' */
+%<tlcUpdateFcnOfS1B10>\
+%endif
+}
+if (%<(SLibCGIRIsSampleHit(1, 1))>) {
+    /* {S!d766}Update for UnitDelay: '<S26>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_c = MultiLoop_mode1_B.ZeroOrderHold;
+    /* {S!d768}Update for UnitDelay: '<S6>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_f = MultiLoop_mode1_B.Saturation;
+    /* {S!d770}Update for UnitDelay: '<S13>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_c4 = MultiLoop_mode1_B.Saturation_a;
+    /* {S!d772}Update for UnitDelay: '<S28>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_e = MultiLoop_mode1_B.ZeroOrderHold_mk;
+}
+if (%<(SLibCGIRIsSampleHit(4, 1))>) {
+    /* {S!d774}Update for UnitDelay: '<S15>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_j = MultiLoop_mode1_B.Sum2;
+    /* {S!d776}Update for UnitDelay: '<S24>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_od = MultiLoop_mode1_B.ZeroOrderHold_m;
+    /* {S!d778}Update for UnitDelay: '<S25>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_k = MultiLoop_mode1_B.ZeroOrderHold_h;
+    /* {S!d780}Update for UnitDelay: '<S15>/Unit Delay1' */
+    MultiLoop_mode1_DW.UnitDelay1_DSTATE = MultiLoop_mode1_B.Sum1;
+}
+if (%<(SLibCGIRIsSampleHit(1, 1))>) {
+    /* {S!d782}Update for UnitDelay: '<S30>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_km = MultiLoop_mode1_B.ZeroOrderHold_b;
+    /* {S!d784}Update for UnitDelay: '<S32>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_ew = MultiLoop_mode1_B.ZeroOrderHold_c;
+    /* {S!d786}Update for UnitDelay: '<S34>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_ks = MultiLoop_mode1_B.ZeroOrderHold_j;
+    /* {S!d788}Update for UnitDelay: '<S35>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_fg = MultiLoop_mode1_B.ZeroOrderHold_k;
+    /* {S!d790}Update for UnitDelay: '<S17>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_a = MultiLoop_mode1_B.Saturation_c;
+    /* {S!d792}Update for UnitDelay: '<S37>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_aa = MultiLoop_mode1_B.ZeroOrderHold_ma;
+    /* {S!d794}Update for UnitDelay: '<S38>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_oz = MultiLoop_mode1_B.ZeroOrderHold_g;
+    /* {S!d796}Update for UnitDelay: '<S16>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_c0 = MultiLoop_mode1_B.Saturation_l;
+    /* {S!d798}Update for UnitDelay: '<S39>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_fd = MultiLoop_mode1_B.ZeroOrderHold_e;
+    /* {S!d800}Update for UnitDelay: '<S40>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_f5 = MultiLoop_mode1_B.ZeroOrderHold_kn;
+    /* {S!d802}Update for UnitDelay: '<S20>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_c2 = MultiLoop_mode1_B.Saturation_n;
+    /* {S!d804}Update for UnitDelay: '<S42>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_e3 = MultiLoop_mode1_B.ZeroOrderHold_p;
+    /* {S!d806}Update for UnitDelay: '<S43>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_b = MultiLoop_mode1_B.ZeroOrderHold_i;
+    /* {S!d808}Update for UnitDelay: '<S44>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_an = MultiLoop_mode1_B.ZeroOrderHold_l;
+    /* {S!d810}Update for UnitDelay: '<S23>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_m = MultiLoop_mode1_B.Saturation_h;
+    /* {S!d812}Update for UnitDelay: '<S46>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_lx = MultiLoop_mode1_B.ZeroOrderHold_cy;
+    /* {S!d814}Update for UnitDelay: '<S47>/Unit Delay' */
+    MultiLoop_mode1_DW.UnitDelay_DSTATE_lc = MultiLoop_mode1_B.ZeroOrderHold_cl;
+%if !WHITE_SPACE(tlcUpdateFcnOfS1B19)
+    /* {S!d816}Update for S-Function (TcSfunUtilities): '<Root>/Sync Clock' */
+%<tlcUpdateFcnOfS1B19>\
+%endif
+}
+%closefile cfgTxt
+%<cfgTxt>
+%<LibSetSystemField(system, "CachedUpdateLocalVars", localVarDecl)>
+%endfunction
+%function UpdateFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Update(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 3, fcnProtoType)>
+%endfunction

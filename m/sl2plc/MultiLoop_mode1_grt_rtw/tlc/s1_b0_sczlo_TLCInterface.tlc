@@ -1,0 +1,1798 @@
+%implements s1_b0_sczlo_TLCInterface "C"
+
+%function getInputAddr_1_1_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInput_1_1_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInputAddr_1_1_0_0_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInput_1_1_0_0_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInputAddr_1_1_0_0_0_2(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInput_1_1_0_0_0_2(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInputAddr_1_1_0_0_0_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInput_1_1_0_0_0_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInputAddr_1_1_0_0_0_4(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv9"
+%endfunction
+
+%function getInput_1_1_0_0_0_4(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv9"
+%endfunction
+
+%function getInputAddr_1_1_0_0_0_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_e"
+%endfunction
+
+%function getInput_1_1_0_0_0_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_e"
+%endfunction
+
+%function getInputAddr_1_1_0_0_0_6(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_c"
+%endfunction
+
+%function getInput_1_1_0_0_0_6(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_c"
+%endfunction
+
+%function getInputAddr_1_1_0_0_0_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_nd"
+%endfunction
+
+%function getInput_1_1_0_0_0_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_nd"
+%endfunction
+
+%function getInputAddr_1_1_0_0_0_8(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv10"
+%endfunction
+
+%function getInput_1_1_0_0_0_8(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv10"
+%endfunction
+
+%function getInputAddr_1_1_0_0_0_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInput_1_1_0_0_0_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInputAddr_1_1_0_0_0_10(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_h"
+%endfunction
+
+%function getInput_1_1_0_0_0_10(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_h"
+%endfunction
+
+%function getInputAddr_1_1_0_0_0_11(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv11"
+%endfunction
+
+%function getInput_1_1_0_0_0_11(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv11"
+%endfunction
+
+%function getInputAddr_1_1_0_0_0_12(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.ManualSwitch" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_1_0_0_0_12(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.ManualSwitch" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutputAddr_1_1_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutput_1_1_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_4_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+%<SLibCGIRAccessLocalVar(79, 0, "")> %% rtb_TmpSignalConversionAtToWork
+
+%return "&rtb_TmpSignalConversionAtToWork" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_4_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+%<SLibCGIRAccessLocalVar(79, 0, "")> %% rtb_TmpSignalConversionAtToWork
+
+%return "rtb_TmpSignalConversionAtToWork" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_4_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.ToWorkspace7_PWORK"
+%endfunction
+
+%function getDWork_1_4_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.ToWorkspace7_PWORK"
+%endfunction
+
+%function getDWorkAddr_1_20_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.SoftRealTime_RWORK"
+%endfunction
+
+%function getDWork_1_20_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.SoftRealTime_RWORK"
+%endfunction
+
+%function getParamAddr_1_20_0_0_1_132(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_P.SoftRealTime_P1"
+%endfunction
+
+%function getParam_1_20_0_0_1_132(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_P.SoftRealTime_P1"
+%endfunction
+
+%function getInputAddr_1_5_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.Sum"
+%endfunction
+
+%function getInput_1_5_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.Sum"
+%endfunction
+
+%function getDWorkAddr_1_5_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.Costperhr_PWORK"
+%endfunction
+
+%function getDWork_1_5_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.Costperhr_PWORK"
+%endfunction
+
+%function getInputAddr_1_6_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.RateLimiter"
+%endfunction
+
+%function getInput_1_6_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.RateLimiter"
+%endfunction
+
+%function getInputAddr_1_6_0_0_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_6_0_0_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_6_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.Production_PWORK"
+%endfunction
+
+%function getDWork_1_6_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.Production_PWORK"
+%endfunction
+
+%function getInputAddr_1_7_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.RateLimiter1"
+%endfunction
+
+%function getInput_1_7_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.RateLimiter1"
+%endfunction
+
+%function getInputAddr_1_7_0_0_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_7_0_0_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_7_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.Quality_PWORK"
+%endfunction
+
+%function getDWork_1_7_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.Quality_PWORK"
+%endfunction
+
+%function getInputAddr_1_8_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_8_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_8_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.Pressure_PWORK"
+%endfunction
+
+%function getDWork_1_8_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.Pressure_PWORK"
+%endfunction
+
+%function getInputAddr_1_9_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_9_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_9_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.StripperLevelMonitor_PWORK"
+%endfunction
+
+%function getDWork_1_9_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.StripperLevelMonitor_PWORK"
+%endfunction
+
+%function getInputAddr_1_10_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_0_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_0_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_0_2_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_0_2_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_0_3_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_0_3_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_0_4_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_0_4_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_0_5_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_0_5_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_0_6_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_0_6_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_0_7_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_0_7_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_0_8_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_0_8_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_0_9_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_0_9_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_0_10_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInput_1_10_0_0_10_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInputAddr_1_10_0_0_11_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInput_1_10_0_0_11_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInputAddr_1_10_0_0_12_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInput_1_10_0_0_12_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInputAddr_1_10_0_0_13_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInput_1_10_0_0_13_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInputAddr_1_10_0_0_14_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInput_1_10_0_0_14_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInputAddr_1_10_0_0_15_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.Sum2"
+%endfunction
+
+%function getInput_1_10_0_0_15_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.Sum2"
+%endfunction
+
+%function getInputAddr_1_10_0_0_16_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.Sum1"
+%endfunction
+
+%function getInput_1_10_0_0_16_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.Sum1"
+%endfunction
+
+%function getInputAddr_1_11_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_11_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_11_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.Temperature_PWORK"
+%endfunction
+
+%function getDWork_1_11_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.Temperature_PWORK"
+%endfunction
+
+%function getOutputAddr_1_19_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.SyncClock"
+%endfunction
+
+%function getOutput_1_19_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.SyncClock"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInput_1_1_0_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInput_1_1_0_1_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_2(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInput_1_1_0_1_0_2(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInput_1_1_0_1_0_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_4(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv9"
+%endfunction
+
+%function getInput_1_1_0_1_0_4(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv9"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_e"
+%endfunction
+
+%function getInput_1_1_0_1_0_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_e"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_6(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_c"
+%endfunction
+
+%function getInput_1_1_0_1_0_6(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_c"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_nd"
+%endfunction
+
+%function getInput_1_1_0_1_0_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_nd"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_8(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv10"
+%endfunction
+
+%function getInput_1_1_0_1_0_8(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv10"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInput_1_1_0_1_0_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_10(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_h"
+%endfunction
+
+%function getInput_1_1_0_1_0_10(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_h"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_11(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv11"
+%endfunction
+
+%function getInput_1_1_0_1_0_11(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv11"
+%endfunction
+
+%function getInputAddr_1_1_0_1_0_12(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.ManualSwitch" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_1_0_1_0_12(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.ManualSwitch" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutputAddr_1_1_0_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutput_1_1_0_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInput_1_1_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInput_1_1_0_2_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_2(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInput_1_1_0_2_0_2(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInput_1_1_0_2_0_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_4(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv9"
+%endfunction
+
+%function getInput_1_1_0_2_0_4(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv9"
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_e"
+%endfunction
+
+%function getInput_1_1_0_2_0_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_e"
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_6(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_c"
+%endfunction
+
+%function getInput_1_1_0_2_0_6(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_c"
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_nd"
+%endfunction
+
+%function getInput_1_1_0_2_0_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_nd"
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_8(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv10"
+%endfunction
+
+%function getInput_1_1_0_2_0_8(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv10"
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInput_1_1_0_2_0_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_10(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_h"
+%endfunction
+
+%function getInput_1_1_0_2_0_10(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_h"
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_11(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv11"
+%endfunction
+
+%function getInput_1_1_0_2_0_11(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv11"
+%endfunction
+
+%function getInputAddr_1_1_0_2_0_12(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.ManualSwitch" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_1_0_2_0_12(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.ManualSwitch" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutputAddr_1_1_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutput_1_1_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_4_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+%<SLibCGIRAccessLocalVar(79, 0, "")> %% rtb_TmpSignalConversionAtToWork
+
+%return "&rtb_TmpSignalConversionAtToWork" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_4_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+%<SLibCGIRAccessLocalVar(79, 0, "")> %% rtb_TmpSignalConversionAtToWork
+
+%return "rtb_TmpSignalConversionAtToWork" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_4_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.ToWorkspace7_PWORK"
+%endfunction
+
+%function getDWork_1_4_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.ToWorkspace7_PWORK"
+%endfunction
+
+%function getInputAddr_1_5_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.Sum"
+%endfunction
+
+%function getInput_1_5_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.Sum"
+%endfunction
+
+%function getDWorkAddr_1_5_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.Costperhr_PWORK"
+%endfunction
+
+%function getDWork_1_5_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.Costperhr_PWORK"
+%endfunction
+
+%function getInputAddr_1_6_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.RateLimiter"
+%endfunction
+
+%function getInput_1_6_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.RateLimiter"
+%endfunction
+
+%function getInputAddr_1_6_0_2_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_6_0_2_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_6_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.Production_PWORK"
+%endfunction
+
+%function getDWork_1_6_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.Production_PWORK"
+%endfunction
+
+%function getInputAddr_1_7_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.RateLimiter1"
+%endfunction
+
+%function getInput_1_7_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.RateLimiter1"
+%endfunction
+
+%function getInputAddr_1_7_0_2_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_7_0_2_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_7_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.Quality_PWORK"
+%endfunction
+
+%function getDWork_1_7_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.Quality_PWORK"
+%endfunction
+
+%function getInputAddr_1_8_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_8_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_8_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.Pressure_PWORK"
+%endfunction
+
+%function getDWork_1_8_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.Pressure_PWORK"
+%endfunction
+
+%function getInputAddr_1_9_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_9_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_9_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.StripperLevelMonitor_PWORK"
+%endfunction
+
+%function getDWork_1_9_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.StripperLevelMonitor_PWORK"
+%endfunction
+
+%function getInputAddr_1_10_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_2_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_2_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_2_2_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_2_2_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_2_3_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_2_3_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_2_4_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_2_4_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_2_5_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_2_5_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_2_6_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_2_6_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_2_7_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_2_7_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_2_8_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_2_8_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_2_9_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_2_9_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_2_10_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInput_1_10_0_2_10_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInputAddr_1_10_0_2_11_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInput_1_10_0_2_11_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInputAddr_1_10_0_2_12_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInput_1_10_0_2_12_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInputAddr_1_10_0_2_13_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInput_1_10_0_2_13_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInputAddr_1_10_0_2_14_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInput_1_10_0_2_14_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInputAddr_1_10_0_2_15_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.Sum2"
+%endfunction
+
+%function getInput_1_10_0_2_15_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.Sum2"
+%endfunction
+
+%function getInputAddr_1_10_0_2_16_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.Sum1"
+%endfunction
+
+%function getInput_1_10_0_2_16_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.Sum1"
+%endfunction
+
+%function getInputAddr_1_11_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_11_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_11_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.Temperature_PWORK"
+%endfunction
+
+%function getDWork_1_11_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.Temperature_PWORK"
+%endfunction
+
+%function getOutputAddr_1_19_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.SyncClock"
+%endfunction
+
+%function getOutput_1_19_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.SyncClock"
+%endfunction
+
+%function getDWorkAddr_1_20_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.SoftRealTime_RWORK"
+%endfunction
+
+%function getDWork_1_20_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.SoftRealTime_RWORK"
+%endfunction
+
+%function getParamAddr_1_20_0_2_1_132(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_P.SoftRealTime_P1"
+%endfunction
+
+%function getParam_1_20_0_2_1_132(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_P.SoftRealTime_P1"
+%endfunction
+
+%function getInputAddr_1_10_0_3_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_3_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_3_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_3_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_3_2_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_3_2_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_3_3_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_3_3_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_3_4_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_3_4_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_3_5_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_3_5_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_3_6_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_3_6_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_3_7_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_3_7_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_3_8_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_3_8_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_3_9_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_10_0_3_9_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_10_0_3_10_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInput_1_10_0_3_10_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInputAddr_1_10_0_3_11_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInput_1_10_0_3_11_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInputAddr_1_10_0_3_12_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInput_1_10_0_3_12_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInputAddr_1_10_0_3_13_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInput_1_10_0_3_13_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInputAddr_1_10_0_3_14_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInput_1_10_0_3_14_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInputAddr_1_10_0_3_15_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.Sum2"
+%endfunction
+
+%function getInput_1_10_0_3_15_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.Sum2"
+%endfunction
+
+%function getInputAddr_1_10_0_3_16_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.Sum1"
+%endfunction
+
+%function getInput_1_10_0_3_16_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.Sum1"
+%endfunction
+
+%function getOutputAddr_1_19_0_3_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.SyncClock"
+%endfunction
+
+%function getOutput_1_19_0_3_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.SyncClock"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInput_1_1_0_4_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInput_1_1_0_4_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_2(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInput_1_1_0_4_0_2(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInput_1_1_0_4_0_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_4(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv9"
+%endfunction
+
+%function getInput_1_1_0_4_0_4(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv9"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_e"
+%endfunction
+
+%function getInput_1_1_0_4_0_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_e"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_6(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_c"
+%endfunction
+
+%function getInput_1_1_0_4_0_6(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_c"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_nd"
+%endfunction
+
+%function getInput_1_1_0_4_0_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_nd"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_8(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv10"
+%endfunction
+
+%function getInput_1_1_0_4_0_8(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv10"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInput_1_1_0_4_0_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_10(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_h"
+%endfunction
+
+%function getInput_1_1_0_4_0_10(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_h"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_11(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv11"
+%endfunction
+
+%function getInput_1_1_0_4_0_11(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv11"
+%endfunction
+
+%function getInputAddr_1_1_0_4_0_12(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.ManualSwitch" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_1_0_4_0_12(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.ManualSwitch" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutputAddr_1_1_0_4_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutput_1_1_0_4_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInput_1_1_0_5_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInput_1_1_0_5_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_2(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInput_1_1_0_5_0_2(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInput_1_1_0_5_0_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_4(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv9"
+%endfunction
+
+%function getInput_1_1_0_5_0_4(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv9"
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_e"
+%endfunction
+
+%function getInput_1_1_0_5_0_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_e"
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_6(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_c"
+%endfunction
+
+%function getInput_1_1_0_5_0_6(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_c"
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_nd"
+%endfunction
+
+%function getInput_1_1_0_5_0_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_nd"
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_8(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv10"
+%endfunction
+
+%function getInput_1_1_0_5_0_8(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv10"
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInput_1_1_0_5_0_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_10(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_h"
+%endfunction
+
+%function getInput_1_1_0_5_0_10(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_h"
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_11(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv11"
+%endfunction
+
+%function getInput_1_1_0_5_0_11(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv11"
+%endfunction
+
+%function getInputAddr_1_1_0_5_0_12(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.ManualSwitch" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_1_0_5_0_12(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.ManualSwitch" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutputAddr_1_1_0_5_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutput_1_1_0_5_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInput_1_1_0_6_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay"
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInput_1_1_0_6_0_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m"
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_2(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInput_1_1_0_6_0_2(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_n"
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInput_1_1_0_6_0_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_m1"
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_4(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv9"
+%endfunction
+
+%function getInput_1_1_0_6_0_4(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv9"
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_e"
+%endfunction
+
+%function getInput_1_1_0_6_0_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_e"
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_6(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_c"
+%endfunction
+
+%function getInput_1_1_0_6_0_6(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_c"
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_nd"
+%endfunction
+
+%function getInput_1_1_0_6_0_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_nd"
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_8(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv10"
+%endfunction
+
+%function getInput_1_1_0_6_0_8(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv10"
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInput_1_1_0_6_0_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_o"
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_10(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.UnitDelay_h"
+%endfunction
+
+%function getInput_1_1_0_6_0_10(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.UnitDelay_h"
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_11(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.xmv11"
+%endfunction
+
+%function getInput_1_1_0_6_0_11(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.xmv11"
+%endfunction
+
+%function getInputAddr_1_1_0_6_0_12(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.ManualSwitch" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_1_0_6_0_12(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.ManualSwitch" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutputAddr_1_1_0_6_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutput_1_1_0_6_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.G_IOXMEAS_RX" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_1_4_0_6_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+%<SLibCGIRAccessLocalVar(79, 0, "")> %% rtb_TmpSignalConversionAtToWork
+
+%return "&rtb_TmpSignalConversionAtToWork" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_1_4_0_6_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+%<SLibCGIRAccessLocalVar(79, 0, "")> %% rtb_TmpSignalConversionAtToWork
+
+%return "rtb_TmpSignalConversionAtToWork" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_1_4_0_6_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.ToWorkspace7_PWORK"
+%endfunction
+
+%function getDWork_1_4_0_6_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.ToWorkspace7_PWORK"
+%endfunction
+
+%function getOutputAddr_1_19_0_6_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_B.SyncClock"
+%endfunction
+
+%function getOutput_1_19_0_6_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_B.SyncClock"
+%endfunction
+
+%function getDWorkAddr_1_20_0_6_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_DW.SoftRealTime_RWORK"
+%endfunction
+
+%function getDWork_1_20_0_6_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_DW.SoftRealTime_RWORK"
+%endfunction
+
+%function getParamAddr_1_20_0_6_1_132(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&MultiLoop_mode1_P.SoftRealTime_P1"
+%endfunction
+
+%function getParam_1_20_0_6_1_132(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "MultiLoop_mode1_P.SoftRealTime_P1"
+%endfunction
+

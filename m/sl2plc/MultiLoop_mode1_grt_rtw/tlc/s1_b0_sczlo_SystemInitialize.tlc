@@ -1,0 +1,103 @@
+%implements s1_b0_sczlo_SystemInitialize "C"
+
+%function SystemInitialize(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%assign tlcInitializeConditionsFcnOfS1B1 = OpaqueTLCBlockFcn("InitializeConditions", 1, 1, 0, 1)
+%assign tlcSystemInitializeFcnOfS1B1 = OpaqueTLCBlockFcn("SystemInitialize", 1, 1, 0, 1)
+%<SLibInsertAsyncTaskInitializeCode(system)>
+%<SLibWriteMachineInitialize()>
+/* InitializeConditions for UnitDelay: '<S31>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE = MultiLoop_mode1_P.xmv1_0;
+/* InitializeConditions for UnitDelay: '<S33>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_g = MultiLoop_mode1_P.xmv2_0;
+/* InitializeConditions for UnitDelay: '<S27>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_o = MultiLoop_mode1_P.xmv3_0;
+/* InitializeConditions for UnitDelay: '<S29>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_oq = MultiLoop_mode1_P.xmv4_0;
+/* InitializeConditions for UnitDelay: '<S36>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_gn = MultiLoop_mode1_P.xmv6_0;
+/* InitializeConditions for UnitDelay: '<S41>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_l = MultiLoop_mode1_P.xmv7_0;
+/* InitializeConditions for UnitDelay: '<S45>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_gl = MultiLoop_mode1_P.xmv8_0;
+/* InitializeConditions for UnitDelay: '<S18>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_d = MultiLoop_mode1_P.xmv10_0;
+/* InitializeConditions for UnitDelay: '<S21>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_h = MultiLoop_mode1_P.xmv11_0;
+%if !WHITE_SPACE(tlcInitializeConditionsFcnOfS1B1)
+/* InitializeConditions for S-Function (temexd): '<S5>/TE Code' */
+%<tlcInitializeConditionsFcnOfS1B1>\
+%endif
+/* InitializeConditions for RateLimiter: '<S5>/Rate Limiter' */
+MultiLoop_mode1_DW.LastMajorTime = %<LibGetMathConstant(LibRealNonFinite("inf"), FcnGetDataTypeIdFromName("double"))>;
+/* InitializeConditions for RateLimiter: '<S5>/Rate Limiter1' */
+MultiLoop_mode1_DW.LastMajorTime_j = %<LibGetMathConstant(LibRealNonFinite("inf"), FcnGetDataTypeIdFromName("double"))>;
+/* InitializeConditions for UnitDelay: '<S26>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_c = MultiLoop_mode1_P.UnitDelay_InitialCondition;
+/* InitializeConditions for UnitDelay: '<S6>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_f = MultiLoop_mode1_P.Eadj_0;
+/* InitializeConditions for UnitDelay: '<S15>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_j = MultiLoop_mode1_P.r1_0;
+/* InitializeConditions for UnitDelay: '<S24>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_od = MultiLoop_mode1_P.UnitDelay_InitialCondition_k;
+/* InitializeConditions for UnitDelay: '<S13>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_c4 = MultiLoop_mode1_P.Productionrate_x0;
+/* InitializeConditions for UnitDelay: '<S28>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_e = MultiLoop_mode1_P.UnitDelay_InitialCondition_d;
+/* InitializeConditions for UnitDelay: '<S25>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_k = MultiLoop_mode1_P.UnitDelay_InitialCondition_i;
+/* InitializeConditions for UnitDelay: '<S15>/Unit Delay1' */
+MultiLoop_mode1_DW.UnitDelay1_DSTATE = MultiLoop_mode1_P.r4_0;
+/* InitializeConditions for UnitDelay: '<S30>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_km = MultiLoop_mode1_P.UnitDelay_InitialCondition_i4;
+/* InitializeConditions for UnitDelay: '<S32>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_ew = MultiLoop_mode1_P.UnitDelay_InitialCondition_l;
+/* InitializeConditions for UnitDelay: '<S34>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_ks = MultiLoop_mode1_P.UnitDelay_InitialCondition_n;
+/* InitializeConditions for UnitDelay: '<S35>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_fg = MultiLoop_mode1_P.UnitDelay_InitialCondition_j;
+/* InitializeConditions for UnitDelay: '<S17>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_a = MultiLoop_mode1_P.r5_0;
+/* InitializeConditions for UnitDelay: '<S37>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_aa = MultiLoop_mode1_P.UnitDelay_InitialCondition_h;
+/* InitializeConditions for UnitDelay: '<S38>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_oz = MultiLoop_mode1_P.UnitDelay_InitialCondition_a;
+/* InitializeConditions for UnitDelay: '<S16>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_c0 = MultiLoop_mode1_P.SP17_0;
+/* InitializeConditions for UnitDelay: '<S39>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_fd = MultiLoop_mode1_P.UnitDelay_InitialCondition_do;
+/* InitializeConditions for UnitDelay: '<S40>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_f5 = MultiLoop_mode1_P.UnitDelay_InitialCondition_kw;
+/* InitializeConditions for UnitDelay: '<S20>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_c2 = MultiLoop_mode1_P.r6_0;
+/* InitializeConditions for UnitDelay: '<S42>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_e3 = MultiLoop_mode1_P.UnitDelay_InitialCondition_hr;
+/* InitializeConditions for UnitDelay: '<S43>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_b = MultiLoop_mode1_P.UnitDelay_InitialCondition_ht;
+/* InitializeConditions for UnitDelay: '<S44>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_an = MultiLoop_mode1_P.UnitDelay_InitialCondition_aq;
+/* InitializeConditions for UnitDelay: '<S23>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_m = MultiLoop_mode1_P.r7_0;
+/* InitializeConditions for UnitDelay: '<S46>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_lx = MultiLoop_mode1_P.UnitDelay_InitialCondition_f;
+/* InitializeConditions for UnitDelay: '<S47>/Unit Delay' */
+MultiLoop_mode1_DW.UnitDelay_DSTATE_lc = MultiLoop_mode1_P.UnitDelay_InitialCondition_jx;
+%if !WHITE_SPACE(tlcSystemInitializeFcnOfS1B1)
+/* SystemInitialize for S-Function (temexd): '<S5>/TE Code' */
+%<tlcSystemInitializeFcnOfS1B1>\
+%endif
+%<SLibInsertInitPeriodicCStatesFcn(system)>
+%closefile cfgTxt
+%<cfgTxt>
+%<LibSetSystemField(system, "CachedSystemInitializeLocalVars", localVarDecl)>
+%endfunction
+%function SystemInitializeFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void SystemInitialize(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 1, fcnProtoType)>
+%endfunction

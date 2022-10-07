@@ -1,0 +1,22 @@
+%implements s1_b0_sczlo_Derivatives "C"
+
+%function Derivatives(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%assign tlcDerivativesFcnOfS1B1 = OpaqueTLCBlockFcn("Derivatives", 1, 1, 0, 4)
+%if !WHITE_SPACE(tlcDerivativesFcnOfS1B1)
+/* Derivatives for S-Function (temexd): '<S5>/TE Code' */
+%<tlcDerivativesFcnOfS1B1>\
+%endif
+%closefile cfgTxt
+%<cfgTxt>
+%endfunction
+%function DerivativesFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Derivatives(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 4, fcnProtoType)>
+%endfunction

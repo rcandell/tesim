@@ -1,0 +1,82 @@
+%implements s1_b0_sczlo_Start "C"
+
+%function Start(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%assign tlcSetupRuntimeResourcesFcnOfS1B1 = OpaqueTLCBlockFcn("SetupRuntimeResources", 1, 1, 0, 0)
+%assign tlcSetupRuntimeResourcesFcnOfS1B4 = OpaqueTLCBlockFcn("SetupRuntimeResources", 1, 4, 0, 0)
+%assign tlcSetupRuntimeResourcesFcnOfS1B20 = OpaqueTLCBlockFcn("SetupRuntimeResources", 1, 20, 0, 0)
+%assign tlcStartFcnOfS1B1 = OpaqueTLCBlockFcn("Start", 1, 1, 0, 0)
+%assign tlcStartFcnOfS1B5 = OpaqueTLCBlockFcn("Start", 1, 5, 0, 0)
+%assign tlcStartFcnOfS1B6 = OpaqueTLCBlockFcn("Start", 1, 6, 0, 0)
+%assign tlcStartFcnOfS1B7 = OpaqueTLCBlockFcn("Start", 1, 7, 0, 0)
+%assign tlcStartFcnOfS1B8 = OpaqueTLCBlockFcn("Start", 1, 8, 0, 0)
+%assign tlcStartFcnOfS1B9 = OpaqueTLCBlockFcn("Start", 1, 9, 0, 0)
+%assign tlcStartFcnOfS1B10 = OpaqueTLCBlockFcn("Start", 1, 10, 0, 0)
+%assign tlcStartFcnOfS1B11 = OpaqueTLCBlockFcn("Start", 1, 11, 0, 0)
+%assign tlcStartFcnOfS1B19 = OpaqueTLCBlockFcn("Start", 1, 19, 0, 0)
+%assign tlcStartFcnOfS1B20 = OpaqueTLCBlockFcn("Start", 1, 20, 0, 0)
+%if !WHITE_SPACE(tlcSetupRuntimeResourcesFcnOfS1B1)
+/* SetupRuntimeResources for S-Function (temexd): '<S5>/TE Code' */
+%<tlcSetupRuntimeResourcesFcnOfS1B1>\
+%endif
+%if !WHITE_SPACE(tlcSetupRuntimeResourcesFcnOfS1B4)
+/* SetupRuntimeResources for ToWorkspace: '<Root>/To Workspace7' */
+%<tlcSetupRuntimeResourcesFcnOfS1B4>\
+%endif
+%if !WHITE_SPACE(tlcSetupRuntimeResourcesFcnOfS1B20)
+/* SetupRuntimeResources for S-Function (sfun_time): '<Root>/Soft Real Time' */
+%<tlcSetupRuntimeResourcesFcnOfS1B20>\
+%endif
+%if !WHITE_SPACE(tlcStartFcnOfS1B1)
+/* Start for S-Function (temexd): '<S5>/TE Code' */
+%<tlcStartFcnOfS1B1>\
+%endif
+%if !WHITE_SPACE(tlcStartFcnOfS1B5)
+/* Start for Scope: '<S2>/Cost per hr' */
+%<tlcStartFcnOfS1B5>\
+%endif
+%if !WHITE_SPACE(tlcStartFcnOfS1B6)
+/* Start for Scope: '<S3>/Production' */
+%<tlcStartFcnOfS1B6>\
+%endif
+%if !WHITE_SPACE(tlcStartFcnOfS1B7)
+/* Start for Scope: '<S4>/Quality' */
+%<tlcStartFcnOfS1B7>\
+%endif
+%if !WHITE_SPACE(tlcStartFcnOfS1B8)
+/* Start for Scope: '<S5>/Pressure' */
+%<tlcStartFcnOfS1B8>\
+%endif
+%if !WHITE_SPACE(tlcStartFcnOfS1B9)
+/* Start for Scope: '<S5>/Stripper Level Monitor' */
+%<tlcStartFcnOfS1B9>\
+%endif
+%if !WHITE_SPACE(tlcStartFcnOfS1B10)
+/* Start for S-Function (TcSfunAdsInterface): '<S5>/TC ADS Symbol Interface4' */
+%<tlcStartFcnOfS1B10>\
+%endif
+%if !WHITE_SPACE(tlcStartFcnOfS1B11)
+/* Start for Scope: '<S5>/Temperature' */
+%<tlcStartFcnOfS1B11>\
+%endif
+%if !WHITE_SPACE(tlcStartFcnOfS1B19)
+/* Start for S-Function (TcSfunUtilities): '<Root>/Sync Clock' */
+%<tlcStartFcnOfS1B19>\
+%endif
+%if !WHITE_SPACE(tlcStartFcnOfS1B20)
+/* Start for S-Function (sfun_time): '<Root>/Soft Real Time' */
+%<tlcStartFcnOfS1B20>\
+%endif
+%closefile cfgTxt
+%<cfgTxt>
+%endfunction
+%function StartFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Start(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 0, fcnProtoType)>
+%endfunction
